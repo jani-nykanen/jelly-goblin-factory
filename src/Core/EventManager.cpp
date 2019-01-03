@@ -1,5 +1,5 @@
 // Event manager
-// (c) 2018 Jani Nykänen
+// (c) 2019 Jani Nykänen
 
 #include "EventManager.hpp"
 

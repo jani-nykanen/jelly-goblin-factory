@@ -1,11 +1,16 @@
 // Application
-// (c) 2018 Jani Nykänen
+// (c) 2019 Jani Nykänen
 
 #ifndef __APP_H__
 #define __APP_H__
 
+#include <vector>
+#include <cstdio>
+
 #include "EventManager.hpp"
 #include "Graphics.hpp"
+#include "Scene.hpp"
+#include "SceneManager.hpp"
 
 
 // Application class
@@ -15,8 +20,13 @@ private:
 
     // Event manager
     EventManager* evMan;
+    // Scene manager
+    SceneManager* sceneMan;
     // Graphics
     Graphics* graph;
+
+    // Scene info storage
+    std::vector<SceneInfo>* scenes;
 
     // Is running
     bool running;
@@ -35,7 +45,7 @@ private:
 public:
 
     // Constructor
-    Application();
+    Application(std::vector<SceneInfo>* scenes =NULL);
 
     // Run
     int run(int argc, char ** argv);

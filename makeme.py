@@ -1,5 +1,5 @@
 # Generates makefiles for Cpp projects
-# (c) 2018 Jani Nykänen
+# (c) 2019 Jani Nykänen
 
 import sys
 import os

@@ -1,5 +1,5 @@
 // Application
-// (c) 2018 Jani Nykänen
+// (c) 2019 Jani Nykänen
 
 #include "Application.hpp"
 
@@ -10,6 +10,20 @@
 // Initialize
 void Application::init() {
     
+    // Create scene manager
+    sceneMan = new SceneManager(evMan);
+    // Add scenes
+    SceneInfo sinfo;
+    for(int i = 0; i < scenes->size(); ++ i) {
+        
+        sinfo = (*scenes)[i];
+        sceneMan->addScene(sinfo.s, sinfo.makeActive, sinfo.makeGlobal);
+    }
+
+    // Initialize scenes
+    sceneMan->init();
+
+    // Set running
     running = true;
 }
 
@@ -44,13 +58,16 @@ void Application::draw() {
 // Dispose
 void Application::dispose() {
 
+    // Dispose scenes
+    sceneMan->dispose();
 }
 
 
 // Constructor
-Application::Application() {
+Application::Application(std::vector<SceneInfo>* scenes) {
 
-    // ...
+    // Store scenes for future use
+    this->scenes = scenes;
 }
 
 

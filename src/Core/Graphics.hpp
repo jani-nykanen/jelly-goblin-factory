@@ -1,5 +1,5 @@
 // Graphics context & routines
-// (c) 2018 Jani Nykänen
+// (c) 2019 Jani Nykänen
 
 #ifndef __GRAPHICS_H__
 #define __GRAPHICS_H__

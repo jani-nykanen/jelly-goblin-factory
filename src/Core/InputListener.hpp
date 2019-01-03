@@ -1,5 +1,5 @@
 // Input listener
-// (c) 2018 Jani Nykänen
+// (c) 2019 Jani Nykänen
 
 #ifndef __INPUT_LISTENER_H__
 #define __INPUT_LISTENER_H__
