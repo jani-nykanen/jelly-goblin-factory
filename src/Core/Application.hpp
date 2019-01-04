@@ -76,6 +76,9 @@ public:
     // Toggle fullscreen
     void toggleFullscreen();
 
+    // Resize event
+    void resize(int width, int height);
+
 };
 
 

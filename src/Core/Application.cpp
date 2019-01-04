@@ -6,6 +6,18 @@
 #include <stdexcept>
 #include <cstdio>
 
+#include <GL/gl.h>
+
+
+// Reference to self
+static Application* self;
+
+// Resize event
+static void resizeFramebuffer(GLFWwindow* window, int width, int height)
+{
+    self->resize(width, height);
+}
+
 
 // Initialize GLFW & GL content
 void Application::initGL() {
@@ -22,6 +34,8 @@ void Application::initGL() {
     
     // Create window
     window = glfwCreateWindow(width, height, caption, NULL, NULL);
+    winSize[0] = width;
+    winSize[1] = height;
     // Set OpenGL context to this window
     glfwMakeContextCurrent(window);
 
@@ -32,6 +46,10 @@ void Application::initGL() {
 
         toggleFullscreen();
     }
+    else {
+
+        fullscreen = false;
+    }
 
     // Enable VSync
     glfwSwapInterval(1);
@@ -41,6 +59,13 @@ void Application::initGL() {
 
         throw std::runtime_error("Failed to initialize GLEW!");
     }
+
+    // Hide cursor
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+    // Register core events
+    self = this;
+    glfwSetFramebufferSizeCallback(window, resizeFramebuffer);
 }
 
 
@@ -246,4 +271,17 @@ void Application::toggleFullscreen() {
 		winSize[0] = prevWinSize[0];
 		winSize[1] = prevWinSize[1];
     }
+}
+
+
+// Resize event
+void Application::resize(int width, int height) {
+
+    winSize[0] = width;
+    winSize[1] = height;
+
+    glViewport(0, 0, width, height);
+
+    // TODO: Resize graphics?
+    // ...
 }
