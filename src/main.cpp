@@ -15,5 +15,5 @@ int main(int argc, char** argv) {
     scenes.push_back(SceneInfo(new Game(), true, false));
 
     // Run application
-    return Application(&scenes).run(argc, argv);
+    return Application("app.cfg", &scenes).run(argc, argv);
 }

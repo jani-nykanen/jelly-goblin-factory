@@ -11,6 +11,7 @@
 #include "Graphics.hpp"
 #include "Scene.hpp"
 #include "SceneManager.hpp"
+#include "Config.hpp"
 
 
 // Application class
@@ -27,6 +28,8 @@ private:
 
     // Scene info storage
     std::vector<SceneInfo>* scenes;
+    // Configuration
+    ConfigData conf;
 
     // Is running
     bool running;
@@ -36,7 +39,7 @@ private:
     // Event loop
     void loop();
     // Update
-    void update(float delta);
+    void update(int steps);
     // Render
     void draw();
     // Dispose
@@ -45,7 +48,7 @@ private:
 public:
 
     // Constructor
-    Application(std::vector<SceneInfo>* scenes =NULL);
+    Application(std::string cfgPath, std::vector<SceneInfo>* scenes =NULL);
 
     // Run
     int run(int argc, char ** argv);

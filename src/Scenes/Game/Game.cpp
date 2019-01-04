@@ -14,7 +14,7 @@ void Game::init() {
 
 
 // Update scene
-void Game::update(float tm) {
+void Game::update(int steps) {
 
 }
 

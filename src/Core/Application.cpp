@@ -44,7 +44,7 @@ void Application::loop() {
 
 
 // Update
-void Application::update(float delta) {
+void Application::update(int steps) {
     
 }
 
@@ -64,7 +64,17 @@ void Application::dispose() {
 
 
 // Constructor
-Application::Application(std::vector<SceneInfo>* scenes) {
+Application::Application(std::string cfgPath, std::vector<SceneInfo>* scenes) {
+
+    // Parse configuration
+    try {
+
+        conf = ConfigData(cfgPath);
+    }
+    catch(std::runtime_error err) {
+
+    }
+
 
     // Store scenes for future use
     this->scenes = scenes;

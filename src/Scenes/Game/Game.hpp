@@ -15,7 +15,7 @@ public:
     // Initialize scene
     void init();
     // Update scene
-    void update(float tm);
+    void update(int steps);
     // Draw scene
     void draw(Graphics* g);
     // Dispose scene
