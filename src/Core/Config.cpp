@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include <string>
 
@@ -153,4 +154,19 @@ std::string ConfigData::getParam(std::string key, std::string def) {
 std::string ConfigData::getParam(std::string key) {
 
     return getParam(key, "");
+}
+
+
+// Get integer parameter
+int ConfigData::getIntParam(std::string key, int def) {
+
+    std::string r = getParam(key, "f");
+    if(r == "f") {
+
+        return def;
+    }
+    // Convert to integer
+    int ret = 0;
+    std::istringstream ( r ) >> ret;
+    return ret;
 }

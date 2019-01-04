@@ -26,10 +26,29 @@ protected:
     // Keyboard states
     std::vector<int> kbstate;
 
+    // Input down
+    void inputDown(std::vector<int> &arr, int index);
+    // Input up
+    void inputUp(std::vector<int> &arr, int index);
+    // Update input array
+    void updateInputArray(std::vector<int> &arr);
+    // Get input state
+    int getInputState(std::vector<int> arr, int index);
+
 public:
 
+    // Keyboard events
+    inline void keyDown(int key){ inputDown(kbstate, key); }
+    inline void keyUp(int key){ inputUp(kbstate, key); }
+
     // Constructor
-    InputListener();
+    InputListener(void* window);
+
+    // Update input
+    void updateInput();
+
+    // Get key state
+    inline int getKeyState(int key) { return getInputState(kbstate, key); }
 
 };
 

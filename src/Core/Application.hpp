@@ -13,11 +13,17 @@
 #include "SceneManager.hpp"
 #include "Config.hpp"
 
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 
 // Application class
 class Application {
 
 private:
+
+    // Window
+    GLFWwindow* window;
 
     // Event manager
     EventManager* evMan;
@@ -33,6 +39,9 @@ private:
 
     // Is running
     bool running;
+
+    // Initialize GLFW & GL content
+    void initGL();
 
     // Initialize
     void init();
@@ -52,6 +61,8 @@ public:
 
     // Run
     int run(int argc, char ** argv);
+    // Terminate
+    void terminate();
 
 };
 

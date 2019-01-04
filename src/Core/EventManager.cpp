@@ -3,9 +3,19 @@
 
 #include "EventManager.hpp"
 
+#include "Application.hpp"
+
 
 // Constructor
-EventManager::EventManager() : InputListener() {
+EventManager::EventManager(Application* ref, void* window) 
+    : InputListener(window) {
 
-    // ...
+    appRef = ref;
+}
+
+
+// Terminate
+void EventManager::terminate() {
+
+    appRef->terminate();
 }

@@ -5,6 +5,8 @@
 
 #include <cstdio>
 
+#include <GLFW/glfw3.h>
+
 
 // Initialize scene
 void Game::init() {
@@ -16,6 +18,10 @@ void Game::init() {
 // Update scene
 void Game::update(int steps) {
 
+    if(evMan->getKeyState(GLFW_KEY_ESCAPE) == State::Released) {
+
+        evMan->terminate();
+    }
 }
 
 

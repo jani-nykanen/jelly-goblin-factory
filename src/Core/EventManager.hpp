@@ -6,17 +6,23 @@
 
 #include "InputListener.hpp"
 
+class Application;
+
 // Event manager class
-class EventManager : private InputListener {
+class EventManager : public InputListener {
 
 private:
 
-    // ...
+    // Reference to application
+    Application* appRef;
 
 public:
 
     // Constructor
-    EventManager();
+    EventManager(Application* ref, void* window);
+
+    // Terminate
+    void terminate();
 
 };
 

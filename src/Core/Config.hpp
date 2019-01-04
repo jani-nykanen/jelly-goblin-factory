@@ -43,6 +43,7 @@ public:
     // Get parameter
     std::string getParam(std::string key, std::string def);
     std::string getParam(std::string key);
+    int getIntParam(std::string key, int def);
 };
 
 #endif // __CONFIG_H__

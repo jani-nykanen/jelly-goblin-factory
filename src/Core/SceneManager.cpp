@@ -64,6 +64,28 @@ void SceneManager::init() {
 }
 
 
+// Update scenes
+void SceneManager::update(int steps) {
+
+    if(globalScene != NULL)
+        globalScene->update(steps);
+
+    if(activeScene != NULL)
+        activeScene->update(steps);
+}
+
+
+// Draw scenes
+void SceneManager::draw(Graphics* g){
+
+    if(globalScene != NULL)
+        globalScene->draw(g);
+
+    if(activeScene != NULL)
+        activeScene->draw(g);
+}
+
+
 // Dispose scenes
 void SceneManager::dispose() {
 

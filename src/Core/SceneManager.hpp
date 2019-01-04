@@ -33,8 +33,14 @@ public:
     void addScene(Scene* s, bool makeActive=false, bool makeGlobal=false);
     // Change active scene
     void changeActiveScene(std::string name);
+
     // Initialize scenes
     void init();
+    // Update scenes
+    void update(int steps);
+    // Draw scenes
+    void draw(Graphics* g);
+
     // Dispose scenes
     void dispose();
 
