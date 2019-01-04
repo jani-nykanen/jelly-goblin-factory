@@ -39,6 +39,10 @@ public:
     // Constructors
     ConfigData();
     ConfigData(std::string path);
+
+    // Get parameter
+    std::string getParam(std::string key, std::string def);
+    std::string getParam(std::string key);
 };
 
 #endif // __CONFIG_H__
