@@ -25,6 +25,9 @@ void Application::initGL() {
     // Set OpenGL context to this window
     glfwMakeContextCurrent(window);
 
+    // Enable VSync
+    glfwSwapInterval(1);
+
     // Initialize GLEW
     if(glewInit() != GLEW_OK) {
 
