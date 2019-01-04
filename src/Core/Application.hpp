@@ -17,6 +17,9 @@
 #include <GLFW/glfw3.h>
 
 
+typedef int WeakVec2Int[2];
+
+
 // Application class
 class Application {
 
@@ -35,11 +38,18 @@ private:
     // Scene info storage
     std::vector<SceneInfo>* scenes;
     // Configuration
-    ConfigData conf;
+    ConfigData* conf;
+
+    // Is full screen enabled
+    bool fullscreen;
+    // Window data
+    WeakVec2Int prevWinPos;
+    WeakVec2Int prevWinSize;
+    WeakVec2Int winSize;
 
     // Is running
     bool running;
-
+  
     // Initialize GLFW & GL content
     void initGL();
 
@@ -63,6 +73,8 @@ public:
     int run(int argc, char ** argv);
     // Terminate
     void terminate();
+    // Toggle fullscreen
+    void toggleFullscreen();
 
 };
 

@@ -16,14 +16,22 @@ void Application::initGL() {
         throw std::runtime_error("Failed to initialize GLFW!");
     }
 
-    int width = conf.getIntParam("window_width", 640);
-    int height = conf.getIntParam("window_height", 480);
-    const char* caption = conf.getParam("caption").c_str();
+    int width = conf->getIntParam("window_width", 640);
+    int height = conf->getIntParam("window_height", 480);
+    const char* caption = conf->getParam("caption").c_str();
     
     // Create window
     window = glfwCreateWindow(width, height, caption, NULL, NULL);
     // Set OpenGL context to this window
     glfwMakeContextCurrent(window);
+
+    // Toggle fullscreen, if wanted
+    bool fs = conf->getIntParam("fullscreen", 0) == 1;
+    fullscreen = false;
+    if(fs) {
+
+        toggleFullscreen();
+    }
 
     // Enable VSync
     glfwSwapInterval(1);
@@ -74,7 +82,7 @@ void Application::loop() {
     glfwSetTime(0.0);
 
     // Compute desired frame wait
-    int steps = conf.getIntParam("refresh_steps", 1);
+    int steps = conf->getIntParam("refresh_steps", 1);
     float frameWait = 1.0f / (COMPARED_FPS / steps);
     int updateCount = 0;
     bool redraw = false;
@@ -153,6 +161,7 @@ void Application::dispose() {
     // Dispose elements
     delete evMan;
     delete sceneMan;
+    delete conf;
 
     // Destroy window
     glfwDestroyWindow(window);
@@ -165,7 +174,7 @@ Application::Application(std::string cfgPath, std::vector<SceneInfo>* scenes) {
     // Parse configuration
     try {
 
-        conf = ConfigData(cfgPath);
+        conf = new ConfigData(cfgPath);
     }
     catch(std::runtime_error err) {
 
@@ -204,4 +213,37 @@ int Application::run(int argc, char ** argv) {
 void Application::terminate() {
 
     running = false;
+}
+
+
+// Toggle fullscreen
+void Application::toggleFullscreen() {
+
+    fullscreen = !fullscreen;
+    if(fullscreen) {
+
+        // Store old window information
+        glfwGetWindowPos(window, &prevWinPos[0], &prevWinPos[1]);
+        glfwGetWindowSize(window, &prevWinSize[0], &prevWinSize[1]);
+
+        // Get monitor pointer & video mode
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* video = glfwGetVideoMode(monitor);
+
+		// Enable full screen mode
+		glfwSetWindowMonitor(window, monitor, 0, 0, 
+            video->width, video->height, GLFW_DONT_CARE );
+    }
+    else {
+
+        // Reset window
+		glfwSetWindowMonitor(window, NULL,
+				prevWinPos[0], prevWinPos[1],
+				prevWinSize[0], prevWinSize[1],
+				GLFW_DONT_CARE);
+
+		// Store current window size
+		winSize[0] = prevWinSize[0];
+		winSize[1] = prevWinSize[1];
+    }
 }

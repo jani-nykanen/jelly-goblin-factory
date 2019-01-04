@@ -14,8 +14,6 @@ EventManager::EventManager(Application* ref, void* window)
 }
 
 
-// Terminate
-void EventManager::terminate() {
-
-    appRef->terminate();
-}
+// Redirect to application core
+void EventManager::terminate() {appRef->terminate();}
+void EventManager::toggleFullscreen() {appRef->toggleFullscreen();}

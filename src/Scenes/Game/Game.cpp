@@ -18,10 +18,6 @@ void Game::init() {
 // Update scene
 void Game::update(int steps) {
 
-    if(evMan->getKeyState(GLFW_KEY_ESCAPE) == State::Released) {
-
-        evMan->terminate();
-    }
 }
 
 

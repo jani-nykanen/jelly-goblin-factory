@@ -21,8 +21,9 @@ public:
     // Constructor
     EventManager(Application* ref, void* window);
 
-    // Terminate
+    // Redirect to application core
     void terminate();
+    void toggleFullscreen();
 
 };
 
