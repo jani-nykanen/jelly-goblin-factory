@@ -28,6 +28,8 @@ public:
     
     // Constructor
     SceneManager(EventManager* evMan);
+    // Destructor
+    ~SceneManager();
 
     // Add a scene
     void addScene(Scene* s, bool makeActive=false, bool makeGlobal=false);

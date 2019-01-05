@@ -18,6 +18,16 @@ SceneManager::SceneManager(EventManager* evMan) {
 }
 
 
+// Destructor
+SceneManager::~SceneManager() {
+
+    for(int i = 0; i < scenes.size(); ++ i) {
+
+        delete scenes[i];
+    }
+}
+
+
 // Add a scene
 void SceneManager::addScene(Scene* s, bool makeActive, bool makeGlobal) {
 

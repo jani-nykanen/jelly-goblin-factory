@@ -28,9 +28,9 @@ void Application::initGL() {
         throw std::runtime_error("Failed to initialize GLFW!");
     }
 
-    int width = conf->getIntParam("window_width", 640);
-    int height = conf->getIntParam("window_height", 480);
-    const char* caption = conf->getParam("caption").c_str();
+    int width = conf.getIntParam("window_width", 640);
+    int height = conf.getIntParam("window_height", 480);
+    const char* caption = conf.getParam("caption").c_str();
     
     // Create window
     window = glfwCreateWindow(width, height, caption, NULL, NULL);
@@ -40,7 +40,7 @@ void Application::initGL() {
     glfwMakeContextCurrent(window);
 
     // Toggle fullscreen, if wanted
-    bool fs = conf->getIntParam("fullscreen", 0) == 1;
+    bool fs = conf.getIntParam("fullscreen", 0) == 1;
     fullscreen = false;
     if(fs) {
 
@@ -76,8 +76,8 @@ void Application::init() {
     initGL();
 
     // Create graphics
-    int canvasWidth = conf->getIntParam("canvas_width", 320);
-    int canvasHeight = conf->getIntParam("canvas_height", 240);
+    int canvasWidth = conf.getIntParam("canvas_width", 320);
+    int canvasHeight = conf.getIntParam("canvas_height", 240);
     graph = new Graphics(canvasWidth, canvasHeight);
     graph->resize(winSize[0], winSize[1]);
 
@@ -88,9 +88,9 @@ void Application::init() {
     sceneMan = new SceneManager(evMan);
     // Add scenes
     SceneInfo sinfo;
-    for(int i = 0; i < scenes->size(); ++ i) {
+    for(int i = 0; i < scenes.size(); ++ i) {
         
-        sinfo = (*scenes)[i];
+        sinfo = scenes[i];
         sceneMan->addScene(sinfo.s, sinfo.makeActive, sinfo.makeGlobal);
     }
 
@@ -113,7 +113,7 @@ void Application::loop() {
     glfwSetTime(0.0);
 
     // Compute desired frame wait
-    int steps = conf->getIntParam("refresh_steps", 1);
+    int steps = conf.getIntParam("refresh_steps", 1);
     float frameWait = 1.0f / (COMPARED_FPS / steps);
     int updateCount = 0;
     bool redraw = false;
@@ -194,7 +194,7 @@ void Application::dispose() {
     // Dispose elements
     delete evMan;
     delete sceneMan;
-    delete conf;
+    delete graph;
 
     // Destroy window
     glfwDestroyWindow(window);
@@ -202,12 +202,12 @@ void Application::dispose() {
 
 
 // Constructor
-Application::Application(std::string cfgPath, std::vector<SceneInfo>* scenes) {
+Application::Application(std::string cfgPath, std::vector<SceneInfo> scenes) {
 
     // Parse configuration
     try {
 
-        conf = new ConfigData(cfgPath);
+        conf = ConfigData(cfgPath);
     }
     catch(std::runtime_error err) {
 

@@ -36,12 +36,14 @@ private:
     int canvasHeight;
 
     // Rectangular mesh
-    SimpleMesh* rectMesh =NULL;
+    SimpleMesh rectMesh;
 
     // Canvas texture
     uint32 texCanvas;
-    // Canvas data
-    uint8* canvasData;
+    // Canvas framebuffer
+    uint8* canvasFramebuffer;
+    // Canvas pixel data
+    uint8* canvasPixels;
 
     // Create rectangular mesh
     void createRectMesh();

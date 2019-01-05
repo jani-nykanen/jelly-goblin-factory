@@ -30,6 +30,8 @@ public:
     Shader(std::string vertex, 
         std::string fragment);
     Shader();
+    // Destructor
+    ~Shader();
 
     // Use shader
     void useShader();

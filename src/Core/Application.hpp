@@ -36,9 +36,9 @@ private:
     Graphics* graph;
 
     // Scene info storage
-    std::vector<SceneInfo>* scenes;
+    std::vector<SceneInfo> scenes;
     // Configuration
-    ConfigData* conf;
+    ConfigData conf;
 
     // Is full screen enabled
     bool fullscreen;
@@ -67,7 +67,7 @@ private:
 public:
 
     // Constructor
-    Application(std::string cfgPath, std::vector<SceneInfo>* scenes =NULL);
+    Application(std::string cfgPath, std::vector<SceneInfo> scenes);
 
     // Run
     int run(int argc, char ** argv);

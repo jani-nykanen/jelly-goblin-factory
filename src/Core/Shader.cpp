@@ -126,6 +126,13 @@ Shader::Shader() {
 }
 
 
+// Destructor
+Shader::~Shader() {
+
+    glDeleteProgram(program);
+}
+
+
 // Use shader
 void Shader::useShader() {
 

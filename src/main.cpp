@@ -17,12 +17,5 @@ int main(int argc, char** argv) {
     scenes.push_back(SceneInfo(new Game(), true, false));
 
     // Run application
-    Application* app = new Application("app.cfg", &scenes);
-    int ret = app->run(argc, argv);
-    // TODO: Might cause problems?
-    if(ret == 0) {
-
-        delete app;
-    }
-    return ret;
+    return Application("app.cfg", scenes).run(argc, argv);
 }
