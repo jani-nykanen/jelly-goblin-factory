@@ -79,7 +79,6 @@ void Application::init() {
     int canvasWidth = conf->getIntParam("canvas_width", 320);
     int canvasHeight = conf->getIntParam("canvas_height", 240);
     graph = new Graphics(canvasWidth, canvasHeight);
-    // Set graphics size info up to date
     graph->resize(winSize[0], winSize[1]);
 
     // Create event manager
