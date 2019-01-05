@@ -75,6 +75,13 @@ void Application::init() {
     // Initialize OpenGL content
     initGL();
 
+    // Create graphics
+    int canvasWidth = conf->getIntParam("canvas_width", 320);
+    int canvasHeight = conf->getIntParam("canvas_height", 240);
+    graph = new Graphics(canvasWidth, canvasHeight);
+    // Set graphics size info up to date
+    graph->resize(winSize[0], winSize[1]);
+
     // Create event manager
     evMan = new EventManager(this, (void*)window);
 
@@ -143,7 +150,9 @@ void Application::loop() {
             redraw = false;
         }
 
-        // TODO: Draw canvas
+        // Draw canvas
+        graph->drawCanvas();
+        // Swap buffers
         glfwSwapBuffers(window);
 
         // Window closed
@@ -279,9 +288,5 @@ void Application::resize(int width, int height) {
 
     winSize[0] = width;
     winSize[1] = height;
-
-    glViewport(0, 0, width, height);
-
-    // TODO: Resize graphics?
-    // ...
+    graph->resize(winSize[0], winSize[1]);
 }
