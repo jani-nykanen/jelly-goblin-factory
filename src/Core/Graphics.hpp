@@ -18,6 +18,9 @@ public:
 
     // Constructor
     Graphics(int canvasWidth, int canvasHeight);
+
+    // Clear screen
+    void clearScreen(uint8 color);
 };
 
 #endif // __GRAPHICS_H__

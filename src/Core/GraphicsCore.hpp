@@ -6,6 +6,8 @@
 
 #include "Shader.hpp"
 
+#define GRAPHICS_CORE_PALETTE_SIZE 256
+
 // Simple mesh
 struct SimpleMesh {
     uint32 vertexBuffer;
@@ -31,27 +33,35 @@ private:
     // Shader
     Shader* shader =NULL;
 
-    // Canvas content size
-    int canvasWidth;
-    int canvasHeight;
-
     // Rectangular mesh
     SimpleMesh rectMesh;
 
     // Canvas texture
     uint32 texCanvas;
-    // Canvas framebuffer
-    uint8* canvasFramebuffer;
     // Canvas pixel data
     uint8* canvasPixels;
+    
+    // Palette
+    uint8 palette[GRAPHICS_CORE_PALETTE_SIZE *3];
 
     // Create rectangular mesh
     void createRectMesh();
     // Create canvas texture
     void createCanvasTexture();
+    // Generate palette
+    void genPalette();
 
     // Compute canvas properties
     void computeCanvasProp(int w, int h);
+
+protected:
+
+    // Canvas content size
+    int canvasWidth;
+    int canvasHeight;
+
+    // Canvas framebuffer
+    uint8* canvasFramebuffer;
 
 public:
 
@@ -65,6 +75,8 @@ public:
 
     // Draw canvas
     void drawCanvas();
+    // Refresh canvas
+    void refreshCanvas();
 
 };
 

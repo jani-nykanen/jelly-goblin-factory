@@ -182,6 +182,9 @@ void Application::draw() {
 
     // Draw scenes
     sceneMan->draw(graph);
+
+    // Refresh canvas
+    graph->refreshCanvas();
 }
 
 

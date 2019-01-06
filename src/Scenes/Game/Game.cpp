@@ -24,6 +24,7 @@ void Game::update(int steps) {
 // Draw scene
 void Game::draw(Graphics* g) {
 
+    g->clearScreen(0b10010010);
 }
 
 
