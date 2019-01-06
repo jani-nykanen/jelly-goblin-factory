@@ -84,7 +84,6 @@ void GraphicsCore::createCanvasTexture() {
 void GraphicsCore::genPalette() {
 
     uint8 col, r,g,b;
-    int ir, ig, ib;
     for(int i = 0; i < GRAPHICS_CORE_PALETTE_SIZE; ++ i) {
 
         col = (uint8)i;
@@ -101,12 +100,9 @@ void GraphicsCore::genPalette() {
 
         // Make the colors "imitate VGA
         // colors"
-        ir = (int)r*4; ir /= 4;
-        ig = (int)g*4; ig /= 4;
-        ib = (int)b*4; ib /= 4;
-        r = (uint8)ir;
-        g = (uint8)ig;
-        b = (uint8)ib;
+        r /= 4; r *= 4;
+        g /= 4; g *= 4;
+        b /= 4; b *= 4;
 
         palette[i*3] = r;
         palette[i*3 +1] = g;
