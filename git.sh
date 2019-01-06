@@ -6,3 +6,5 @@ git add README.md
 git add makemake.sh
 git add makeme.py
 git add app.cfg
+git add tools
+git add dev
