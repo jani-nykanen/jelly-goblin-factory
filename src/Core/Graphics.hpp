@@ -12,7 +12,8 @@ class Graphics : public GraphicsCore {
 
 private:
 
-    // ...
+    // Clip
+    bool clip(int &x, int &y, int &w, int &h);
 
 public:
 
@@ -21,6 +22,9 @@ public:
 
     // Clear screen
     void clearScreen(uint8 color);
+
+    // Draw a filled rectangle
+    void fillRect(int x, int y, int w, int h, uint8 color);
 };
 
 #endif // __GRAPHICS_H__

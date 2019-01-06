@@ -25,6 +25,17 @@ void Game::update(int steps) {
 void Game::draw(Graphics* g) {
 
     g->clearScreen(0b10010010);
+
+    // Draw palette
+    int x, y;
+    for(int i = 0; i < 256; ++ i) {
+
+        x = (i%16) * 8;
+        y = i / 16; y *= 8;
+
+        g->fillRect(x, y, 8, 8, (uint8)i);
+        
+    }
 }
 
 

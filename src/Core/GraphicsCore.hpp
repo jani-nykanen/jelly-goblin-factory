@@ -5,6 +5,7 @@
 #define __GRAPHICS_CORE_H__
 
 #include "Shader.hpp"
+#include "Bitmap.hpp"
 
 #define GRAPHICS_CORE_PALETTE_SIZE 256
 
@@ -61,7 +62,7 @@ protected:
     int canvasHeight;
 
     // Canvas framebuffer
-    uint8* canvasFramebuffer;
+    Bitmap* frame;
 
 public:
 
