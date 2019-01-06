@@ -42,11 +42,16 @@ struct Vec2Fixed {
         this->x=x*FIXED_PRECISION; 
         this->y=y*FIXED_PRECISION;
     };
+    inline Vec2Fixed(float x, float y) {
+        this->x=floatToFixed(x);
+        this->y=floatToFixed(y);
+    };
 
     // Get components
     inline int getXInt(){return x / FIXED_PRECISION;}
     inline int getYInt(){return y / FIXED_PRECISION;}
 };
+
 
 
 // Fixed point 3x3 matrix
@@ -68,11 +73,14 @@ struct Mat3Fixed {
     Mat3Fixed mul(Mat3Fixed M);
 
     // Set to rotation matrix
-    void rotate(int angle);
+    Mat3Fixed rotate(int angle);
     // Scale
-    void scale(FixedPoint x, FixedPoint y);
+    Mat3Fixed scale(FixedPoint x, FixedPoint y);
     // Translate
-    void translate(FixedPoint x, FixedPoint y);
+    Mat3Fixed translate(FixedPoint x, FixedPoint y);
+
+    // Inverse
+    Mat3Fixed inverse();
 };
 
 #endif // __TYPES_H__

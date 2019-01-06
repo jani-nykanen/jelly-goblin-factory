@@ -13,6 +13,9 @@ private:
     Bitmap* bmpParrot;
     Bitmap* bmpFont;
 
+    // Test angle
+    int angle;
+
 public:
 
     // Initialize scene

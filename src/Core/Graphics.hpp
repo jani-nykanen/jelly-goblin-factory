@@ -59,6 +59,11 @@ public:
     void drawText(Bitmap* bmp, std::string text, 
         int dx, int dy, int xoff, int yoff, 
         bool center=false);
+
+    // Draw pseudo-3D floor
+    void drawPseudo3DFloor(Bitmap* bmp, 
+        Vec2Fixed tr, Vec2Fixed scale, int angle,
+        int horizon);
 };
 
 #endif // __GRAPHICS_H__

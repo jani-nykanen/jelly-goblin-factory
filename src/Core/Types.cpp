@@ -30,6 +30,9 @@ Vec2Fixed Mat3Fixed::mul(Vec2Fixed p) {
     ret.x = m11 * p.x + m21 * p.y + m31 * FIXED_PRECISION;
     ret.y = m12 * p.x + m22 * p.y + m32 * FIXED_PRECISION;
 
+    ret.x /= FIXED_PRECISION;
+    ret.y /= FIXED_PRECISION;
+
     return ret;
 }
 Mat3Fixed Mat3Fixed::mul(Mat3Fixed M) {
@@ -57,7 +60,7 @@ Mat3Fixed Mat3Fixed::mul(Mat3Fixed M) {
 
 
 // Set to rotation matrix
-void Mat3Fixed::rotate(int angle) {
+Mat3Fixed Mat3Fixed::rotate(int angle) {
 
     FixedPoint c = floatToFixed(cosf(angle / 180.0f * M_PI));
 	FixedPoint s = floatToFixed(sinf(angle / 180.0f * M_PI));
@@ -65,22 +68,37 @@ void Mat3Fixed::rotate(int angle) {
 	m11 = c; m21 =-s; m31 = 0;
 	m12 = s; m22 = c; m32 = 0;
 	m13 = 0; m23 = 0; m33 = FIXED_PRECISION;
+
+    return *this;
 }
 
 
 // Scale
-void Mat3Fixed::scale(FixedPoint x, FixedPoint y) {
+Mat3Fixed Mat3Fixed::scale(FixedPoint x, FixedPoint y) {
 
     m11 = x; m21 = 0; m31 = 0;
 	m12 = 0; m22 = y; m32 = 0;
 	m13 = 0; m23 = 0; m33 = FIXED_PRECISION;
+
+    return *this;
 }
 
 
 // Translate
-void Mat3Fixed::translate(FixedPoint x, FixedPoint y) {
+Mat3Fixed Mat3Fixed::translate(FixedPoint x, FixedPoint y) {
 
     m11 = FIXED_PRECISION; m21 = 0; m31 = x;
 	m12 = 0; m22 = FIXED_PRECISION; m32 = y;
 	m13 = 0; m23 = 0; m33 = FIXED_PRECISION;
+
+    return *this;
+}
+
+
+// Inverse
+Mat3Fixed Mat3Fixed::inverse() {
+
+    Mat3Fixed A;
+    // TODO: THIS!
+    return A;
 }

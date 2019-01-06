@@ -4,6 +4,7 @@
 #include "Game.hpp"
 
 #include <cstdio>
+#include <cmath>
 
 #include <GLFW/glfw3.h>
 
@@ -22,6 +23,8 @@ void Game::init() {
 // Update scene
 void Game::update(int steps) {
 
+    angle += 1 * steps;
+    angle %= 360;
 }
 
 
@@ -30,22 +33,16 @@ void Game::draw(Graphics* g) {
 
     g->clearScreen(0b10010010);
 
-    // Draw palette
-    int x, y;
-    for(int i = 0; i < 256; ++ i) {
+    float c = cosf(angle/180.0f * M_PI)*0.5f+1.0f;
+    float s = sinf(angle/180.0f * M_PI)*0.5f+1.0f;
 
-        x = (i%16) * 8;
-        y = i / 16; y *= 8;
-
-        g->fillRect(x, y, 8, 8, (uint8)i);
-        
-    }
-
-    // Draw parrot
-    g->drawBitmap(bmpParrot,0, 0, 128, 128, 224, -32, Flip::Both);
+    g->drawPseudo3DFloor(bmpParrot, 
+        Vec2Fixed(160, 100), 
+        Vec2Fixed(c, s), 
+        angle, 0);
 
     // Draw text
-    g->drawText(bmpFont, "Hello world!", 2, 180, -4, 0);
+    g->drawText(bmpFont, "Hello world!", 2, 2, -4, 0);
 }
 
 

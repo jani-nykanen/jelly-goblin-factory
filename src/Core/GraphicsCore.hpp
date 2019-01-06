@@ -37,6 +37,9 @@ private:
     // Rectangular mesh
     SimpleMesh rectMesh;
 
+    // Canvas content size
+    int canvasWidth;
+    int canvasHeight;
     // Canvas texture
     uint32 texCanvas;
     // Canvas pixel data
@@ -56,10 +59,6 @@ private:
     void computeCanvasProp(int w, int h);
 
 protected:
-
-    // Canvas content size
-    int canvasWidth;
-    int canvasHeight;
 
     // Canvas framebuffer
     Bitmap* frame;

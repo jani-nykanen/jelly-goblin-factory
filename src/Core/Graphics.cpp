@@ -3,6 +3,8 @@
 
 #include "Graphics.hpp"
 
+#include "MathExt.hpp"
+
 #include <GL/glew.h>
 #include <GL/gl.h>
 
@@ -94,7 +96,8 @@ Graphics::Graphics(int canvasWidth, int canvasHeight)
 // Clear screen
 void Graphics::clearScreen(uint8 color) {
 
-    memset(frame->getData(), color, canvasWidth*canvasHeight);
+    memset(frame->getData(), color, 
+        frame->getWidth()*frame->getHeight());
 }
 
 
@@ -261,4 +264,47 @@ void Graphics::drawText(Bitmap* bmp, std::string text,
 
         x += cw + xoff;
     }
+}
+
+
+// Draw pseudo-3D floor
+void Graphics::drawPseudo3DFloor(Bitmap* bmp, 
+    Vec2Fixed tr, Vec2Fixed scale, int angle,
+    int horizon) {
+
+    uint8* d = frame->getData();
+    uint8* bd = bmp->getData();
+
+    int bx, by;
+
+    // Matrices
+    Mat3Fixed rotMat = Mat3Fixed().rotate(angle);
+    Mat3Fixed trMat = Mat3Fixed().translate(tr.x, tr.y);
+    Mat3Fixed scaleMat = Mat3Fixed().scale(scale.x, scale.y);
+    Mat3Fixed opMat = trMat.mul(rotMat).mul(scaleMat);
+
+    Vec2Fixed transf;
+
+    int srcOffset = 0;
+    int offset = horizon*frame->getWidth() + 0;
+    int size = bmp->getWidth()*bmp->getHeight();
+    for(int y = horizon; y < frame->getHeight(); ++ y) {
+
+        for(int x = 0; x < frame->getWidth(); ++ x) {
+
+            transf = opMat.mul(Vec2Fixed(x, y));
+            bx = transf.getXInt();
+            by = transf.getYInt();
+            while(bx < 0) bx += bmp->getWidth();
+            while(by < 0) by += bmp->getHeight();
+            bx %=  bmp->getWidth();
+            by %=  bmp->getHeight();
+
+            srcOffset = by*bmp->getWidth() + bx;
+
+            // Put pixel
+            d[offset ++] = bd[srcOffset];
+        }
+    }
+
 }
