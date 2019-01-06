@@ -2,13 +2,16 @@
 // (c) 2019 Jani Nykänen
 
 #include "../../Core/Scene.hpp"
+#include "../../Core/Bitmap.hpp"
 
 // Game scene
 class Game : public Scene {
 
 private:
 
-    // ...
+    // Test bitmaps
+    Bitmap* bmpParrot;
+    Bitmap* bmpFont;
 
 public:
 

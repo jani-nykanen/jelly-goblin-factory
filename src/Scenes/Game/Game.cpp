@@ -12,6 +12,10 @@
 void Game::init() {
 
     printf("Initializing...\n");
+
+    // Load bitmaps
+    bmpParrot = new Bitmap("parrot.bin");
+    bmpFont = new Bitmap("font.bin");
 }
 
 
@@ -36,6 +40,12 @@ void Game::draw(Graphics* g) {
         g->fillRect(x, y, 8, 8, (uint8)i);
         
     }
+
+    // Draw parrot
+    g->drawBitmap(bmpParrot,0, 0, 128, 128, 224, -32, Flip::Both);
+
+    // Draw text
+    g->drawText(bmpFont, "Hello world!", 2, 180, -4, 0);
 }
 
 

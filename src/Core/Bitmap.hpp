@@ -6,6 +6,8 @@
 
 #include "Types.hpp"
 
+#include <string>
+
 // Bitmap class
 class Bitmap {
 
@@ -25,6 +27,7 @@ public:
     // Constructors
     Bitmap(int width, int height);
     Bitmap(int width, int height, uint8* data);
+    Bitmap(std::string path);
     // Destructor
     ~Bitmap();
 
