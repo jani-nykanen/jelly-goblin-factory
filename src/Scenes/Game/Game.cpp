@@ -33,15 +33,15 @@ void Game::update(int steps) {
 // Draw scene
 void Game::draw(Graphics* g) {
 
-    g->clearScreen(0b10010010);
+    g->clearScreen(0);
 
-    FixedPoint c = fixedCos(angle)/2 + FIXED_PRECISION;
-    FixedPoint s = fixedSin(angle)/2 + FIXED_PRECISION;
+    // FixedPoint c = fixedCos(angle)/2 + FIXED_PRECISION;
+    // FixedPoint s = fixedSin(angle)/2 + FIXED_PRECISION;
 
     g->drawPseudo3DFloor(bmpParrot, 
-        Vec2Fixed(160, 100), 
-        Vec2Fixed(c, s, false), 
-        angle, 0);
+        Vec2Fixed(0, 0), 
+        Vec2Fixed(1, 1), 
+        angle, 0, 0, 0);
 
     // Draw text
     g->drawText(bmpFont, "Hello world!", 2, 2, -4, 0);

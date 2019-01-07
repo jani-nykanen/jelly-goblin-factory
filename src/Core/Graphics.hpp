@@ -63,7 +63,7 @@ public:
     // Draw pseudo-3D floor
     void drawPseudo3DFloor(Bitmap* bmp, 
         Vec2Fixed tr, Vec2Fixed scale, int angle,
-        int horizon);
+        int horizon, int skipTop = 0, int skipBottom = 0);
 };
 
 #endif // __GRAPHICS_H__

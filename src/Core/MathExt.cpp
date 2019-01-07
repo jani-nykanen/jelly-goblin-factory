@@ -11,7 +11,7 @@ int negMod(int m, int n) {
 
     if(m < 0) {
 
-        return n - (-m % n);
+        return n - (-m % n) -1;
     }
     return m % n;
 }

@@ -270,7 +270,7 @@ void Graphics::drawText(Bitmap* bmp, std::string text,
 // Draw pseudo-3D floor
 void Graphics::drawPseudo3DFloor(Bitmap* bmp, 
     Vec2Fixed tr, Vec2Fixed scale, int angle,
-    int horizon) {
+    int horizon, int skipTop, int skipBottom ) {
 
     uint8* d = frame->getData();
     uint8* bd = bmp->getData();
@@ -280,25 +280,44 @@ void Graphics::drawPseudo3DFloor(Bitmap* bmp,
     // Matrices
     Mat3Fixed rotMat = Mat3Fixed().rotate(angle);
     Mat3Fixed trMat = Mat3Fixed().translate(tr.x, tr.y);
+    Mat3Fixed baseTrMat = Mat3Fixed().translate(
+        -frame->getWidth()/2 * FIXED_PRECISION, 
+        -frame->getHeight() * FIXED_PRECISION);
+
     Mat3Fixed scaleMat = Mat3Fixed().scale(scale.x, scale.y);
-    Mat3Fixed opMat = trMat.mul(rotMat).mul(scaleMat);
+    Mat3Fixed opMat = trMat.mul(scaleMat).mul(rotMat).mul(baseTrMat);
 
     Vec2Fixed transf;
+    Mat3Fixed lscaleMat;
+    Mat3Fixed ltransMat;
+    int lscale;
+    int ltrans;
 
     int srcOffset = 0;
-    int offset = horizon*frame->getWidth() + 0;
+    int offset = (horizon+skipTop)*frame->getWidth() + 0;
     int size = bmp->getWidth()*bmp->getHeight();
-    for(int y = horizon; y < frame->getHeight(); ++ y) {
+    // Draw lines
+    for(int y = horizon + skipTop; 
+        y < frame->getHeight() - skipBottom; 
+        ++ y) {
 
         for(int x = 0; x < frame->getWidth(); ++ x) {
 
-            transf = opMat.mul(Vec2Fixed(x, y));
+            // Compute line scale
+            lscale = (y - horizon)*FIXED_PRECISION /
+                 (frame->getHeight()-horizon);
+            lscaleMat.scale(lscale, lscale);
+
+            // Compute line translation
+            ltrans = (FIXED_PRECISION - lscale) * bmp->getHeight();
+            ltransMat.translate(0, -ltrans);
+
+            // Transform
+            transf = opMat.mul(lscaleMat).mul(ltransMat).mul(Vec2Fixed(x, y));
             bx = transf.getXInt();
             by = transf.getYInt();
-            while(bx < 0) bx += bmp->getWidth();
-            while(by < 0) by += bmp->getHeight();
-            bx %=  bmp->getWidth();
-            by %=  bmp->getHeight();
+            bx = negMod(bx, bmp->getWidth());
+            by = negMod(by, bmp->getHeight());
 
             srcOffset = by*bmp->getWidth() + bx;
 
