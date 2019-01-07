@@ -3,10 +3,27 @@
 
 #include "Types.hpp"
 
+#include "MathExt.hpp"
+
 #include <cmath>
 
 
-// Constructor
+// Vector constructors
+Vec2Fixed::Vec2Fixed(int x, int y, bool fix) {
+
+    this->x = x;
+    this->y = y;
+
+    if(fix) {
+
+        this->x *= FIXED_PRECISION;
+        this->y *= FIXED_PRECISION;
+    }
+}
+
+
+
+// Matrix constructor
 Mat3Fixed::Mat3Fixed() {
 
     identity();
@@ -62,8 +79,8 @@ Mat3Fixed Mat3Fixed::mul(Mat3Fixed M) {
 // Set to rotation matrix
 Mat3Fixed Mat3Fixed::rotate(int angle) {
 
-    FixedPoint c = floatToFixed(cosf(angle / 180.0f * M_PI));
-	FixedPoint s = floatToFixed(sinf(angle / 180.0f * M_PI));
+    FixedPoint s = fixedSin(angle);
+    FixedPoint c = fixedCos(angle);
 
 	m11 = c; m21 =-s; m31 = 0;
 	m12 = s; m22 = c; m32 = 0;

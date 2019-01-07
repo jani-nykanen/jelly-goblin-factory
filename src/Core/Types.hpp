@@ -38,14 +38,11 @@ struct Vec2Fixed {
 
     // Constructor
     inline Vec2Fixed(){x=0;y=0;}
-    inline Vec2Fixed(int x, int y) {
-        this->x=x*FIXED_PRECISION; 
-        this->y=y*FIXED_PRECISION;
-    };
     inline Vec2Fixed(float x, float y) {
         this->x=floatToFixed(x);
         this->y=floatToFixed(y);
     };
+    Vec2Fixed(int x, int y, bool fix=true);
 
     // Get components
     inline int getXInt(){return x / FIXED_PRECISION;}

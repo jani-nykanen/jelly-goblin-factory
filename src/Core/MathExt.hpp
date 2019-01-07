@@ -20,4 +20,12 @@ MIN(uint16)
 MIN(int32)
 MIN(uint32)
 
+// Negative modulo
+int negMod(int m, int n);
+
+// Fixed sine
+int fixedSin(int angle);
+// Fixed cosine
+int fixedCos(int angle);
+
 #endif // __MATH_EXT_H__

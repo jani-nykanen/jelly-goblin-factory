@@ -3,6 +3,8 @@
 
 #include "Game.hpp"
 
+#include "../../Core/MathExt.hpp"
+
 #include <cstdio>
 #include <cmath>
 
@@ -33,12 +35,12 @@ void Game::draw(Graphics* g) {
 
     g->clearScreen(0b10010010);
 
-    float c = cosf(angle/180.0f * M_PI)*0.5f+1.0f;
-    float s = sinf(angle/180.0f * M_PI)*0.5f+1.0f;
+    FixedPoint c = fixedCos(angle)/2 + FIXED_PRECISION;
+    FixedPoint s = fixedSin(angle)/2 + FIXED_PRECISION;
 
     g->drawPseudo3DFloor(bmpParrot, 
         Vec2Fixed(160, 100), 
-        Vec2Fixed(c, s), 
+        Vec2Fixed(c, s, false), 
         angle, 0);
 
     // Draw text
