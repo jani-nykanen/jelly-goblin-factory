@@ -18,6 +18,7 @@ void Game::init() {
 
     // Load bitmaps
     bmpParrot = assets->getBitmap("parrot");
+    bmpFont = assets->getBitmap("font");
 
     // Set defaults
     angle = 0.0f;
@@ -65,6 +66,10 @@ void Game::draw(Graphics* g) {
     g->drawBitmap(bmpParrot, 32, 32, 256, 256, Flip::Both);
     g->setColor(1, 0, 0, 0.5f);
     g->drawBitmap(bmpParrot, 192, 192);
+
+    // Draw some text
+    g->setColor(1,1,0);
+    g->drawText(bmpFont, "Hello world!", view.x/2, 16, -32,0, 1.0f, true);
 }
 
 

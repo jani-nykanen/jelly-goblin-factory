@@ -47,6 +47,11 @@ public:
     void drawBitmap(Bitmap* bmp, float dx, float dy, float dw, float dh,
         int flip = Flip::None);
     void drawBitmap(Bitmap* bmp, float dx, float dy, int flip = Flip::None);
+
+    // Draw text
+    void drawText(Bitmap* bmp, std::string text, int dx, int dy, 
+                int xoff, int yoff, 
+		        float scale = 1.0f, bool center = false);
 };
 
 #endif // __GRAPHICS_H__

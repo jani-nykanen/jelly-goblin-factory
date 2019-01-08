@@ -96,3 +96,49 @@ void Graphics::drawBitmap(Bitmap* bmp, float dx, float dy, int flip) {
 
     drawBitmap(bmp, dx, dy, bmp->getWidth(), bmp->getHeight(), flip);
 }
+
+// Draw text
+void Graphics::drawText(Bitmap* bmp, std::string text, int dx, int dy, 
+                int xoff, int yoff, 
+		        float scale, bool center) {
+
+    int cw = (bmp->getWidth()) / 16;
+    int ch = cw;
+    int len = text.length();
+
+    float x = dx;
+    float y = dy;
+    unsigned char c;
+
+    // Center the text
+    if (center)
+    {
+        dx -= ((len + 1) / 2.0f * (cw + xoff) * scale);
+        x = dx;
+    }
+
+    // Draw every character
+    float sx, sy;
+    for (int i = 0; i < len; ++i)
+    {
+
+        c = text[i];
+        // Line swap
+        if (c == '\n')
+        {
+
+            x = dx;
+            y += (yoff + ch) * scale;
+            continue;
+        }
+
+        sx = c % 16;
+        sy = (c / 16);
+        // Draw character
+        drawBitmap(bmp, sx * cw, sy * ch, cw, ch,
+            x, y,
+            cw * scale, ch * scale);
+
+        x += (cw + xoff) * scale;
+    } 
+}

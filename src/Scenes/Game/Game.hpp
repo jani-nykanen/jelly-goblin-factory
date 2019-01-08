@@ -11,6 +11,7 @@ private:
 
     // Test bitmaps
     Bitmap* bmpParrot;
+    Bitmap* bmpFont;
 
     // Test angle
     float angle;
