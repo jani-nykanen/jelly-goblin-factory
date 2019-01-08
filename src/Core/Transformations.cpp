@@ -4,6 +4,13 @@
 #include "Transformations.hpp"
 
 
+// Pass transformations to shader
+void Transformations::passToShader(Shader* s) {
+
+    s->setMatrixUniforms(model, view);
+}
+
+
 // Constructor
 Transformations::Transformations() {
 
@@ -35,6 +42,22 @@ void Transformations::rotate(float angle) {
     
     operand.rotate(angle);
     model = model.mul(operand);
+}
+
+
+// Set view
+void Transformations::setView(float w, float h) {
+
+    view.ortho2D(0, w, 0, h);
+	viewport.x = w;
+	viewport.y = h;
+}
+void Transformations::setView(float h) {
+
+    float ratio = fbSize.x / fbSize.y;
+	float w = ratio * h;
+		
+	setView(w, h);
 }
 
 

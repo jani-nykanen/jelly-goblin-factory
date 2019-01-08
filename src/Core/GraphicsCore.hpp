@@ -43,6 +43,9 @@ public:
 
     // Resize event
     void resize(int width, int height);
+
+    // Use transformations
+    void useTransf();
 };
 
 #endif // __GRAPHICS_CORE_H__

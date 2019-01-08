@@ -9,12 +9,8 @@ class Game : public Scene {
 
 private:
 
-    // Test bitmaps
-    Bitmap* bmpParrot;
-    Bitmap* bmpFont;
-
     // Test angle
-    int angle;
+    float angle;
 
 public:
 

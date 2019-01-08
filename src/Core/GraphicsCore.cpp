@@ -91,3 +91,10 @@ void GraphicsCore::resize(int width, int height) {
     // Resize viewport
     glViewport(0, 0, width, height);
 }
+
+
+// Use transformations
+void GraphicsCore::useTransf() {
+
+    passToShader(shader);
+}

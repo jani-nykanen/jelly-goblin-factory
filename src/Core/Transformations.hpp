@@ -45,6 +45,10 @@ public:
     void scale(float x, float y);
     void rotate(float angle);
 
+    // Set view
+    void setView(float w, float h);
+    void setView(float h);
+
     // Stack operations
     void push();
     void pop();

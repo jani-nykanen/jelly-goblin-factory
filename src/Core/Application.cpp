@@ -115,7 +115,8 @@ void Application::loop() {
     // Compute desired frame wait
     float framerate = conf.getIntParam("framerate", 60);
     float tm = COMPARED_FPS / framerate;
-    float frameWait = tm / 1000.0f;
+    float frameWait = 1.0f / framerate;
+
     int updateCount = 0;
     bool redraw = false;
 
