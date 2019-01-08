@@ -8,6 +8,7 @@
 
 #include "EventManager.hpp"
 #include "Graphics.hpp"
+#include "AssetPack.hpp"
 
 class SceneManager;
 
@@ -20,11 +21,15 @@ protected:
     EventManager* evMan;
     // Scene manager reference
     SceneManager* sceneMan;
+    // Global asset pack
+    AssetPack* assets;
 
 public:
 
     // Set references
-    void setReferences(EventManager* evMan, SceneManager* sceneMan);
+    void setReferences(EventManager* evMan, 
+        SceneManager* sceneMan, 
+        AssetPack* assets);
 
     // Methods
     virtual void init() {}

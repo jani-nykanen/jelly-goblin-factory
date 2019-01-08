@@ -84,8 +84,11 @@ void Application::init() {
     // Create event manager
     evMan = new EventManager(this, (void*)window);
 
+    // Load assets
+    assets = new AssetPack(conf.getParam("asset_path"));
+
     // Create scene manager
-    sceneMan = new SceneManager(evMan);
+    sceneMan = new SceneManager(evMan, assets);
     // Add scenes
     SceneInfo sinfo;
     for(int i = 0; i < scenes.size(); ++ i) {
@@ -193,6 +196,7 @@ void Application::dispose() {
     delete evMan;
     delete sceneMan;
     delete graph;
+    delete assets;
 
     // Destroy window
     glfwDestroyWindow(window);

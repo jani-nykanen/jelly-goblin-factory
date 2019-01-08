@@ -17,7 +17,7 @@ void Game::init() {
     printf("Initializing...\n");
 
     // Load bitmaps
-    bmpParrot = new Bitmap("Assets/Bitmaps/parrot.png");
+    bmpParrot = assets->getBitmap("parrot");
 
     // Set defaults
     angle = 0.0f;

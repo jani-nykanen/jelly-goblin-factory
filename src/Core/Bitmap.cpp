@@ -60,7 +60,7 @@ Bitmap::Bitmap(std::string path) {
 
     uint8* data = readPNG(path, width, height);
     create(width, height, data);
-    delete[] data;
+    free(data);
 }
 
 

@@ -21,13 +21,14 @@ private:
     // Active scene
     Scene* activeScene;
 
-    // Reference to the event manager
+    // References
     EventManager* evMan;
+    AssetPack* assets;
 
 public:
     
     // Constructor
-    SceneManager(EventManager* evMan);
+    SceneManager(EventManager* evMan, AssetPack* assets);
     // Destructor
     ~SceneManager();
 

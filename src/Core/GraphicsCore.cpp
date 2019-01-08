@@ -56,6 +56,7 @@ GraphicsCore::~GraphicsCore() {
 
     delete shader;
     delete bmpWhite;
+    delete rectMesh;
 }
 
 

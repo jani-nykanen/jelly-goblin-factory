@@ -12,6 +12,7 @@
 #include "Scene.hpp"
 #include "SceneManager.hpp"
 #include "Config.hpp"
+#include "AssetPack.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -34,6 +35,8 @@ private:
     SceneManager* sceneMan;
     // Graphics
     Graphics* graph;
+    // Global asset pack
+    AssetPack* assets;
 
     // Scene info storage
     std::vector<SceneInfo> scenes;

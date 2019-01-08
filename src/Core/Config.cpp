@@ -97,6 +97,10 @@ ConfigData::ConfigData(std::string path) {
 
     // Open file
     std::ifstream file(path.c_str());
+    if(file.is_open() == false) {
+
+        throw std::runtime_error("Failed to open a file in " + path);
+    }
 
     // Read lines
     std::string line;
@@ -155,6 +159,12 @@ std::string ConfigData::getParam(std::string key) {
 
     return getParam(key, "");
 }
+std::string ConfigData::getParam(int i) {
+
+    if(i < 0 || i >= params.size()) return "";
+
+    return params[i].value;
+}
 
 
 // Get integer parameter
@@ -169,4 +179,12 @@ int ConfigData::getIntParam(std::string key, int def) {
     int ret = 0;
     std::istringstream ( r ) >> ret;
     return ret;
+}
+
+// Get key
+std::string ConfigData::getKey(int i) {
+
+    if(i < 0 || i >= params.size()) return "";
+
+    return params[i].key;
 }

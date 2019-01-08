@@ -7,9 +7,11 @@
 
 
 // Constructor
-SceneManager::SceneManager(EventManager* evMan) {
+SceneManager::SceneManager(EventManager* evMan, AssetPack* assets) {
 
+    // Store references
     this->evMan = evMan;
+    this->assets = assets;
 
     // Initialize data
     scenes = std::vector<Scene*> ();
@@ -31,7 +33,7 @@ SceneManager::~SceneManager() {
 // Add a scene
 void SceneManager::addScene(Scene* s, bool makeActive, bool makeGlobal) {
 
-    s->setReferences(evMan, this);
+    s->setReferences(evMan, this, assets);
     scenes.push_back(s);
 
     if(makeActive)

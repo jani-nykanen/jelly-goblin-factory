@@ -43,7 +43,14 @@ public:
     // Get parameter
     std::string getParam(std::string key, std::string def);
     std::string getParam(std::string key);
+    std::string getParam(int i);
     int getIntParam(std::string key, int def);
+
+    // Get key
+    std::string getKey(int i);
+
+    // Get param count
+    inline int getParamCount() {return (int)params.size();}
 };
 
 #endif // __CONFIG_H__

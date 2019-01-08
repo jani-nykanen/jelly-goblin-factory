@@ -5,9 +5,12 @@
 
 
 // Constructor
-void Scene::setReferences(EventManager* evMan, SceneManager* sceneMan) {
+void Scene::setReferences(EventManager* evMan, 
+    SceneManager* sceneMan, 
+    AssetPack* assets) {
 
     // Store references
     this->evMan = evMan;
     this->sceneMan = sceneMan;
+    this->assets = assets;
 }
