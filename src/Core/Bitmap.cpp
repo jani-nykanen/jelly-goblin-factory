@@ -10,6 +10,8 @@
 
 #include <GL/gl.h>
 
+#include "../Lib/ReadPNG.hpp"
+
 // Previous texture
 static Bitmap* prevTex = NULL;
 
@@ -53,6 +55,12 @@ Bitmap::Bitmap(int width, int height, uint8* data) {
     
     // Create
     create(width, height, data);
+}
+Bitmap::Bitmap(std::string path) {
+
+    uint8* data = readPNG(path, width, height);
+    create(width, height, data);
+    delete[] data;
 }
 
 

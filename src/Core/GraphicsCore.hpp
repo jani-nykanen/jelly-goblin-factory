@@ -6,15 +6,9 @@
 
 #include "Shader.hpp"
 #include "Bitmap.hpp"
+#include "Mesh.hpp"
 #include "Transformations.hpp"
 
-// Simple mesh
-struct SimpleMesh {
-    uint32 vertexBuffer;
-    uint32 uvBuffer;
-    uint32 indexBuffer;
-    uint32 indexCount;
-};
 
 // Graphics class
 class GraphicsCore : public Transformations {
@@ -30,7 +24,7 @@ protected:
     Shader* shader =NULL;
 
     // Rectangular mesh
-    SimpleMesh rectMesh;
+    Mesh* rectMesh;
     // White texture
     Bitmap* bmpWhite;
 

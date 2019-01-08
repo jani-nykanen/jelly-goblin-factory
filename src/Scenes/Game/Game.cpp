@@ -16,6 +16,10 @@ void Game::init() {
 
     printf("Initializing...\n");
 
+    // Load bitmaps
+    bmpParrot = new Bitmap("Assets/Bitmaps/parrot.png");
+
+    // Set defaults
     angle = 0.0f;
 }
 
@@ -54,6 +58,13 @@ void Game::draw(Graphics* g) {
 
     g->setColor(0, 1, 0, 0.25f);
     g->fillRect(view.x/2 - 128, view.y/2-128, 256, 256);
+
+    g->identity();
+    g->useTransf();
+    g->setColor();
+    g->drawBitmap(bmpParrot, 32, 32, 256, 256, Flip::Both);
+    g->setColor(1, 0, 0, 0.5f);
+    g->drawBitmap(bmpParrot, 192, 192);
 }
 
 

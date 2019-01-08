@@ -37,6 +37,16 @@ public:
     
     // Draw a filled rectangle
     void fillRect(float x, float y, float w, float h);
+    // Draw a bitmap
+    void drawBitmap(Bitmap* bmp, float sx, float sy, float sw, float sh, 
+        float dx, float dy, float dw, float dh, 
+        int flip = Flip::None);
+    void drawBitmap(Bitmap* bmp, float sx, float sy, float sw, float sh, 
+        float dx, float dy, 
+        int flip = Flip::None);
+    void drawBitmap(Bitmap* bmp, float dx, float dy, float dw, float dh,
+        int flip = Flip::None);
+    void drawBitmap(Bitmap* bmp, float dx, float dy, int flip = Flip::None);
 };
 
 #endif // __GRAPHICS_H__

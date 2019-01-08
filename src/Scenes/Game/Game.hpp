@@ -9,6 +9,9 @@ class Game : public Scene {
 
 private:
 
+    // Test bitmaps
+    Bitmap* bmpParrot;
+
     // Test angle
     float angle;
 
