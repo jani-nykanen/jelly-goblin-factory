@@ -17,6 +17,8 @@ static const std::string DEF_VERTEX =
 "#version 120\n"
 "attribute vec2 vertexPos;\n"
 "attribute vec2 vertexUV;\n"
+"uniform mat3 model;\n"
+"uniform mat3 view;\n"
 "uniform vec2 pos;\n"
 "uniform vec2 size;\n"
 "varying vec2 uv;\n"
@@ -25,16 +27,28 @@ static const std::string DEF_VERTEX =
 "    p.x *= size.x;\n"
 "	 p.y *= size.y;\n"
 "	 p += pos;\n"
-"    gl_Position = vec4(p.x, p.y, 1, 1);\n"
+"    gl_Position = vec4(view * model * vec3(p.x, p.y, 1), 1);\n"
 "    uv = vertexUV; \n"
 "}\n";
 static const std::string DEF_FRAG = 
 "#version 120\n"
-"varying vec2 uv;\n"
-"uniform sampler2D texSampler;\n"
-"void main() {\n"
-"   gl_FragColor = texture2D(texSampler, uv);\n"
-"}\n";
+"varying vec2 uv;\n"  
+"uniform sampler2D texSampler;\n"  
+"uniform vec2 texPos;\n"  
+"uniform vec2 texSize;\n"  
+"uniform vec4 color;\n"  
+"void main() {\n"  
+"    const float DELTA = 0.01;\n"  
+"    vec2 tex = uv;\n"  
+"    tex.x *= texSize.x;\n"  
+"    tex.y *= texSize.y;\n"  
+"    tex += texPos;\n"  
+"    vec4 res = color * texture2D(texSampler, tex);\n"  
+"    if(res.a <= DELTA) {\n"  
+"        discard;\n"  
+"    }\n"  
+"    gl_FragColor = res;\n"  
+"}";
 
 
 // Compile a shader
@@ -142,15 +156,37 @@ void Shader::useShader() {
     // Get uniforms
     unifPos = glGetUniformLocation(program, "pos");
 	unifSize = glGetUniformLocation(program, "size");
+    unifModel = glGetUniformLocation(program, "model");
+    unifView = glGetUniformLocation(program, "view");
+    unifUVPos = glGetUniformLocation(program, "texPos");
+    unifUVSize = glGetUniformLocation(program, "texSize");
+    unifColor = glGetUniformLocation(program, "color");
 
     // Set defaults
-    setUniforms(0, 0, 1, 1);
+    setMatrixUniforms(Matrix3().identity(), Matrix3().identity());
+    setVertexUniforms(Vector2(0, 0), Vector2(1, 1));
+    setUVUniforms(Vector2(0, 0), Vector2(1, 1));
+    setColorUniforms(Color(1, 1, 1, 1));
 }
 
 
 // Set uniforms
-void Shader::setUniforms(float x, float y, float w, float h) {
+void Shader::setMatrixUniforms(Matrix3 model, Matrix3 view) {
 
-    glUniform2f(unifPos, x, y);
-    glUniform2f(unifSize, w, h);
+    glUniformMatrix3fv(unifModel, 1, false, model.toArray());
+    glUniformMatrix3fv(unifView, 1, false, view.toArray());
+}
+void Shader::setVertexUniforms(Vector2 pos, Vector2 size) {
+    
+    glUniform2f(unifPos, pos.x, pos.y);
+    glUniform2f(unifSize, size.x, size.y);
+}
+void Shader::setUVUniforms(Vector2 pos, Vector2 size) {
+    
+    glUniform2f(unifUVPos, pos.x, pos.y);
+    glUniform2f(unifUVSize, size.x, size.y);
+}
+void Shader::setColorUniforms(Color col) {
+    
+    glUniform4f(unifColor, col.r, col.g, col.b, col.a);
 }

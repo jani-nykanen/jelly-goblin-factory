@@ -28,7 +28,7 @@ public:
 
     // Methods
     virtual void init() {}
-    virtual void update(int steps) {}
+    virtual void update(float tm) {}
     virtual void draw(Graphics* g) {}
     virtual void dispose() {}
     virtual void onChange() {}

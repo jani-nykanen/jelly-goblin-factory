@@ -75,13 +75,13 @@ void SceneManager::init() {
 
 
 // Update scenes
-void SceneManager::update(int steps) {
+void SceneManager::update(float tm) {
 
     if(globalScene != NULL)
-        globalScene->update(steps);
+        globalScene->update(tm);
 
     if(activeScene != NULL)
-        activeScene->update(steps);
+        activeScene->update(tm);
 }
 
 

@@ -12,9 +12,11 @@
 // Reference to self
 static Application* self;
 
+
 // Resize event
-static void resizeFramebuffer(GLFWwindow* window, int width, int height)
-{
+static void resizeFramebuffer(GLFWwindow* window, 
+    int width, int height) {
+
     self->resize(width, height);
 }
 
@@ -76,9 +78,7 @@ void Application::init() {
     initGL();
 
     // Create graphics
-    int canvasWidth = conf.getIntParam("canvas_width", 320);
-    int canvasHeight = conf.getIntParam("canvas_height", 240);
-    graph = new Graphics(canvasWidth, canvasHeight);
+    graph = new Graphics();
     graph->resize(winSize[0], winSize[1]);
 
     // Create event manager
@@ -113,8 +113,9 @@ void Application::loop() {
     glfwSetTime(0.0);
 
     // Compute desired frame wait
-    int steps = conf.getIntParam("refresh_steps", 1);
-    float frameWait = 1.0f / (COMPARED_FPS / steps);
+    float framerate = conf.getIntParam("framerate", 60);
+    float tm = COMPARED_FPS / framerate;
+    float frameWait = tm / 1000.0f;
     int updateCount = 0;
     bool redraw = false;
 
@@ -127,7 +128,7 @@ void Application::loop() {
         while(timeSum >= frameWait) {
 
             // Update frame
-            update(steps);
+            update(tm);
             redraw = true;
 
             // Make sure we won't be updating the frame
@@ -142,15 +143,8 @@ void Application::loop() {
             timeSum -= frameWait; 
         }
 
-        if(redraw) {
-
-            // Draw
-            draw();
-            redraw = false;
-        }
-
-        // Draw canvas
-        graph->drawCanvas();
+        // Draw
+        draw();
         // Swap buffers
         glfwSwapBuffers(window);
 
@@ -183,8 +177,8 @@ void Application::draw() {
     // Draw scenes
     sceneMan->draw(graph);
 
-    // Refresh canvas
-    graph->refreshCanvas();
+    // Reset graphics matrix stack
+    graph->resetStack();
 }
 
 

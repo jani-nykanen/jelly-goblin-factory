@@ -8,53 +8,26 @@
 #include <cmath>
 
 
-// Vector constructors
-Vec2Fixed::Vec2Fixed(int x, int y, bool fix) {
-
-    this->x = x;
-    this->y = y;
-
-    if(fix) {
-
-        this->x *= FIXED_PRECISION;
-        this->y *= FIXED_PRECISION;
-    }
-}
-
-
-
 // Matrix constructor
-Mat3Fixed::Mat3Fixed() {
+Matrix3::Matrix3() {
 
     identity();
 }
 
 
-// Constructor
-void Mat3Fixed::identity() {
-
-    m11 = FIXED_PRECISION; m21 = 0; m31 = 0;
-	m12 = 0; m22 = FIXED_PRECISION; m32 = 0;
-	m13 = 0; m23 = 0; m33 = FIXED_PRECISION;
-}
-
-
 // Multiply
-Vec2Fixed Mat3Fixed::mul(Vec2Fixed p) {
+Vector2 Matrix3::mul(Vector2 p) {
 
-    Vec2Fixed ret;
+    Vector2 ret;
 
-    ret.x = m11 * p.x + m21 * p.y + m31 * FIXED_PRECISION;
-    ret.y = m12 * p.x + m22 * p.y + m32 * FIXED_PRECISION;
-
-    ret.x /= FIXED_PRECISION;
-    ret.y /= FIXED_PRECISION;
+    ret.x = m11 * p.x + m21 * p.y + m31 * 1.0f;
+    ret.y = m12 * p.x + m22 * p.y + m32 * 1.0f;
 
     return ret;
 }
-Mat3Fixed Mat3Fixed::mul(Mat3Fixed M) {
+Matrix3 Matrix3::mul(Matrix3 M) {
 
-    Mat3Fixed A;
+    Matrix3 A;
 
     A.m11 = m11 * M.m11 + m21 * M.m12 + m31 * M.m13;
 	A.m21 = m11 * M.m21 + m21 * M.m22 + m31 * M.m23;
@@ -68,54 +41,78 @@ Mat3Fixed Mat3Fixed::mul(Mat3Fixed M) {
 	A.m23 = m13 * M.m21 + m23 * M.m22 + m33 * M.m23;
 	A.m33 = m13 * M.m31 + m23 * M.m32 + m33 * M.m33;
 
-    A.m11 /= FIXED_PRECISION; A.m12 /= FIXED_PRECISION; A.m13 /= FIXED_PRECISION;
-    A.m21 /= FIXED_PRECISION; A.m22 /= FIXED_PRECISION; A.m23 /= FIXED_PRECISION;
-    A.m31 /= FIXED_PRECISION; A.m32 /= FIXED_PRECISION; A.m33 /= FIXED_PRECISION;
-
     return A;
 }
 
 
-// Set to rotation matrix
-Mat3Fixed Mat3Fixed::rotate(int angle) {
+// Set to identity matrix
+Matrix3 Matrix3::identity() {
 
-    FixedPoint s = fixedSin(angle);
-    FixedPoint c = fixedCos(angle);
+    m11 = 1.0f; m21 = 0; m31 = 0;
+	m12 = 0; m22 = 1.0f; m32 = 0;
+	m13 = 0; m23 = 0; m33 = 1.0f;
+
+    return *this;
+}
+
+
+// Set to rotation matrix
+Matrix3 Matrix3::rotate(float angle) {
+
+    float s = sinf(angle);
+    float c = cosf(angle);
 
 	m11 = c; m21 =-s; m31 = 0;
 	m12 = s; m22 = c; m32 = 0;
-	m13 = 0; m23 = 0; m33 = FIXED_PRECISION;
+	m13 = 0; m23 = 0; m33 = 1.0f;
 
     return *this;
 }
 
 
 // Scale
-Mat3Fixed Mat3Fixed::scale(FixedPoint x, FixedPoint y) {
+Matrix3 Matrix3::scale(float x, float y) {
 
     m11 = x; m21 = 0; m31 = 0;
 	m12 = 0; m22 = y; m32 = 0;
-	m13 = 0; m23 = 0; m33 = FIXED_PRECISION;
+	m13 = 0; m23 = 0; m33 = 1.0f;
 
     return *this;
 }
 
 
 // Translate
-Mat3Fixed Mat3Fixed::translate(FixedPoint x, FixedPoint y) {
+Matrix3 Matrix3::translate(float x, float y) {
 
-    m11 = FIXED_PRECISION; m21 = 0; m31 = x;
-	m12 = 0; m22 = FIXED_PRECISION; m32 = y;
-	m13 = 0; m23 = 0; m33 = FIXED_PRECISION;
+    m11 = 1.0f; m21 = 0; m31 = x;
+	m12 = 0; m22 = 1.0f; m32 = y;
+	m13 = 0; m23 = 0; m33 = 1.0f;
 
     return *this;
 }
 
 
-// Inverse
-Mat3Fixed Mat3Fixed::inverse() {
+// Ortho 2D projection
+Matrix3 Matrix3::ortho2D(float left, float right, 
+        float bottom, float top) {
 
-    Mat3Fixed A;
-    // TODO: THIS!
-    return A;
+    float w = right - left;
+	float h = top - bottom;
+
+	m11 = 2.0f / w; m21 = 0; m31 = -(right+left)/w;
+	m12 = 0; m22 = -2.0f / h; m32 = (top+bottom)/h;
+	m13 = 0; m23 = 0; m33 = 1.0f;
+
+    return *this;
+}
+
+
+// To array
+float* Matrix3::toArray() {
+
+    arr[0] = m11; arr[1] = m12; arr[2] = m13;
+    arr[3] = m21; arr[4] = m22; arr[5] = m23;
+    arr[6] = m31; arr[7] = m32; arr[8] = m33;
+
+    return arr;
 }

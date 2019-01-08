@@ -4,8 +4,6 @@
 #ifndef __TYPES_H__
 #define __TYPES_H__
 
-#define FIXED_PRECISION 256
-
 // Primitive types
 typedef signed char int8;
 typedef unsigned char uint8;
@@ -16,68 +14,68 @@ typedef unsigned int uint32;
 typedef signed long int64;
 typedef unsigned long uint64;
 
-// "Fixed point" number
-typedef int FixedPoint;
-
-// To int
-inline int fixedToInt(FixedPoint fp) {
-    return fp / FIXED_PRECISION;
-}
-// Float to fixed
-inline FixedPoint floatToFixed(float f) {
-
-    return (FixedPoint)(f * FIXED_PRECISION);
-}
-
 
 // Fixed point vector
-struct Vec2Fixed {
+struct Vector2 {
 
     // Components
-    int x, y;
+    float x, y;
 
     // Constructor
-    inline Vec2Fixed(){x=0;y=0;}
-    inline Vec2Fixed(float x, float y) {
-        this->x=floatToFixed(x);
-        this->y=floatToFixed(y);
-    };
-    Vec2Fixed(int x, int y, bool fix=true);
+    inline Vector2(){x=0;y=0;}
+    inline Vector2(float x, float y) {
 
-    // Get components
-    inline int getXInt(){return x / FIXED_PRECISION;}
-    inline int getYInt(){return y / FIXED_PRECISION;}
+        this->x = x;
+        this->y = y;
+    };
 };
 
+// Color
+struct Color {
+    float r,g,b,a;
+    inline Color(float r=1, float g=1, float b=1, float a=1) {
 
+        this->r = r;
+        this->g = g;
+        this->b = b;
+        this->a = a;
+    }
+};
 
 // Fixed point 3x3 matrix
-struct Mat3Fixed {
+class Matrix3 {
+
+private:
 
     // Components
-    int m11, m21, m31,
+    float m11, m21, m31,
         m12, m22, m32,
         m13, m23, m33;
+    float arr[3*3];
+
+public:
 
     // Constructor
-    Mat3Fixed();
-
-    // Set to the identity matrix
-    void identity();
+    Matrix3();
 
     // Multiply
-    Vec2Fixed mul(Vec2Fixed p);
-    Mat3Fixed mul(Mat3Fixed M);
+    Vector2 mul(Vector2 p);
+    Matrix3 mul(Matrix3 M);
 
+    // Set to the identity matrix
+    Matrix3 identity();
     // Set to rotation matrix
-    Mat3Fixed rotate(int angle);
+    Matrix3 rotate(float angle);
     // Scale
-    Mat3Fixed scale(FixedPoint x, FixedPoint y);
+    Matrix3 scale(float x, float y);
     // Translate
-    Mat3Fixed translate(FixedPoint x, FixedPoint y);
+    Matrix3 translate(float x, float y);
+    // Ortho 2D projection
+    Matrix3 ortho2D(float left, float right, 
+        float bottom, float top);
 
-    // Inverse
-    Mat3Fixed inverse();
+    // To array
+    float* toArray();
 };
 
 #endif // __TYPES_H__

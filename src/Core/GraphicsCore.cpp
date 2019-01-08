@@ -51,103 +51,16 @@ void GraphicsCore::createRectMesh() {
 }
 
 
-// Create canvas texture
-void GraphicsCore::createCanvasTexture() {
-
-    const int CHANNELS = 3;
-
-    // Generate palette
-    genPalette();
-
-    // Create data
-    canvasPixels = new uint8[canvasWidth*canvasHeight*CHANNELS];
-    for(int i = 0; i < canvasWidth*canvasHeight*CHANNELS; ++ i) {
-
-        canvasPixels[i] = 255;
-    }
-    frame = new Bitmap(canvasWidth, canvasHeight);
-
-    // Create texture
-    glGenTextures(1, &texCanvas);
-    glBindTexture(GL_TEXTURE_2D, texCanvas);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, canvasWidth, canvasHeight, 0, GL_RGB,
-	    GL_UNSIGNED_BYTE, canvasPixels);
-
-    glActiveTexture(GL_TEXTURE0);
-}   
-
-
-// Generate palette
-void GraphicsCore::genPalette() {
-
-    uint8 col, r,g,b;
-    for(int i = 0; i < GRAPHICS_CORE_PALETTE_SIZE; ++ i) {
-
-        col = (uint8)i;
-
-        // Get components
-        r = col >> 5;
-        r *= 36;
-        g = col << 3;
-        g = g >> 5;
-        g *= 36;
-        b = col << 6;
-        b = b >> 6;
-        b *= 85;
-
-        // Make the colors "imitate VGA
-        // colors"
-        r /= 4; r *= 4;
-        g /= 4; g *= 4;
-        b /= 4; b *= 4;
-
-        palette[i*3] = r;
-        palette[i*3 +1] = g;
-        palette[i*3 + 2] = b;
-    }
-}
-
-
-// Compute canvas properties
-void GraphicsCore::computeCanvasProp(int w, int h) {
-
-    PrimitiveRect canvasProp;
-
-    float aspectRatio = (float)canvasWidth / (float)canvasHeight;
-    float winRatio = (float)w / (float)h;
-
-    // Horizontal
-    if(winRatio >= aspectRatio) {
-
-        canvasProp.w = aspectRatio / winRatio * 2.0f;
-        canvasProp.h = 2.0f;
-
-        canvasProp.x = -canvasProp.w/2.0f;
-        canvasProp.y = -1.0f;
-    }
-    else {
-
-        canvasProp.w = 2.0f;
-        canvasProp.h = winRatio / aspectRatio * 2.0f;
-
-        canvasProp.x = -1.0f;
-        canvasProp.y = -canvasProp.h/2.0f;
-    }
-
-    // Pass data to the shader
-    shader->setUniforms(canvasProp.x, canvasProp.y,
-        canvasProp.w, canvasProp.h);
-}
-
-
 // Constructor
-GraphicsCore::GraphicsCore(int canvasWidth, int canvasHeight) {
+GraphicsCore::GraphicsCore() : Transformations() {
 
-    this->canvasWidth = canvasWidth;
-    this->canvasHeight = canvasHeight;
+    // Enable & set GL settings
+    glEnable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0);
+	glDisable(GL_DEPTH_TEST);
+	glEnable( GL_BLEND );
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, 
+        GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
     // Create shader
     shader = new Shader();
@@ -156,59 +69,25 @@ GraphicsCore::GraphicsCore(int canvasWidth, int canvasHeight) {
 
     // Create rectangular mesh
     createRectMesh();
-    // Create canvas texture
-    createCanvasTexture();
+    // Create white texture
+    bmpWhite = new Bitmap(1, 1);
 }
 
 
 // Destructor
 GraphicsCore::~GraphicsCore() {
 
-    delete frame;
-    delete canvasPixels;
-
     delete shader;
+    delete bmpWhite;
 }
 
 
 // Resize event
 void GraphicsCore::resize(int width, int height) {
 
+    // Pass size to the transformations
+    fbSize = Vector2(width, height);
+
+    // Resize viewport
     glViewport(0, 0, width, height);
-    computeCanvasProp(width, height);
-}
-
-
-// Draw canvas
-void GraphicsCore::drawCanvas() {
-
-    // Clear screen
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0, 0, 0, 1.0f);
-
-    // Draw rectangular mesh
-    glDrawElements(GL_TRIANGLES, rectMesh.indexCount,
-        GL_UNSIGNED_SHORT, (void*)0 );
-}
-
-
-// Refresh canvas
-void GraphicsCore::refreshCanvas() {
-
-    uint8* d = frame->getData();
-
-    // Update pixel data
-    int cindex;
-    for(int i = 0; i < canvasWidth*canvasHeight; ++ i) {
-
-        cindex = d[i];
-
-        canvasPixels[i*3] = palette[cindex*3];
-        canvasPixels[i*3 +1] = palette[cindex*3 +1];
-        canvasPixels[i*3 +2] = palette[cindex*3 +2];
-    }
-
-    // Pass to the texture
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, canvasWidth, canvasHeight,
-        GL_RGB, GL_UNSIGNED_BYTE, canvasPixels);
 }

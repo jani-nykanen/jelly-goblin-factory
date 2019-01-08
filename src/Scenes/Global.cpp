@@ -13,7 +13,7 @@ void Global::init() {
 
 
 // Update scene
-void Global::update(int steps) {
+void Global::update(float tm) {
 
     // Default keyboard shortcuts
     // 1) Terminate

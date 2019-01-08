@@ -39,7 +39,7 @@ public:
     // Initialize scenes
     void init();
     // Update scenes
-    void update(int steps);
+    void update(float tm);
     // Draw scenes
     void draw(Graphics* g);
 

@@ -8,75 +8,67 @@
 #include <iterator>
 #include <stdexcept>
 
+#include <GL/gl.h>
+
+// Previous texture
+static Bitmap* prevTex = NULL;
+
 
 // Create
 void Bitmap::create(int width, int height, uint8* src) {
-    
-    if(src != NULL) {
 
-        // Copy data
-        data = new uint8[width*height];
-        for(int i = 0; i < width*height; ++ i) {
-
-            data[i] = src[i];
-        }
-    }
+    // Store dimensions
     this->width = width;
     this->height = height;
+
+    // Create texture
+    glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+	    GL_UNSIGNED_BYTE, src);
 }
 
 
 // Constructors
 Bitmap::Bitmap(int width, int height) {
 
-    // Allocate memory for the bitmap
-    data = new uint8[width*height];
-    for(int i = 0; i < width*height; ++ i) {
+    const int CHANNELS = 4;
 
-        data[i] = 0;
+    // Allocate memory for the bitmap
+    uint8* data = new uint8[width*height*CHANNELS];
+    for(int i = 0; i < width*height*CHANNELS; ++ i) {
+
+        data[i] = 255;
     }
 
     // Create
-    create(width, height, NULL);
+    create(width, height, data);
+
+    // Clear data
+    delete[] data;
 }
 Bitmap::Bitmap(int width, int height, uint8* data) {
     
     // Create
     create(width, height, data);
 }
-Bitmap::Bitmap(std::string path) {
-
-    // Load from a file
-    // Open file
-    FILE* f = fopen(path.c_str(), "rb");
-    if(f == NULL) {
-
-        throw new std::runtime_error("Failed to load a file in: "
-        + path);
-    }
-
-    // Read size
-    short w, h;
-    fread(&w, sizeof(short),1, f);
-    fread(&h, sizeof(short),1, f);
-
-    // Allocate memory
-    data = new uint8[w*h];
-
-    // Read data
-    fread(data, sizeof(uint8), w*h, f);
-
-    // Store dimensions
-    width = (int)w;
-    height = (int)h;
-
-    // Close file
-    fclose(f);
-}
 
 
 // Destructor
 Bitmap::~Bitmap() {
 
-    delete[] data;
+    // ...
+}
+
+
+// Bind
+void Bitmap::bind() {
+
+    if(prevTex != this) {
+
+        prevTex = this;
+        glBindTexture(GL_TEXTURE_2D, texture);
+    }
 }

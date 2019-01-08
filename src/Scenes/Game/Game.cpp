@@ -15,36 +15,23 @@
 void Game::init() {
 
     printf("Initializing...\n");
-
-    // Load bitmaps
-    bmpParrot = new Bitmap("parrot.bin");
-    bmpFont = new Bitmap("font.bin");
 }
 
 
 // Update scene
-void Game::update(int steps) {
+void Game::update(float tm) {
 
-    angle += 1 * steps;
-    angle %= 360;
+
 }
 
 
 // Draw scene
 void Game::draw(Graphics* g) {
 
-    g->clearScreen(0);
+    g->clearScreen(0.75f, 0.75f, 0.75f);
 
-    // FixedPoint c = fixedCos(angle)/2 + FIXED_PRECISION;
-    // FixedPoint s = fixedSin(angle)/2 + FIXED_PRECISION;
-
-    g->drawPseudo3DFloor(bmpParrot, 
-        Vec2Fixed(0, 0), 
-        Vec2Fixed(1, 1), 
-        angle, 0, 0, 0);
-
-    // Draw text
-    g->drawText(bmpFont, "Hello world!", 2, 2, -4, 0);
+    g->setColor(1, 0, 0, 1.0f);
+    g->fillRect(0, 0, 1, 1);
 }
 
 
