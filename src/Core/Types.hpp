@@ -28,6 +28,21 @@ struct Vector2 {
         this->x = x;
         this->y = y;
     };
+
+    // Operators
+    inline Vector2 operator+(const Vector2 &v) {
+
+        return Vector2(x + v.x, y + v.y);
+    }
+    inline Vector2 operator*(const float &m) {
+
+        return Vector2(x*m, y*m);
+    }
+    inline Vector2& operator+=(const Vector2 &v) {
+
+        this->x += v.x;
+        this->y += v.y;
+    }
 };
 
 // Color

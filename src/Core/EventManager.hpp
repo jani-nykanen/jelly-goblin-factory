@@ -5,6 +5,7 @@
 #define __EVMAN_H__
 
 #include "InputListener.hpp"
+#include "GamePad.hpp"
 
 class Application;
 
@@ -15,15 +16,23 @@ private:
 
     // Reference to application
     Application* appRef;
+    // Gamepad reference
+    GamePad* vpad;
 
 public:
 
     // Constructor
-    EventManager(Application* ref, void* window);
+    EventManager(Application* ref, void* window, GamePad* vpad);
 
     // Redirect to application core
     void terminate();
     void toggleFullscreen();
+
+    // Get controller
+    inline GamePad* getController() {
+
+        return vpad;
+    }
 
 };
 

@@ -81,8 +81,17 @@ void Application::init() {
     graph = new Graphics();
     graph->resize(winSize[0], winSize[1]);
 
+    try {
+        // Create gamepad
+        vpad = GamePad(conf.getParam("controls_path"));
+    }
+    catch(std::runtime_error err) {
+
+        printf("Warning: error reading controls config:%s\n",
+            err.what());
+    }
     // Create event manager
-    evMan = new EventManager(this, (void*)window);
+    evMan = new EventManager(this, (void*)window, &vpad);
 
     // Load assets
     assets = new AssetPack(conf.getParam("asset_path"));
@@ -167,6 +176,9 @@ void Application::loop() {
 // Update
 void Application::update(int steps) {
     
+    // Update gamepad
+    vpad.update(evMan);
+
     // Update scenes
     sceneMan->update(steps);
 

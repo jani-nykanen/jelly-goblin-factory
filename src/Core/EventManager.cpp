@@ -7,10 +7,11 @@
 
 
 // Constructor
-EventManager::EventManager(Application* ref, void* window) 
+EventManager::EventManager(Application* ref, void* window, GamePad* vpad) 
     : InputListener(window) {
 
     appRef = ref;
+    this->vpad = vpad;
 }
 
 

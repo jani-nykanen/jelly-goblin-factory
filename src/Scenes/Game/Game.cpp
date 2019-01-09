@@ -22,14 +22,25 @@ void Game::init() {
 
     // Set defaults
     angle = 0.0f;
+    pos.x = 0;
+    pos.y = 0;
 }
 
 
 // Update scene
 void Game::update(float tm) {
 
-    angle += 0.05f * tm;
-    fmodf(angle, M_PI*2);
+    GamePad* vpad = evMan->getController();
+    
+    // Move
+    pos += vpad->getStick() * 4.0f * tm;
+
+    // Rotate
+    if(vpad->getButton("accept") == State::Down) {
+
+        angle += 0.05f * tm;
+        fmodf(angle, M_PI*2);
+    }
 }
 
 
@@ -45,14 +56,15 @@ void Game::draw(Graphics* g) {
     g->identity();
     
     g->push();
-    g->translate(view.x/2, view.y/2);
+    g->translate(view.x/2 + pos.x, view.y/2 + pos.y);
     g->rotate(angle);
     float s = sinf(angle)*0.5f + 1.0f;
     g->scale(s, s);
     g->useTransf();
 
     g->setColor(1, 0, 0, 1.0f);
-    g->fillRect(-32, -32, 64, 64);
+    g->fillRect(-32, -32, 
+        64, 64);
 
     g->pop();
     g->useTransf();
@@ -84,4 +96,5 @@ void Game::dispose() {
 // to this scene
 void Game::onChange() {
 
+    
 }

@@ -15,6 +15,8 @@ private:
 
     // Test angle
     float angle;
+    // Test pos
+    Vector2 pos;
 
 public:
 

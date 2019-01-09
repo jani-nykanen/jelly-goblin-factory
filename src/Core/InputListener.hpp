@@ -6,6 +6,8 @@
 
 #include <vector>
 
+#include "Types.hpp"
+
 // Key states
 namespace State {
 
@@ -25,6 +27,13 @@ protected:
 
     // Keyboard states
     std::vector<int> kbstate;
+    // Joy buttons
+    std::vector<int> joystate;
+
+    // Joystick
+    Vector2 joystick;
+    // Is joystick active
+    bool joyActive;
 
     // Input down
     void inputDown(std::vector<int> &arr, int index);
@@ -41,6 +50,9 @@ public:
     inline void keyDown(int key){ inputDown(kbstate, key); }
     inline void keyUp(int key){ inputUp(kbstate, key); }
 
+    // Update joystick
+    void updateJoystick(float x, float y);
+
     // Constructor
     InputListener(void* window);
 
@@ -49,6 +61,8 @@ public:
 
     // Get key state
     inline int getKeyState(int key) { return getInputState(kbstate, key); }
+    // Get joystick
+    inline Vector2 getJoystick() {return joystick;}
 
 };
 

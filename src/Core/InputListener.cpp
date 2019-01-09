@@ -5,6 +5,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include <cmath>
+
 // Reference to self
 static InputListener* self;
 
@@ -70,6 +72,13 @@ int InputListener::getInputState(std::vector<int> arr, int index) {
     return arr[index];
 }
 
+// Update joystick
+void InputListener::updateJoystick(float x, float y) {
+
+    joystick.x = x;
+    joystick.y = y;
+}
+
 
 // Constructor
 InputListener::InputListener(void* window) {
@@ -85,12 +94,34 @@ InputListener::InputListener(void* window) {
     self = this;
     if(window != NULL)
         glfwSetKeyCallback((GLFWwindow*)window, keybCallback);
+
+    // Check if joystick is active
+    joyActive = glfwJoystickPresent(GLFW_JOYSTICK_1);
 }
 
 
 // Update input
 void InputListener::updateInput() {
 
+    const float DELTA = 0.01f;
+
     // Update state arrays
     updateInputArray(kbstate);
+
+    // Update joystick
+    joystick.x = 0;
+    joystick.y = 0;
+    if(joyActive) {
+
+        int count;
+        const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
+        if(count >= 2) {
+            
+            // Check if enough movement
+            if(hypotf(axes[0],axes[1]) > DELTA) {
+
+                updateJoystick(axes[0], axes[1]);
+            }
+        }
+    }
 }

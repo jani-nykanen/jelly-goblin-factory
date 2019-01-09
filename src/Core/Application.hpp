@@ -13,6 +13,7 @@
 #include "SceneManager.hpp"
 #include "Config.hpp"
 #include "AssetPack.hpp"
+#include "GamePad.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -37,6 +38,8 @@ private:
     Graphics* graph;
     // Global asset pack
     AssetPack* assets;
+    // Gamepad
+    GamePad vpad;
 
     // Scene info storage
     std::vector<SceneInfo> scenes;
