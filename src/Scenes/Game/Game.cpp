@@ -4,6 +4,7 @@
 #include "Game.hpp"
 
 #include "../../Core/MathExt.hpp"
+#include "../../Core/Tilemap.hpp"
 
 #include <cstdio>
 #include <cmath>
@@ -24,6 +25,10 @@ void Game::init() {
     angle = 0.0f;
     pos.x = 0;
     pos.y = 0;
+
+    // Load a test tilemap
+    Tilemap* t = new Tilemap("Assets/Tilemaps/test.tmx");
+    delete t;
 }
 
 

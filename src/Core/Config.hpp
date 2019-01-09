@@ -7,23 +7,7 @@
 #include <string>
 #include <vector>
 
-// Key-value pair
-struct KeyValuePair {
-    std::string key;
-    std::string value;
-
-    // Constructors
-    inline KeyValuePair() {
-
-        this->key = "";
-        this->value = "";
-    }
-    inline KeyValuePair(std::string key, std::string value) {
-
-        this->key = key;
-        this->value = value;
-    }
-};
+#include "Types.hpp"
 
 
 // Configuration data

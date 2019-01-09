@@ -4,6 +4,8 @@
 #ifndef __TYPES_H__
 #define __TYPES_H__
 
+#include <string>
+
 // Primitive types
 typedef signed char int8;
 typedef unsigned char uint8;
@@ -14,6 +16,23 @@ typedef unsigned int uint32;
 typedef signed long int64;
 typedef unsigned long uint64;
 
+// Key-value pair
+struct KeyValuePair {
+    std::string key;
+    std::string value;
+
+    // Constructors
+    inline KeyValuePair() {
+
+        this->key = "";
+        this->value = "";
+    }
+    inline KeyValuePair(std::string key, std::string value) {
+
+        this->key = key;
+        this->value = value;
+    }
+};
 
 // Fixed point vector
 struct Vector2 {
