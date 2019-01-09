@@ -9,3 +9,4 @@ git add app.cfg
 git add tools
 git add dev
 git add Assets
+git add controls.cfg
