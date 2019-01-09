@@ -29,6 +29,8 @@ protected:
     std::vector<int> kbstate;
     // Joy buttons
     std::vector<int> joystate;
+    // Joystick button buffer
+    std::vector<uint8> joybuffer;
 
     // Joystick
     Vector2 joystick;
@@ -59,8 +61,9 @@ public:
     // Update input
     void updateInput();
 
-    // Get key state
+    // Get input states
     inline int getKeyState(int key) { return getInputState(kbstate, key); }
+    inline int getButtonState(int b) { return getInputState(joystate, b); }
     // Get joystick
     inline Vector2 getJoystick() {return joystick;}
 

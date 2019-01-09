@@ -66,7 +66,10 @@ void GamePad::update(InputListener* input) {
     for(int i = 0; i < buttons.size(); ++ i) {
 
         buttons[i].state = input->getKeyState(buttons[i].key);
-        // TODO: Check joy button
+        if(buttons[i].state == State::Up) {
+
+            buttons[i].state = input->getButtonState(buttons[i].button);
+        }
     }
 
     // Update stick

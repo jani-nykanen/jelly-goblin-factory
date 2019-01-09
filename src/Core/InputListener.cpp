@@ -3,9 +3,15 @@
 
 #include "InputListener.hpp"
 
+#include "MathExt.hpp"
+
 #include <GLFW/glfw3.h>
 
 #include <cmath>
+#include <cstdio>
+
+// Maximum amount of joystick buttons
+#define MAX_BUTTONS 16
 
 // Reference to self
 static InputListener* self;
@@ -89,6 +95,13 @@ InputListener::InputListener(void* window) {
 
         kbstate[i] = State::Up;
     }
+    joystate = std::vector<int> (MAX_BUTTONS);
+    joybuffer = std::vector<uint8> (MAX_BUTTONS);
+    for(int i = 0; i < joystate.size(); ++ i) {
+
+        joystate[i] = State::Up;
+        joybuffer[i] = 0;
+    }
     
     // Register key event listeners
     self = this;
@@ -107,8 +120,9 @@ void InputListener::updateInput() {
 
     // Update state arrays
     updateInputArray(kbstate);
+    updateInputArray(joystate);
 
-    // Update joystick
+    // Update joystick stick
     joystick.x = 0;
     joystick.y = 0;
     if(joyActive) {
@@ -123,5 +137,24 @@ void InputListener::updateInput() {
                 updateJoystick(axes[0], axes[1]);
             }
         }
+
+        // Update joystick buttons
+        const uint8* buttons = glfwGetJoystickButtons(
+            GLFW_JOYSTICK_1, &count);
+        uint8 state=0;
+        for(int i = 0; i < max_int32(count, MAX_BUTTONS); ++ i) {
+
+            state = buttons[i];
+			if(state != joybuffer[i]) {
+
+				if(state == 1)
+					inputDown(joystate, i);
+						
+				else if(state == 0)
+					inputUp(joystate, i);
+			}
+			joybuffer[i] = state;
+        }
+        
     }
 }
