@@ -78,6 +78,14 @@ int InputListener::getInputState(std::vector<int> arr, int index) {
     return arr[index];
 }
 
+
+// Update joystick hat
+void InputListener::updateJoyHat(const uint8* buttons) {
+
+    
+}
+
+
 // Update joystick
 void InputListener::updateJoystick(float x, float y) {
 
@@ -110,6 +118,8 @@ InputListener::InputListener(void* window) {
 
     // Check if joystick is active
     joyActive = glfwJoystickPresent(GLFW_JOYSTICK_1);
+    joystick.x = 0;
+    joystick.y = 0;
 }
 
 
@@ -136,6 +146,14 @@ void InputListener::updateInput() {
 
                 updateJoystick(axes[0], axes[1]);
             }
+            // Check hat
+            if(count >= 6)  {
+
+                if(hypotf(axes[4],axes[5]) > DELTA) {
+
+                    updateJoystick(axes[4], axes[5]);
+                }
+            }
         }
 
         // Update joystick buttons
@@ -155,6 +173,9 @@ void InputListener::updateInput() {
 			}
 			joybuffer[i] = state;
         }
+
+        // Update joy hat
+        updateJoyHat(buttons);
         
     }
 }
