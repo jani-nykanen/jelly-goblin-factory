@@ -33,6 +33,9 @@ private:
     float baseWidth;
     float baseHeight;
 
+    // Cog angle
+    float cogAngle;
+
     // Get a tile
     int getTile(int x, int y);
 
@@ -42,6 +45,12 @@ private:
     void drawBorders(Graphics* g);
     // Draw shadow
     void drawShadow(Graphics* g);
+
+    // Draw a single cog
+    void drawCog(Graphics* g, float x, float y, 
+        float scale, float angle);
+    // Draw background cogs
+    void drawCogs(Graphics* g);
 
 public:
 

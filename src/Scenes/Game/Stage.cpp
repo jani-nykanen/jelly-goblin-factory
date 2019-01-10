@@ -9,6 +9,7 @@ static const float BASE_TILE_SIZE = 128.0f;
 // Bitmaps
 static Bitmap* bmpWall;
 static Bitmap* bmpBorders;
+static Bitmap* bmpCog;
 
 
 // Initialize global data
@@ -17,6 +18,7 @@ void initGlobalStage(AssetPack* assets) {
     // Get assets
     bmpWall = assets->getBitmap("wall");
     bmpBorders = assets->getBitmap("borders");
+    bmpCog = assets->getBitmap("cog");
 }
 
 
@@ -141,6 +143,53 @@ void Stage::drawShadow(Graphics* g) {
 }
 
 
+// Draw a single cog
+void Stage::drawCog(Graphics* g, float x, float y, 
+    float scale, float angle) {
+
+    g->push();
+    g->translate(x, y);
+    g->rotate(angle);
+    g->scale(scale, scale);
+    g->useTransf();
+    g->drawBitmap(bmpCog,-128,-128,256,256);
+    g->pop();
+}
+
+
+// Draw background cogs
+void Stage::drawCogs(Graphics* g) {
+
+    const float BOTTOM_RIGHT = 1.25f;
+    const float BOTTOM_LEFT = 1.0f;
+    const float TOP_RIGHT = 1.0f;
+    const float SHADOW_X = 16.0f;
+    const float SHADOW_Y = 16.0f;
+    const float SHADOW_ALPHA = 0.5f;
+
+    Vector2 view = g->getViewport();
+
+    for(int i = 1; i >= 0; -- i) {
+
+        if(i == 0)
+            g->setColor();
+        else
+            g->setColor(0, 0, 0, SHADOW_ALPHA);
+
+        // Bottom right
+        drawCog(g, view.x + i *SHADOW_X, view.y + i*SHADOW_Y, 
+            BOTTOM_RIGHT, cogAngle);
+        // Bottom left
+        drawCog(g,  SHADOW_X, view.y +  i *SHADOW_Y, 
+            BOTTOM_LEFT, -cogAngle);
+        // Top right
+        drawCog(g, view.x+ i *SHADOW_X,  i *SHADOW_X, 
+            TOP_RIGHT, -cogAngle);
+    }
+
+}
+
+
 // Constructor
 Stage::Stage(std::string mapPath) {
 
@@ -158,6 +207,9 @@ Stage::Stage(std::string mapPath) {
     scale = 1.0f / ( ((height+2)*BASE_TILE_SIZE) / VIEW_HEIGHT );
     scaledWidth = scale * baseWidth;
     scaledHeight = scale * baseHeight;
+
+    // Set defaults
+    cogAngle = 0.0f;
 }
 // Desctructor
 Stage::~Stage() {
@@ -169,6 +221,10 @@ Stage::~Stage() {
 // Update
 void Stage::update(EventManager* evMan, float tm) {
 
+    const float COG_SPEED = 0.05f;
+
+    // Rotate cogs
+    cogAngle += COG_SPEED * tm;
 }
 
 
@@ -177,6 +233,9 @@ void Stage::draw(Graphics* g) {
 
     // Get viewport
     Vector2 view = g->getViewport();
+
+    // Draw cogs
+    drawCogs(g);
 
     // Set view
     g->push();
