@@ -24,6 +24,9 @@ class Graphics : public GraphicsCore {
 
 private:
 
+    // Color storage
+    Color gcolor;
+
 public:
 
     // Constructor
@@ -52,6 +55,13 @@ public:
     void drawText(Bitmap* bmp, std::string text, int dx, int dy, 
                 int xoff, int yoff, 
 		        float scale = 1.0f, bool center = false);
+    // Draw text with a shadow
+    void drawText(Bitmap* bmp, std::string text, int dx, int dy, 
+                int xoff, int yoff, 
+		        float shadowX, float shadowY,
+                float trans = 0.5f,
+                float scale = 1.0f, 
+                bool center = false);
 };
 
 #endif // __GRAPHICS_H__

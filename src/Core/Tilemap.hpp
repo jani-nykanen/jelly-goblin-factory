@@ -35,6 +35,10 @@ public:
     // Get dimensions
     inline int getWidth(){return width;}
     inline int getHeight(){return height;}
+    // Copy data
+    inline std::vector<int> copyData() {
+        return data;
+    }
 
     // Get tile
     int getTile(int x, int y);

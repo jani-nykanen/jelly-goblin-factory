@@ -4,19 +4,18 @@
 #include "../../Core/Scene.hpp"
 #include "../../Core/Bitmap.hpp"
 
+#include  "Stage.hpp"
+
 // Game scene
 class Game : public Scene {
 
 private:
 
     // Test bitmaps
-    Bitmap* bmpParrot;
     Bitmap* bmpFont;
 
-    // Test angle
-    float angle;
-    // Test pos
-    Vector2 pos;
+    // Stage
+    Stage* stage;
 
 public:
 

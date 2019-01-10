@@ -10,6 +10,7 @@
 
 #include <cstring>
 #include <cstdio>
+#include <stdexcept>
 
 
 // Constructor
@@ -31,7 +32,8 @@ void Graphics::clearScreen(float r, float g, float b) {
 // Set color
 void Graphics::setColor(float r, float g, float b, float a) {
 
-    shader->setColorUniforms(Color(r, g, b, a));
+    gcolor = Color(r, g, b, a);
+    shader->setColorUniforms(gcolor);
 }
 
 
@@ -53,6 +55,11 @@ void Graphics::fillRect(float x, float y, float w, float h) {
 // Draw a bitmap
 void Graphics::drawBitmap(Bitmap* bmp, float sx, float sy, float sw, float sh, 
         float dx, float dy, float dw, float dh, int flip) {
+
+        if(bmp == NULL) {
+
+            throw std::runtime_error("Null bitmap error!");
+        }
 
         // Bind bitmap
 		bmp->bind();
@@ -83,17 +90,27 @@ void Graphics::drawBitmap(Bitmap* bmp, float sx, float sy, float sw, float sh,
         float dx, float dy, 
         int flip) {
 
+    if(bmp == NULL) {
+        throw std::runtime_error("Null bitmap error!");
+    }
+
     drawBitmap(bmp, sx, sy, sw, sh, dx, dy, 
-        bmp->getWidth(), bmp->getHeight(), 
+        sw, sh, 
         flip);
 }
 void Graphics::drawBitmap(Bitmap* bmp, float dx, float dy, float dw, float dh,
         int flip) {
-
+    
+    if(bmp == NULL) {
+        throw std::runtime_error("Null bitmap error!");
+    }
     drawBitmap(bmp, 0, 0, bmp->getWidth(), bmp->getHeight(), dx, dy, dw, dh, flip);
 }
 void Graphics::drawBitmap(Bitmap* bmp, float dx, float dy, int flip) {
 
+    if(bmp == NULL) {
+        throw std::runtime_error("Null bitmap error!");
+    }
     drawBitmap(bmp, dx, dy, bmp->getWidth(), bmp->getHeight(), flip);
 }
 
@@ -101,6 +118,10 @@ void Graphics::drawBitmap(Bitmap* bmp, float dx, float dy, int flip) {
 void Graphics::drawText(Bitmap* bmp, std::string text, int dx, int dy, 
                 int xoff, int yoff, 
 		        float scale, bool center) {
+
+    if(bmp == NULL) {
+        throw std::runtime_error("Null bitmap error!");
+    }
 
     int cw = (bmp->getWidth()) / 16;
     int ch = cw;
@@ -141,4 +162,24 @@ void Graphics::drawText(Bitmap* bmp, std::string text, int dx, int dy,
 
         x += (cw + xoff) * scale;
     } 
+}
+
+
+// Draw text with a shadow
+void Graphics::drawText(Bitmap* bmp, std::string text, int dx, int dy, 
+                int xoff, int yoff, 
+		        float shadowX, float shadowY,
+                float trans, float scale,
+                bool center) {
+
+    Color c = gcolor;
+
+    // Draw shadow
+    setColor(0, 0, 0, trans);
+    drawText(bmp, text, dx + shadowX, dy + shadowY, 
+        xoff, yoff, scale, center);    
+
+    // Draw base text
+    setColor(c.r, c.g, c.b, c.a);
+    drawText(bmp, text, dx, dy, xoff, yoff, scale, center);    
 }

@@ -17,81 +17,49 @@ void Game::init() {
 
     printf("Initializing...\n");
 
-    // Load bitmaps
-    bmpParrot = assets->getBitmap("parrot");
+    // Get bitmaps
     bmpFont = assets->getBitmap("font");
 
-    // Set defaults
-    angle = 0.0f;
-    pos.x = 0;
-    pos.y = 0;
+    // Initialize global data
+    initGlobalStage(assets);
 
-    // Load a test tilemap
-    Tilemap* t = new Tilemap("Assets/Tilemaps/test.tmx");
-    delete t;
+    // Initialize stage
+    stage = new Stage("Assets/Tilemaps/test.tmx");
 }
 
 
 // Update scene
 void Game::update(float tm) {
 
-    GamePad* vpad = evMan->getController();
-    
-    // Move
-    pos += vpad->getStick() * 4.0f * tm;
-
-    // Rotate
-    if(vpad->getButton("accept") == State::Down) {
-
-        angle += 0.05f * tm;
-        fmodf(angle, M_PI*2);
-    }
+    stage->update(evMan, tm);
 }
 
 
 // Draw scene
 void Game::draw(Graphics* g) {
 
-    Vector2 view = g->getViewport();
-
-    g->clearScreen(0.75f, 0.75f, 0.75f);
+    g->clearScreen(0.1f, 0.60f, 1.0f);
 
     // Set transform
     g->setView(720.0f);
     g->identity();
-    
-    g->push();
-    g->translate(view.x/2 + pos.x, view.y/2 + pos.y);
-    g->rotate(angle);
-    float s = sinf(angle)*0.5f + 1.0f;
-    g->scale(s, s);
     g->useTransf();
 
-    g->setColor(1, 0, 0, 1.0f);
-    g->fillRect(-32, -32, 
-        64, 64);
+    // Draw stage
+    stage->draw(g);
 
-    g->pop();
-    g->useTransf();
-
-    g->setColor(0, 1, 0, 0.25f);
-    g->fillRect(view.x/2 - 128, view.y/2-128, 256, 256);
-
-    g->identity();
-    g->useTransf();
+    // Draw temporary text
     g->setColor();
-    g->drawBitmap(bmpParrot, 32, 32, 256, 256, Flip::Both);
-    g->setColor(1, 0, 0, 0.5f);
-    g->drawBitmap(bmpParrot, 192, 192);
-
-    // Draw some text
-    g->setColor(1,1,0);
-    g->drawText(bmpFont, "Hello world!", view.x/2, 16, -32,0, 1.0f, true);
+    g->drawText(bmpFont, "Stage 0", 16, 16, -32, 0,
+        4.0f, 6.0f, 0.5f,
+     1.0f, false);
 }
 
 
 // Dispose scene
 void Game::dispose() {
+
+    delete stage;
 
     printf("Terminating...\n");
 }
