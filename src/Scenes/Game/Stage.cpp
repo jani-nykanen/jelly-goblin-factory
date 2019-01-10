@@ -20,10 +20,25 @@ void initGlobalStage(AssetPack* assets) {
 }
 
 
+// Get a tile
+int Stage::getTile(int x, int y) {
+
+    if(x < 0 || y < 0 || x >= width || y >= height)
+        return 1;
+
+    return data[y*width +x];
+}
+
+
 // Draw walls
 void Stage::drawWalls(Graphics* g) {
 
+    const int s = BASE_TILE_SIZE;
+    const int BORDER = 8;
+    const float SHADOW = 16.0f;
+
     int x, y;
+    int px, py;
     for(int i = 0; i < width*height; ++ i) {
 
         if(data[i] != 1) 
@@ -32,8 +47,49 @@ void Stage::drawWalls(Graphics* g) {
         x = i % width;
         y = i / width;
 
-        g->drawBitmap(bmpWall, x*BASE_TILE_SIZE, 
-            y*BASE_TILE_SIZE);
+        px = x*s;
+        py = y*s;
+
+        // Draw shadow
+        g->setColor(0.25f,0.125f,0.075f);
+        g->fillRect(px+SHADOW, py+SHADOW,s,s);
+
+        // Draw wall tile
+        g->setColor();
+        g->drawBitmap(bmpWall, px, py);
+        
+        // Draw black borders
+        g->setColor(0, 0, 0);
+        // Right
+        if(getTile(x+1, y) != 1)
+             g->fillRect(px+s-BORDER, py, BORDER, s);
+        // Left
+        if(getTile(x-1, y) != 1)
+             g->fillRect(px, py, BORDER, s);
+        // Bottom
+        if(getTile(x, y+1) != 1)
+             g->fillRect(px, py+s-BORDER, s, BORDER);
+        // Top
+        if(getTile(x, y-1) != 1)
+             g->fillRect(px, py, s, BORDER);    
+
+        // Corners
+        // Bottom-right 
+        if(getTile(x+1, y+1) != 1)
+             g->fillRect(px+s-BORDER, py+s-BORDER, 
+             BORDER, BORDER);
+        // Bottom-left 
+        if(getTile(x-1, y+1) != 1)
+             g->fillRect(px, py+s-BORDER, 
+             BORDER, BORDER);
+        // Top-right 
+        if(getTile(x+1, y-1) != 1)
+             g->fillRect(px+s-BORDER, py, 
+             BORDER, BORDER);
+        // Top-left 
+        if(getTile(x-1, y-1) != 1)
+             g->fillRect(px, py, 
+             BORDER, BORDER);
     }
 }
 
@@ -133,7 +189,7 @@ void Stage::draw(Graphics* g) {
     drawShadow(g);
 
     // Clear to black
-    g->setColor(0, 0, 0);
+    g->setColor(0.45f, 0.25f, 0.15f);
     g->fillRect(0, 0, baseWidth, baseHeight);
 
     // Draw walls
@@ -141,6 +197,7 @@ void Stage::draw(Graphics* g) {
     drawWalls(g);
 
     // Draw borders
+    g->setColor();
     drawBorders(g);
 
     g->pop();

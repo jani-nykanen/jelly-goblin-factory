@@ -33,6 +33,9 @@ private:
     float baseWidth;
     float baseHeight;
 
+    // Get a tile
+    int getTile(int x, int y);
+
     // Draw walls
     void drawWalls(Graphics* g);
     // Draw borders

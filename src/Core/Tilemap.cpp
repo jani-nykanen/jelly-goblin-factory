@@ -135,3 +135,13 @@ Tilemap::Tilemap(std::string path) {
     // Parse CSV
     parseCSVInt(content.substr(begin, end-begin), data);
 }
+
+
+// Get tile
+int Tilemap::getTile(int x, int y) {
+
+    if(x < 0 || y < 0 || x >= width || y >= height)
+        return -1;
+
+    return data[y*width +x];
+}
