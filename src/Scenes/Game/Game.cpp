@@ -25,13 +25,19 @@ void Game::init() {
 
     // Initialize stage
     stage = new Stage("Assets/Tilemaps/test.tmx");
+    // Initialize HUD
+    hud = Hud(assets);
 }
 
 
 // Update scene
 void Game::update(float tm) {
 
+    // Update stage
     stage->update(evMan, tm);
+
+    // Update HUD
+    hud.update();
 }
 
 
@@ -48,11 +54,8 @@ void Game::draw(Graphics* g) {
     // Draw stage
     stage->draw(g);
 
-    // Draw temporary text
-    g->setColor();
-    g->drawText(bmpFont, "Stage 0", 16, 16, -32, 0,
-        4.0f, 6.0f, 0.5f,
-     1.0f, false);
+    // Draw hud
+    hud.draw(g);
 }
 
 

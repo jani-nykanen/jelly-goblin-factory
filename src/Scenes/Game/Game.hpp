@@ -4,7 +4,8 @@
 #include "../../Core/Scene.hpp"
 #include "../../Core/Bitmap.hpp"
 
-#include  "Stage.hpp"
+#include "Stage.hpp"
+#include "Hud.hpp"
 
 // Game scene
 class Game : public Scene {
@@ -16,6 +17,8 @@ private:
 
     // Stage
     Stage* stage;
+    // Hud
+    Hud hud;
 
 public:
 
