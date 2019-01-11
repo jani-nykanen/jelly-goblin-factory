@@ -3,9 +3,6 @@
 
 #include "Stage.hpp"
 
-// Constants
-static const float BASE_TILE_SIZE = 128.0f;
-
 // Bitmaps
 static Bitmap* bmpWall;
 static Bitmap* bmpBorders;
@@ -53,12 +50,12 @@ void Stage::drawWalls(Graphics* g) {
         py = y*s;
 
         // Draw shadow
-        g->setColor(0.25f,0.125f,0.075f);
+        g->setColor(0.30f,0.15f,0.10f);
         g->fillRect(px+SHADOW, py+SHADOW,s,s);
 
         // Draw wall tile
         g->setColor();
-        g->drawBitmap(bmpWall, px, py);
+        g->drawBitmap(bmpWall, 0,0, 128, 128, px, py);
         
         // Draw black borders
         g->setColor(0, 0, 0);
@@ -92,6 +89,32 @@ void Stage::drawWalls(Graphics* g) {
         if(getTile(x-1, y-1) != 1)
              g->fillRect(px, py, 
              BORDER, BORDER);
+    }
+}
+
+
+// Draw floor
+void Stage::drawFloor(Graphics *g) {
+
+    const float FLOOR_ALPHA = 0.33f;
+    g->setColor(1, 1, 1, FLOOR_ALPHA);
+
+    int x, y;
+    int px, py;
+    for(int i = 0; i < width*height; ++ i) {
+
+        if(data[i] == 1) 
+            continue;
+
+        x = i % width;
+        y = i / width;
+
+        px = x*BASE_TILE_SIZE;
+        py = y*BASE_TILE_SIZE;
+
+        // Draw floor tile
+        g->drawBitmap(bmpWall, 128,0, 128, 128, px, py);
+    
     }
 }
 
@@ -218,6 +241,63 @@ Stage::~Stage() {
 }
 
 
+// Parse map for objects
+void Stage::parseMap(Communicator &comm) {
+
+    int t;
+    Point p;
+    int color;
+    bool sleeping, isCog;
+    bool isWorker;
+    for(int i = 0; i < width*height; ++ i) {
+
+        isWorker = false;
+        isCog = false;
+
+        p.x = i % width;
+        p.y = i / width;
+
+        // Check tiles
+        t = getTile(p.x, p.y) -1;
+        switch(t) {
+
+        // Workers (awaken)
+        case 1:
+        case 2:
+        case 3:
+
+            color = t-1; 
+            sleeping = false;
+            isCog = false;
+
+            isWorker = true;
+            break;
+
+        // Cogs
+        case 4:
+        case 5:
+        case 6:
+
+            color = t-4; 
+            sleeping = false;
+            isCog = true;
+
+            isWorker = true;
+            break;
+
+        default:
+            break;
+        }
+
+        // Add worker
+        if(isWorker) {
+
+            comm.addWorker(p, color, sleeping, isCog);
+        }
+    }
+}
+
+
 // Update
 void Stage::update(EventManager* evMan, float tm) {
 
@@ -229,7 +309,7 @@ void Stage::update(EventManager* evMan, float tm) {
 
 
 // Draw
-void Stage::draw(Graphics* g) {
+void Stage::draw(Graphics* g, Communicator &comm) {
 
     // Get viewport
     Vector2 view = g->getViewport();
@@ -248,16 +328,22 @@ void Stage::draw(Graphics* g) {
     drawShadow(g);
 
     // Clear to black
-    g->setColor(0.45f, 0.25f, 0.15f);
+    g->setColor(0.55f, 0.35f, 0.20f);
     g->fillRect(0, 0, baseWidth, baseHeight);
 
     // Draw walls
     g->setColor();
     drawWalls(g);
 
+    // Draw floor
+    drawFloor(g);
+
     // Draw borders
     g->setColor();
     drawBorders(g);
+
+    // Draw workers
+    comm.drawWorkers(g);
 
     g->pop();
     g->useTransf();

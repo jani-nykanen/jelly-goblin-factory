@@ -20,11 +20,19 @@ void Game::init() {
     // Get bitmaps
     bmpFont = assets->getBitmap("font");
 
+    // Create communicator
+    comm = Communicator(this);
+
     // Initialize global data
     initGlobalStage(assets);
+    initGlobalWorker(assets);
 
     // Initialize stage
     stage = new Stage("Assets/Tilemaps/test.tmx");
+    // Parse map for objects
+    workers = std::vector<Worker> ();
+    stage->parseMap(comm);
+
     // Initialize HUD
     hud = Hud(assets);
 }
@@ -32,6 +40,12 @@ void Game::init() {
 
 // Update scene
 void Game::update(float tm) {
+
+    // Update workers
+    for(int i = 0; i < workers.size(); ++ i) {
+
+        workers[i].update(evMan, tm);
+    }
 
     // Update stage
     stage->update(evMan, tm);
@@ -52,7 +66,7 @@ void Game::draw(Graphics* g) {
     g->useTransf();
 
     // Draw stage
-    stage->draw(g);
+    stage->draw(g, comm);
 
     // Draw hud
     hud.draw(g);
@@ -72,5 +86,24 @@ void Game::dispose() {
 // to this scene
 void Game::onChange() {
 
-    
+    // ...
+}
+
+
+// Draw workers
+void Game::drawWorkers(Graphics* g) {
+
+    // Draw workers
+    for(int i = 0; i < workers.size(); ++ i) {
+
+        workers[i].draw(g);
+    }
+}
+
+
+// Add a worker
+void Game::addWorker(Point p, int color,  
+    bool sleeping, bool isCog) {
+
+    workers.push_back(Worker(p, color, sleeping, isCog));
 }

@@ -9,8 +9,12 @@
 #include "../../Core/AssetPack.hpp"
 #include "../../Core/EventManager.hpp"
 
+#include "Communicator.hpp"
+
 // View height
 #define VIEW_HEIGHT 720.0f
+// Constants
+#define BASE_TILE_SIZE 128.0f
 
 // Stage class
 class Stage {
@@ -41,6 +45,8 @@ private:
 
     // Draw walls
     void drawWalls(Graphics* g);
+    // Draw floor
+    void drawFloor(Graphics *g);
     // Draw borders
     void drawBorders(Graphics* g);
     // Draw shadow
@@ -59,10 +65,13 @@ public:
     // Desctructor
     ~Stage();
 
+    // Parse map for objects
+    void parseMap(Communicator &comm);
+
     // Update
     void update(EventManager* evMan, float tm);
     // Draw
-    void draw(Graphics* g);
+    void draw(Graphics* g, Communicator &comm);
 };
 
 

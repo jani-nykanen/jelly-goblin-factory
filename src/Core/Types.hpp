@@ -35,34 +35,38 @@ struct KeyValuePair {
 };
 
 // Fixed point vector
-struct Vector2 {
+template <class T> struct Vector2Generic {
 
     // Components
-    float x, y;
+    T x, y;
 
     // Constructor
-    inline Vector2(){x=0;y=0;}
-    inline Vector2(float x, float y) {
+    inline Vector2Generic(){x=0;y=0;}
+    inline Vector2Generic(T x, T y) {
 
         this->x = x;
         this->y = y;
     };
 
     // Operators
-    inline Vector2 operator+(const Vector2 &v) {
+    inline Vector2Generic operator+(const Vector2Generic &v) {
 
-        return Vector2(x + v.x, y + v.y);
+        return Vector2Generic(x + v.x, y + v.y);
     }
-    inline Vector2 operator*(const float &m) {
+    inline Vector2Generic operator*(const T &m) {
 
-        return Vector2(x*m, y*m);
+        return Vector2Generic(x*m, y*m);
     }
-    inline Vector2& operator+=(const Vector2 &v) {
+    inline Vector2Generic& operator+=(const Vector2Generic &v) {
 
         this->x += v.x;
         this->y += v.y;
     }
 };
+// Vector types
+typedef Vector2Generic<float> Vector2;
+typedef Vector2Generic<int> Point;
+
 
 // Color
 struct Color {
