@@ -85,7 +85,7 @@ void Worker::control(EventManager* evMan,
     if(angle < quarter && angle >= -quarter) 
         dx = 1;
     // Up
-    else if(angle < -quarter)
+    else if(angle < -quarter && angle >= -M_PI+quarter)
         dy = -1;
     // Down
     else if(angle >= quarter && angle < M_PI-quarter)

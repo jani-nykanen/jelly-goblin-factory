@@ -146,14 +146,16 @@ void InputListener::updateInput() {
 
                 updateJoystick(axes[0], axes[1]);
             }
+            
             // Check hat
-            if(count >= 6)  {
+            if(count >= 8)  {
 
-                if(hypotf(axes[4],axes[5]) > DELTA) {
+                if(hypotf(axes[6],axes[7]) > DELTA) {
 
-                    updateJoystick(axes[4], axes[5]);
+                    updateJoystick(axes[6], axes[7]);
                 }
             }
+            
         }
 
         // Update joystick buttons
