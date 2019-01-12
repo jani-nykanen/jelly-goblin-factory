@@ -40,8 +40,10 @@ public:
         return data;
     }
 
-    // Get tile
+    // Get a tile
     int getTile(int x, int y);
+    // Get a property
+    std::string getProp(std::string name);
 };
 
 #endif // __TILEMAP_H__

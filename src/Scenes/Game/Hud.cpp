@@ -3,6 +3,8 @@
 
 #include "Hud.hpp"
 
+#include "../../Core/Utility.hpp"
+
 #include <sstream>
 #include <iostream>
 
@@ -45,15 +47,15 @@ void Hud::draw(Graphics* g) {
     // Draw time text
     std::string str;
     str.push_back((char)1);
-    str += " :0";
+    str += " :" + intToString(time);
     g->drawText(bmpFont, str, TEXT_X, STAGE_Y+TIME_Y, XOFF, 0,
         SHADOW_X, SHADOW_Y, SHADOW_ALPHA,
     SCALE, false);
 
     // Draw star text
     str = "";
-    str.push_back((char)2);
-    str += " :30";
+    str.push_back(time <= turnTarget ? (char)2 : (char)3);
+    str += " :" + intToString(turnTarget);
     g->drawText(bmpFont, str, TEXT_X, STAGE_Y+TIME_Y+STAR_Y, 
         XOFF, 0, SHADOW_X, SHADOW_Y, 
         SHADOW_ALPHA,

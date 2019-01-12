@@ -145,3 +145,17 @@ int Tilemap::getTile(int x, int y) {
 
     return data[y*width +x];
 }
+
+
+// Get a property
+std::string Tilemap::getProp(std::string name) {
+
+    for(int i = 0; i < properties.size(); ++ i) {
+
+        if(properties[i].key == name) {
+
+            return properties[i].value;
+        }
+    }
+    return "0";
+}

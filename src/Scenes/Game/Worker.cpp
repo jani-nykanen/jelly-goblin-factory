@@ -43,7 +43,7 @@ bool Worker::findFreeTile(int dx, int dy, Stage* stage) {
 
             return true;
         }
-        else if(tileID == 1) {
+        else if(tileID == 1 || tileID >= 3) {
 
             break;
         }
@@ -168,8 +168,12 @@ void Worker::animate(float tm) {
 
     if(isCog) {
 
+        int dir = ((pos.y % 2 == 0 && pos.x % 2 == 0) ||
+                (pos.y % 2 == 1 && pos.x % 2 == 1))
+                ? 1 : -1;
+
         // Rotate
-        angle += ROTATE_SPEED * tm;
+        angle += ROTATE_SPEED * tm * dir;
     }
     else {
 
@@ -191,6 +195,26 @@ void Worker::animate(float tm) {
     }
 }
 
+
+// Check cog collision
+void Worker::checkCogCollision(Stage* stage) {
+
+    if(moving || isCog)
+        return;
+
+    // Check nearby tiles
+    if(stage->getSolidValue(pos.x,pos.y-1) == 3+color
+    || stage->getSolidValue(pos.x,pos.y+1) == 3+color
+    || stage->getSolidValue(pos.x-1,pos.y) == 3+color
+    || stage->getSolidValue(pos.x+1,pos.y) == 3+color) {
+
+        isCog = true;
+        moving = false;
+
+        stage->updateSolid(pos.x, pos.y, 3+color);
+    }
+
+}
 
 // Constructor
 Worker::Worker(Point p, int color, bool sleeping, bool isCog) {

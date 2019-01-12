@@ -79,6 +79,9 @@ public:
     void updateSolid(int x, int y, int value);
     // Get solidity value of a tile
     int getSolidValue(int x, int y);
+
+    // Get move target
+    int getMoveTarget();
 };
 
 

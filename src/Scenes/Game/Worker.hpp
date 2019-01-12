@@ -68,6 +68,9 @@ public:
     // Draw
     void draw(Graphics* g);
 
+    // Check cog collision
+    void checkCogCollision(Stage* stage);
+
     // Getters
     inline bool isMoving() {
 

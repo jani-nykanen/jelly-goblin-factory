@@ -32,6 +32,14 @@ public:
     // Draw
     void draw(Graphics* g);
 
+    // Set info
+    inline void addMove() {
+        ++ time;
+    }
+    inline void setMoveTarget(int t) {
+        turnTarget = t;
+    }
+
 };
 
 #endif // __HUD_H__

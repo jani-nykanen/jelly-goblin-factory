@@ -3,6 +3,8 @@
 
 #include "Stage.hpp"
 
+#include "../../Core/Utility.hpp"
+
 // Bitmaps
 static Bitmap* bmpWall;
 static Bitmap* bmpBorders;
@@ -309,7 +311,10 @@ void Stage::parseMap(Communicator &comm) {
 
             comm.addWorker(p, color, sleeping, isCog);
             // Update solid data
-            updateSolid(p.x, p.y, sleeping ? 1 : 2);
+            int solid = 2;
+            if(sleeping) solid = 1;
+            if(isCog) solid = 3;
+            updateSolid(p.x, p.y, solid+color);
         }
     }
 }
@@ -384,4 +389,11 @@ int Stage::getSolidValue(int x, int y) {
         return 0;
 
     return solid[y*width+x];
+}
+
+
+// Get move target
+int Stage::getMoveTarget() {
+
+    return strToInt(tmap->getProp("moves"));
 }

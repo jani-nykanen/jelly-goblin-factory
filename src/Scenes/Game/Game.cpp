@@ -35,28 +35,39 @@ void Game::init() {
 
     // Initialize HUD
     hud = Hud(assets);
+    hud.setMoveTarget(stage->getMoveTarget());
 }
 
 
 // Update scene
 void Game::update(float tm) {
 
-    // Check if any moving
+    // "Pre-update"
     bool anyMoving = false;
     for(int i = 0; i < workers.size(); ++ i) {
 
-        if(workers[i].isMoving()) {
+        // Check cog collisions
+        workers[i].checkCogCollision(stage);
+
+        // Is moving
+        if(!anyMoving && workers[i].isMoving()) {
 
             anyMoving = true;
-            break;
         }
     }
 
+
     // Update workers
+    bool anyStartedMoving = false;
     for(int i = 0; i < workers.size(); ++ i) {
 
         workers[i].update(evMan, stage, anyMoving, tm);
+        if(!anyStartedMoving && workers[i].hasStartedMoving())
+            anyStartedMoving = true;
     }
+    // Increase turns, if moved
+    if(anyStartedMoving)
+        hud.addMove();
 
     // Update stage
     stage->update(evMan, tm);
