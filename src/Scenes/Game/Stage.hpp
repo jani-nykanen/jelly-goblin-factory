@@ -67,6 +67,8 @@ public:
     // Desctructor
     ~Stage();
 
+    // Reset
+    void reset();
     // Parse map for objects
     void parseMap(Communicator &comm);
 

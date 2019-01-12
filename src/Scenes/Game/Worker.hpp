@@ -32,6 +32,11 @@ private:
     // Has started moving
     bool startedMoving;
 
+    // Is transforming
+    bool transforming;
+    // Transform timer
+    float transfTimer;
+
     // Cog angle
     float angle;
 
@@ -55,6 +60,9 @@ private:
     void move(Stage* stage, float tm);
     // Animate
     void animate(float tm);
+    
+    // Transform
+    void transform(float tm);
 
 public:
 
@@ -79,6 +87,10 @@ public:
     inline bool hasStartedMoving() {
 
         return startedMoving;
+    }
+    inline bool isActive() {
+
+        return transforming || moving;
     }
 };
 

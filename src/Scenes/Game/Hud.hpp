@@ -40,6 +40,9 @@ public:
         turnTarget = t;
     }
 
+    // Reset
+    void reset();
+
 };
 
 #endif // __HUD_H__

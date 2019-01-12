@@ -226,12 +226,8 @@ Stage::Stage(std::string mapPath) {
     width = tmap->getWidth();
     height = tmap->getHeight();
 
-    // Set default solid data
-    solid = std::vector<int> (width*height);
-    for(int i = 0; i < width*height; ++ i) {
-
-        solid[i] = data[i] == 1 ? 1 : 0;
-    }
+    // (Re)set some data
+    reset();
 
     // Compute scale
     baseWidth = width * BASE_TILE_SIZE;
@@ -247,6 +243,18 @@ Stage::Stage(std::string mapPath) {
 Stage::~Stage() {
 
     delete tmap;
+}
+
+
+// Reset
+void Stage::reset() {
+
+    // Set default solid data
+    solid = std::vector<int> (width*height);
+    for(int i = 0; i < width*height; ++ i) {
+
+        solid[i] = data[i] == 1 ? 1 : 0;
+    }
 }
 
 
@@ -313,8 +321,8 @@ void Stage::parseMap(Communicator &comm) {
             // Update solid data
             int solid = 2;
             if(sleeping) solid = 1;
-            if(isCog) solid = 3;
-            updateSolid(p.x, p.y, solid+color);
+            if(isCog) solid = 3+color;
+            updateSolid(p.x, p.y, solid);
         }
     }
 }

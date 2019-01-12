@@ -28,6 +28,9 @@ private:
 
 public:
 
+    // Reset the current game state
+    void reset();
+
     // Initialize scene
     void init();
     // Update scene

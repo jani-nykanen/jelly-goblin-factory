@@ -79,13 +79,6 @@ int InputListener::getInputState(std::vector<int> arr, int index) {
 }
 
 
-// Update joystick hat
-void InputListener::updateJoyHat(const uint8* buttons) {
-
-    
-}
-
-
 // Update joystick
 void InputListener::updateJoystick(float x, float y) {
 
@@ -175,9 +168,5 @@ void InputListener::updateInput() {
 			}
 			joybuffer[i] = state;
         }
-
-        // Update joy hat
-        updateJoyHat(buttons);
-        
     }
 }

@@ -12,6 +12,20 @@
 #include <GLFW/glfw3.h>
 
 
+// Reset the current game state
+void Game::reset() {
+
+    // Reset stage
+    stage->reset();
+    // Reset hud
+    hud.reset();
+
+    // Reset workers
+    workers.clear();
+    stage->parseMap(comm);
+}
+
+
 // Initialize scene
 void Game::init() {
 
@@ -42,6 +56,12 @@ void Game::init() {
 // Update scene
 void Game::update(float tm) {
 
+    // Reset
+    if(evMan->getController()->getButton("reset") == State::Pressed) {
+
+        reset();
+    }
+
     // "Pre-update"
     bool anyMoving = false;
     for(int i = 0; i < workers.size(); ++ i) {
@@ -50,7 +70,7 @@ void Game::update(float tm) {
         workers[i].checkCogCollision(stage);
 
         // Is moving
-        if(!anyMoving && workers[i].isMoving()) {
+        if(!anyMoving && workers[i].isActive()) {
 
             anyMoving = true;
         }
@@ -109,6 +129,7 @@ void Game::dispose() {
 void Game::onChange() {
 
     // ...
+    
 }
 
 

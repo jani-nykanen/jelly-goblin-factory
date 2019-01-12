@@ -61,3 +61,10 @@ void Hud::draw(Graphics* g) {
         SHADOW_ALPHA,
     SCALE, false);
 }
+
+
+// Reset
+void Hud::reset() {
+
+    time = 0;
+}

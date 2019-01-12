@@ -46,9 +46,6 @@ protected:
     // Get input state
     int getInputState(std::vector<int> arr, int index);
 
-    // Update joystick hat
-    void updateJoyHat(const uint8* buttons);
-
 public:
 
     // Keyboard events

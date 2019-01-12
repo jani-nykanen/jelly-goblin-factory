@@ -11,6 +11,7 @@
 
 // Constants
 static const float MOVE_TIME = 20;
+static const float TRANSFORM_TIME = 20;
 
 // Bitmap
 static Bitmap* bmpWorker;
@@ -73,7 +74,6 @@ void Worker::control(EventManager* evMan,
     float dist = hypotf(stick.x, stick.y);
     if(dist < DELTA) {
 
-        stopped = false;
         return;
     }
 
@@ -105,8 +105,6 @@ void Worker::control(EventManager* evMan,
         target.x = pos.x;
         target.y = pos.y;
 
-        stopped = false;
-
         return;
     }
 
@@ -117,7 +115,6 @@ void Worker::control(EventManager* evMan,
 
     // Update solid data
     stage->updateSolid(pos.x, pos.y, 0);
-    
 }
 
 
@@ -147,7 +144,6 @@ void Worker::move(Stage* stage, float tm) {
 
         moveTimer = 0.0f;
         moving = false;
-        stopped = true;
 
         pos.x = target.x;
         pos.y = target.y;
@@ -185,13 +181,31 @@ void Worker::animate(float tm) {
         // Awake
         else {
 
-            bool cond = (stopped || moving);
+            bool cond = (moving);
             int frameSkip = cond ? 4 : 0;
 
             // Animate sprite
             spr.animate(color*2, frameSkip, frameSkip+3, 
                 cond ? WALK_SPEED : STAND_SPEED, tm);
         }
+    }
+}
+
+
+// Transform
+void Worker::transform(float tm) {
+
+    const float ANIM_SPEED = 3.0f;
+
+    // Animate
+    if(spr.getFrame() != 5 || spr.getRow() != color*2+1)
+        spr.animate(color*2+1, 2, 5, ANIM_SPEED, tm);
+
+    // Update timer
+    transfTimer -= 1.0f *tm;
+    if(transfTimer <= 0.0f) {
+
+        transforming = false;
     }
 }
 
@@ -210,6 +224,8 @@ void Worker::checkCogCollision(Stage* stage) {
 
         isCog = true;
         moving = false;
+        transforming = true;
+        transfTimer = TRANSFORM_TIME;
 
         stage->updateSolid(pos.x, pos.y, 3+color);
     }
@@ -231,10 +247,11 @@ Worker::Worker(Point p, int color, bool sleeping, bool isCog) {
     angle = 0.0f;
 
     // Set defaults
-    stopped = false;
     moving = false;
     moveTimer = 0.0f;
     startedMoving = false;
+    transforming = false;
+    transfTimer = 0.0f;
 
     // Create sprite
     spr = Sprite(128, 128);
@@ -260,6 +277,12 @@ void Worker::update(EventManager* evMan, Stage* stage,
 
     startedMoving = false;
 
+    // Transform
+    if(isCog && transforming) {
+
+        transform(tm);
+    }
+
     // Control
     control(evMan, stage, anyMoving);
     // Move
@@ -273,26 +296,52 @@ void Worker::update(EventManager* evMan, Stage* stage,
 void Worker::draw(Graphics* g) {
 
     const float COG_SCALE = 1.2f;
+    const float TRANSF_SCALE = 1.5f;
+    const int TRANSF_FRAMES = 3;
 
     if(isCog) {
+
+        float t = transforming ? transfTimer / TRANSFORM_TIME : 0.0f;
 
         g->push();
         g->translate(vpos.x+BASE_TILE_SIZE/2, 
             vpos.y+BASE_TILE_SIZE/2);
         g->rotate(angle);
-        g->scale(COG_SCALE, COG_SCALE);
+        g->scale(COG_SCALE*(1-t), COG_SCALE*(1-t));
         g->useTransf();
 
         // Draw cog
-        spr.draw(g, bmpWorker, 7, 1, 
+        spr.draw(g, bmpWorker, 7, color*2+1, 
             -BASE_TILE_SIZE/2,
             -BASE_TILE_SIZE/2);
 
         g->pop();
         g->useTransf();
 
+        // Draw transforming sprite
+        if(transforming) {
+
+            float s = 1.0f + (1.0f-t) * (TRANSF_SCALE-1.0f);
+
+            g->push();
+            g->translate(vpos.x+BASE_TILE_SIZE/2, 
+                vpos.y+BASE_TILE_SIZE/2);
+            g->scale(s, s);
+            g->useTransf();
+
+            g->setColor(1,1,1, t);
+            spr.draw(g, bmpWorker,
+                -BASE_TILE_SIZE/2,
+                -BASE_TILE_SIZE/2);
+            g->setColor();
+
+            g->pop();
+            g->useTransf();
+            
+        }
+
         // Draw eyes/face
-        spr.draw(g, bmpWorker, 6, 1, vpos.x, vpos.y);
+        spr.draw(g, bmpWorker, 6, color*2+1, vpos.x, vpos.y);
 
     }
     else {
