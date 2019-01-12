@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 // Constants
-static const float MOVE_TIME = 15;
+static const float MOVE_TIME = 20;
 
 // Bitmap
 static Bitmap* bmpWorker;
@@ -73,13 +73,7 @@ void Worker::control(EventManager* evMan,
     float dist = hypotf(stick.x, stick.y);
     if(dist < DELTA) {
 
-        // Change animation back
-        if(stopped) {
-
-            // TODO: Or frame-4?
-			spr.setFrame(0, startRow);
-            stopped = false;
-		}
+        stopped = false;
         return;
     }
 
@@ -111,8 +105,7 @@ void Worker::control(EventManager* evMan,
         target.x = pos.x;
         target.y = pos.y;
 
-        // Reset animation
-        spr.setFrame(0, startRow);
+        stopped = false;
 
         return;
     }
@@ -121,7 +114,6 @@ void Worker::control(EventManager* evMan,
     moving = true;
     moveTimer = MOVE_TIME;
     startedMoving = true;
-    spr.setFrame(spr.getRow(), spr.getFrame() +4);
 
     // Update solid data
     stage->updateSolid(pos.x, pos.y, 0);
@@ -189,11 +181,12 @@ void Worker::animate(float tm) {
         // Awake
         else {
 
-            int frameSkip = moving ? 4 : 0;
+            bool cond = (stopped || moving);
+            int frameSkip = cond ? 4 : 0;
 
             // Animate sprite
             spr.animate(color*2, frameSkip, frameSkip+3, 
-                moving ? WALK_SPEED : STAND_SPEED, tm);
+                cond ? WALK_SPEED : STAND_SPEED, tm);
         }
     }
 }
