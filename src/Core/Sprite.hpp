@@ -36,9 +36,14 @@ public:
         float x, float y, int flip = 0);
     void draw(Graphics* g, Bitmap* bmp, float x, float y, int flip = 0);
 
-    // Get dimensions
+    // Getters
     inline int getWidth() { return width; }
     inline int getHeight() { return height; }
+    inline int getFrame() {return frame;}
+    inline int getRow() {return row;}
+
+    // Setters
+    inline void setRow(int r) {row = r;}
 };
 
 

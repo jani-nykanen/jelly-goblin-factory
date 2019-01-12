@@ -15,7 +15,7 @@ struct PadButton {
     int key;
     int button;
     int state;
-    std::string name = "";
+    std::string name;
     inline PadButton(){}
     inline PadButton(std::string name, int key=-1, int button=-1) {
 

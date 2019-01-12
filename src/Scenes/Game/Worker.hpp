@@ -9,6 +9,8 @@
 #include "../../Core/AssetPack.hpp"
 #include "../../Core/EventManager.hpp"
 
+#include "Stage.hpp"
+
 // Worker class
 class Worker {
 
@@ -25,11 +27,18 @@ private:
     float moveTimer;
     // Is moving
     bool moving;
+    // Has stopped
+    bool stopped;
+    // Has started moving
+    bool startedMoving;
+
     // Cog angle
     float angle;
 
     // Sprite
     Sprite spr;
+    // Start row
+    int startRow;
 
     // Color
     int color;
@@ -38,6 +47,15 @@ private:
     // Is cog
     bool isCog;
 
+    // Find a free tile
+    bool findFreeTile(int dx, int dy, Stage* stage);
+    // Control
+    void control(EventManager* evMan, Stage* stage, bool anyMoving);
+    // Move
+    void move(Stage* stage, float tm);
+    // Animate
+    void animate(float tm);
+
 public:
 
     // Constructor
@@ -45,9 +63,20 @@ public:
     Worker(Point p, int color, bool sleeping=false, bool isCog=false);
 
     // Update
-    void update(EventManager* evMan, float tm);
+    void update(EventManager* evMan, Stage* stage,  
+        bool anyMoving, float tm);
     // Draw
     void draw(Graphics* g);
+
+    // Getters
+    inline bool isMoving() {
+
+        return moving;
+    }
+    inline bool hasStartedMoving() {
+
+        return startedMoving;
+    }
 };
 
 // Initialize global data

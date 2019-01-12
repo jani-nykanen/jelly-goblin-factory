@@ -5,10 +5,15 @@
 
 #include <GLFW/glfw3.h>
 
+#include <cstdlib>
+#include <ctime>
+
 
 // Initialize scene
 void Global::init() {
 
+    // Only affects animation
+    srand(time(NULL));
 }
 
 

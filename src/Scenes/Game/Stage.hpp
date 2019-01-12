@@ -25,6 +25,8 @@ private:
     Tilemap* tmap;
     // Active data
     std::vector<int> data;
+    // Solid data
+    std::vector<int> solid;
 
     // Dimensions (in tiles)
     int width;
@@ -72,6 +74,11 @@ public:
     void update(EventManager* evMan, float tm);
     // Draw
     void draw(Graphics* g, Communicator &comm);
+
+    // Update solid data
+    void updateSolid(int x, int y, int value);
+    // Get solidity value of a tile
+    int getSolidValue(int x, int y);
 };
 
 

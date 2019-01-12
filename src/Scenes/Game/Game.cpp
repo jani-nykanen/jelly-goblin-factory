@@ -41,10 +41,21 @@ void Game::init() {
 // Update scene
 void Game::update(float tm) {
 
+    // Check if any moving
+    bool anyMoving = false;
+    for(int i = 0; i < workers.size(); ++ i) {
+
+        if(workers[i].isMoving()) {
+
+            anyMoving = true;
+            break;
+        }
+    }
+
     // Update workers
     for(int i = 0; i < workers.size(); ++ i) {
 
-        workers[i].update(evMan, tm);
+        workers[i].update(evMan, stage, anyMoving, tm);
     }
 
     // Update stage

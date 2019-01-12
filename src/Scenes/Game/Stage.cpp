@@ -224,6 +224,13 @@ Stage::Stage(std::string mapPath) {
     width = tmap->getWidth();
     height = tmap->getHeight();
 
+    // Set default solid data
+    solid = std::vector<int> (width*height);
+    for(int i = 0; i < width*height; ++ i) {
+
+        solid[i] = data[i] == 1 ? 1 : 0;
+    }
+
     // Compute scale
     baseWidth = width * BASE_TILE_SIZE;
     baseHeight = height * BASE_TILE_SIZE;
@@ -251,7 +258,8 @@ void Stage::parseMap(Communicator &comm) {
     bool isWorker;
     for(int i = 0; i < width*height; ++ i) {
 
-        isWorker = false;
+        isWorker = true;
+        sleeping = false;
         isCog = false;
 
         p.x = i % width;
@@ -269,8 +277,6 @@ void Stage::parseMap(Communicator &comm) {
             color = t-1; 
             sleeping = false;
             isCog = false;
-
-            isWorker = true;
             break;
 
         // Cogs
@@ -281,11 +287,20 @@ void Stage::parseMap(Communicator &comm) {
             color = t-4; 
             sleeping = false;
             isCog = true;
+            break;
 
-            isWorker = true;
+        // Sleepers
+        case 7:
+        case 8:
+        case 9:
+
+            color = t-7;
+            sleeping = true;
+            isCog = false;
             break;
 
         default:
+            isWorker = false;
             break;
         }
 
@@ -293,6 +308,8 @@ void Stage::parseMap(Communicator &comm) {
         if(isWorker) {
 
             comm.addWorker(p, color, sleeping, isCog);
+            // Update solid data
+            updateSolid(p.x, p.y, sleeping ? 1 : 2);
         }
     }
 }
@@ -347,4 +364,24 @@ void Stage::draw(Graphics* g, Communicator &comm) {
 
     g->pop();
     g->useTransf();
+}
+
+
+// Update solid data
+void Stage::updateSolid(int x, int y, int value) {
+
+    if(x < 0 || y < 0 || x >= width || y >= height)
+        return;
+
+    solid[y*width + x] = value;
+}
+
+
+// Is solid
+int Stage::getSolidValue(int x, int y) {
+
+    if(x < 0 || y < 0 || x >= width || y >= height)
+        return 0;
+
+    return solid[y*width+x];
 }
