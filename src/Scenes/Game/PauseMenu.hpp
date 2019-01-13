@@ -40,7 +40,7 @@ public:
     void draw(Graphics* g, float tx=0, float ty=0);
 
     // Activate
-    void activate();
+    void activate(int cpos = 0);
     // Deactive
     void deactivate();
 
@@ -48,6 +48,9 @@ public:
     inline bool isActive() {
         return active;
     }
+
+    // Set button text
+    void setButtonText(int button, std::string newText);
 
 };
 

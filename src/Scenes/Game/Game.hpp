@@ -33,6 +33,7 @@ private:
     // Pause menus
     PauseMenu pause;
     PauseMenu endMenu;
+    PauseMenu settings;
 
     // Stage clear timer
     float endTimer;
@@ -48,6 +49,18 @@ public:
     void resume();
     // Terminate
     void terminate();
+    // Reactivate pause
+    void reactivatePause();
+    // Activate settings
+    void activateSettings();
+    // Toggle fullscreen
+    inline void toggleFullscreen() {
+        evMan->toggleFullscreen();
+    }
+    // Toggle SFX
+    void toggleSFX();
+    // Toggle music
+    void toggleMusic();
 
     // Initialize scene
     void init();

@@ -13,6 +13,17 @@ EventManager::EventManager(Application* ref, void* window, GamePad* vpad)
     appRef = ref;
     this->vpad = vpad;
     trans = Transition();
+
+    // Create audio manager
+    // (temporarily here)
+    audio = new AudioManager();
+}
+
+
+// Destructor
+EventManager::~EventManager() {
+
+    delete audio;
 }
 
 

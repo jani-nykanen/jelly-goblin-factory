@@ -84,10 +84,11 @@ void PauseMenu::draw(Graphics* g, float tx, float ty) {
 
 
 // Activate
-void PauseMenu::activate() {
+void PauseMenu::activate(int cpos) {
 
     active = true;
-    menu.setCursorPos(0);
+    if(cpos >= 0)
+        menu.setCursorPos(cpos);
 }
 
 
@@ -95,4 +96,12 @@ void PauseMenu::activate() {
 void PauseMenu::deactivate() {
 
     active = false;
+}
+
+
+// Set button text
+void PauseMenu::setButtonText(int button, 
+    std::string newText) {
+
+    menu.setText(button, newText);
 }

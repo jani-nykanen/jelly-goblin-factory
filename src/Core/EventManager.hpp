@@ -7,6 +7,7 @@
 #include "InputListener.hpp"
 #include "GamePad.hpp"
 #include "Transition.hpp"
+#include "AudioManager.hpp"
 
 class Application;
 
@@ -19,7 +20,9 @@ private:
     Application* appRef;
     // Gamepad reference
     GamePad* vpad;
-    
+    // Audio manager
+    AudioManager* audio;
+
     // Transition
     Transition trans;
 
@@ -27,6 +30,8 @@ public:
 
     // Constructor
     EventManager(Application* ref, void* window, GamePad* vpad);
+    // Destructor
+    ~EventManager();
 
     // Redirect to application core
     void terminate();
@@ -41,6 +46,11 @@ public:
     inline Transition* getTransition() {
 
         return &trans;
+    }
+    // Get audio manager
+    inline AudioManager* getAudioManager() {
+
+        return audio;
     }
 
 };

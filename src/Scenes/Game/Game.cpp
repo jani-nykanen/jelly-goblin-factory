@@ -18,7 +18,13 @@ static Game* gref;
 // Callbacks
 static void cb_Resume() { gref->resume(); }
 static void cb_Reset() { gref->reset(); }
+static void cb_Settings() { gref->activateSettings();}
 static void cb_Terminate() { gref->terminate(); }
+
+static void cb_SFX() {gref->toggleSFX();}
+static void cb_Music() {gref->toggleMusic();}
+static void cb_Fullscreen() {gref->toggleFullscreen();}
+static void cb_Back() {gref->reactivatePause();}
 
 
 // Draw "Stage clear"
@@ -91,6 +97,48 @@ void Game::terminate() {
 }
 
 
+// Reactivate pause
+void Game::reactivatePause() {
+
+    settings.deactivate();
+    pause.activate(-1);
+}
+
+
+// Activate settings
+void Game::activateSettings() {
+
+    settings.activate(3);
+    pause.deactivate();
+}
+
+
+// Toggle SFX
+void Game::toggleSFX() {
+
+    AudioManager* audio = evMan->getAudioManager();
+    audio->toggleSfx();
+
+    std::string text = "SFX: " + 
+        (audio->isSfxEnabled() ? std::string("On") : std::string("Off"));
+
+    settings.setButtonText(0, text);
+}
+
+
+// Toggle music
+void Game::toggleMusic() {
+
+    AudioManager* audio = evMan->getAudioManager();
+    audio->toggleMusic();
+
+    std::string text = "Music: " + 
+        (audio->isMusicEnabled() ? std::string("On") : std::string("Off"));
+
+    settings.setButtonText(1, text);
+}
+
+
 // Initialize scene
 void Game::init() {
 
@@ -101,6 +149,10 @@ void Game::init() {
     const float END_WIDTH = 320.0f;
     const float END_HEIGHT = 160.0f;
     const float END_SCALE = 0.75f;
+
+    const float SETTINGS_WIDTH = 400.0f;
+    const float SETTINGS_HEIGHT = 288.0f;
+    const float SETTINGS_SCALE = 1.0f;
 
     printf("Initializing...\n");
 
@@ -133,7 +185,7 @@ void Game::init() {
     std::vector<MenuButton> buttons;
     buttons.push_back(MenuButton("Resume", cb_Resume));
     buttons.push_back(MenuButton("Restart", cb_Reset, true, 2.0f));
-    buttons.push_back(MenuButton("Settings", NULL));
+    buttons.push_back(MenuButton("Settings", cb_Settings));
     buttons.push_back(MenuButton("Quit", cb_Terminate, true, 2.0f));
     pause = PauseMenu(buttons, 
         PAUSE_WIDTH, PAUSE_HEIGHT, PAUSE_SCALE);
@@ -145,6 +197,16 @@ void Game::init() {
     buttons.push_back(MenuButton("Stage menu", cb_Terminate, true, 2.0f));
     endMenu = PauseMenu(buttons, 
         END_WIDTH, END_HEIGHT, END_SCALE);
+
+    // Create settings
+    buttons.clear();
+    buttons.push_back(MenuButton("SFX: On", cb_SFX));
+    buttons.push_back(MenuButton("Music: On", cb_Music));
+    buttons.push_back(MenuButton("Fullscreen", cb_Fullscreen));
+    buttons.push_back(MenuButton("Back", cb_Back));
+    settings = PauseMenu(buttons, 
+        SETTINGS_WIDTH, SETTINGS_HEIGHT, 
+        SETTINGS_SCALE);
 }
 
 
@@ -177,6 +239,13 @@ void Game::update(float tm) {
         endMenu.activate();
     }
     */
+
+    // Check settings
+    if(settings.isActive()) {
+
+        settings.update(evMan, false);
+        return;
+    }
 
     // Check pause
     if(pause.isActive()) {
@@ -265,8 +334,9 @@ void Game::draw(Graphics* g) {
     // Draw hud
     hud.draw(g);
 
-    // Draw pause
+    // Draw pause menus
     pause.draw(g);
+    settings.draw(g);
     if(endMenu.isActive()) {
 
         drawStageClear(g);
