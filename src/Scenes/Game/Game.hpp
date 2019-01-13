@@ -15,8 +15,11 @@ class Game : public Scene {
 
 private:
 
-    // Test bitmaps
+    // Bitmaps
     Bitmap* bmpFont;
+
+    // Transition
+    Transition* trans;
 
     // Communicator
     Communicator comm;

@@ -6,6 +6,7 @@
 
 #include "InputListener.hpp"
 #include "GamePad.hpp"
+#include "Transition.hpp"
 
 class Application;
 
@@ -18,6 +19,9 @@ private:
     Application* appRef;
     // Gamepad reference
     GamePad* vpad;
+    
+    // Transition
+    Transition trans;
 
 public:
 
@@ -32,6 +36,11 @@ public:
     inline GamePad* getController() {
 
         return vpad;
+    }
+    // Get transition object
+    inline Transition* getTransition() {
+
+        return &trans;
     }
 
 };

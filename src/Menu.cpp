@@ -24,6 +24,8 @@ Menu::Menu(std::vector<MenuButton> buttons) {
 // Update
 void Menu::update(EventManager* evMan) {
 
+    Transition* trans = evMan->getTransition();
+
     const float DELTA = 0.25f;
 
     GamePad* vpad = evMan->getController();
@@ -43,14 +45,22 @@ void Menu::update(EventManager* evMan) {
     }
 
     // Check key press
+    MenuButton b;
     if(vpad->getButton("accept") == State::Pressed ||
        vpad->getButton("start") == State::Pressed) {
 
         // Call callback function, if any
-        MenuCallback cb = buttons[cursorPos].cb;
+        b = buttons[cursorPos];
+        MenuCallback cb = b.cb;
         if(cb != NULL) {
 
-            cb();
+            if(b.useTransition) {
+
+                trans->activate(FadeIn, b.transSpeed, cb);
+            }
+            else {
+                cb();
+            }
         }
     }
 }

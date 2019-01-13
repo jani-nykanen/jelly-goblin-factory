@@ -22,12 +22,17 @@ struct MenuButton {
 
     std::string text;
     MenuCallback cb;
+    bool useTransition;
+    float transSpeed;
 
     // Constructors
     inline MenuButton() {}
-    inline MenuButton(std::string text, MenuCallback cb) {
+    inline MenuButton(std::string text, MenuCallback cb, 
+        bool useTrans = false, float speed = 1.0f) {
         this->text = text;
         this->cb = cb;
+        useTransition = useTrans;
+        transSpeed = speed;
     }
 };
 

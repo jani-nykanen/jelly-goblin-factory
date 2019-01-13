@@ -19,6 +19,10 @@ void Global::init() {
 
     // Update certain global components
     initGlobalMenu(assets);
+
+    // Set transition
+    trans = evMan->getTransition();
+    trans->activate(FadeOut, 2.0f, NULL, Color(0.1f, 0.60f, 1.0f));
 }
 
 
@@ -39,6 +43,9 @@ void Global::update(float tm) {
 
         evMan->toggleFullscreen();
     }
+
+    // Update transition
+    trans->update(tm);
 }
 
 
@@ -46,6 +53,8 @@ void Global::update(float tm) {
 // Draw scene
 void Global::draw(Graphics* g) {
 
+    // Draw transition
+   trans->draw(g);
 }
 
 

@@ -6,12 +6,15 @@
 
 #include "../Core/Scene.hpp"
 
+#include "../Core/Transition.hpp"
+
 // Game scene
 class Global : public Scene {
 
 private:
 
-    // ...
+    // Transition
+    Transition* trans;
 
 public:
 

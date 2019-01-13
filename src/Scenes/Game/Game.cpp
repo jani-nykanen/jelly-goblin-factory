@@ -20,6 +20,7 @@ static void cb_Resume() { gref->resume(); }
 static void cb_Reset() { gref->reset(); }
 static void cb_Terminate() { gref->terminate(); }
 
+
 // Draw "Stage clear"
 void Game::drawStageClear(Graphics* g) {
 
@@ -47,7 +48,7 @@ void Game::drawStageClear(Graphics* g) {
     if(hud.isPerfectClear())
         g->setColor(1.5f+cmod,1.5f+cmod,0.5f+cmod);
     else
-        g->setColor(0.65f+cmod,0.65f+cmod,0.65f+cmod);
+        g->setColor(0.75f+cmod,0.75f+cmod,0.75f+cmod);
 
     g->drawText(bmpFont, "STAGE CLEAR!", 
         view.x/2, view.y/2 + TEXT_Y*(1+s*SCALE_MOD/2), XOFF, 0, 
@@ -108,6 +109,9 @@ void Game::init() {
     // Get bitmaps
     bmpFont = assets->getBitmap("font");
 
+    // Get transition
+    trans = evMan->getTransition();
+
     // Create communicator
     comm = Communicator(this);
 
@@ -128,17 +132,17 @@ void Game::init() {
     // Create pause menu
     std::vector<MenuButton> buttons;
     buttons.push_back(MenuButton("Resume", cb_Resume));
-    buttons.push_back(MenuButton("Restart", cb_Reset));
+    buttons.push_back(MenuButton("Restart", cb_Reset, true, 2.0f));
     buttons.push_back(MenuButton("Settings", NULL));
-    buttons.push_back(MenuButton("Quit", cb_Terminate));
+    buttons.push_back(MenuButton("Quit", cb_Terminate, true, 2.0f));
     pause = PauseMenu(buttons, 
         PAUSE_WIDTH, PAUSE_HEIGHT, PAUSE_SCALE);
 
     // Create end menu
     buttons.clear();
-    buttons.push_back(MenuButton("Next stage", cb_Reset));
-    buttons.push_back(MenuButton("Retry", cb_Reset));
-    buttons.push_back(MenuButton("Stage menu", cb_Terminate));
+    buttons.push_back(MenuButton("Next stage", cb_Reset, true, 2.0f));
+    buttons.push_back(MenuButton("Retry", cb_Reset, true, 2.0f));
+    buttons.push_back(MenuButton("Stage menu", cb_Terminate, true, 2.0f));
     endMenu = PauseMenu(buttons, 
         END_WIDTH, END_HEIGHT, END_SCALE);
 }
@@ -149,8 +153,11 @@ void Game::update(float tm) {
 
     const float END_TIMER_SPEED = 0.05f;
 
-    GamePad* vpad = evMan->getController();
+    // If fading, wait until it's over
+    if(trans->isActive())
+        return;
 
+    GamePad* vpad = evMan->getController();
     // Check end menu
     if(endMenu.isActive()) {
 
@@ -164,10 +171,12 @@ void Game::update(float tm) {
         return;
     }
     // TEMP
+    /*
     else if(vpad->getButton("debug") == State::Pressed) {
 
         endMenu.activate();
     }
+    */
 
     // Check pause
     if(pause.isActive()) {
@@ -188,7 +197,7 @@ void Game::update(float tm) {
     // Reset
     if(vpad->getButton("reset") == State::Pressed) {
 
-        reset();
+        trans->activate(FadeIn, 2.0f, cb_Reset);
     }
 
     // "Pre-update"
@@ -216,6 +225,7 @@ void Game::update(float tm) {
     if(aliveCount == 0 && !anyMoving) {
 
         endMenu.activate();
+        endTimer = 0.0f;
         return;
     } 
 

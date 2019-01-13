@@ -12,6 +12,7 @@ EventManager::EventManager(Application* ref, void* window, GamePad* vpad)
 
     appRef = ref;
     this->vpad = vpad;
+    trans = Transition();
 }
 
 

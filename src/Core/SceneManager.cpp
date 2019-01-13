@@ -90,11 +90,11 @@ void SceneManager::update(float tm) {
 // Draw scenes
 void SceneManager::draw(Graphics* g){
 
-    if(globalScene != NULL)
-        globalScene->draw(g);
-
     if(activeScene != NULL)
         activeScene->draw(g);
+
+    if(globalScene != NULL)
+        globalScene->draw(g);
 }
 
 
