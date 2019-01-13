@@ -34,6 +34,10 @@ void Application::initGL() {
     int height = conf.getIntParam("window_height", 480);
     const char* caption = conf.getParam("caption").c_str();
     
+    // Set window hints
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+
     // Create window
     window = glfwCreateWindow(width, height, caption, NULL, NULL);
     winSize[0] = width;
