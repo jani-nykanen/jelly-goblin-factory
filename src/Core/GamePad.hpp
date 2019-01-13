@@ -32,6 +32,8 @@ private:
 
     // Analogue stick
     Vector2 stick;
+    // Stick delta
+    Vector2 delta;
 
     // Buttons
     std::vector<PadButton> buttons;
@@ -50,6 +52,10 @@ public:
     // Get stick
     inline Vector2 getStick() {
         return stick;
+    }
+    // Get stick delta
+    inline Vector2 getDelta() {
+        return delta;
     }
 };
 

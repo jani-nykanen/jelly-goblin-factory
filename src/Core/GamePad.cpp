@@ -73,6 +73,7 @@ void GamePad::update(InputListener* input) {
     }
 
     // Update stick
+    Vector2 oldStick = stick;
     // Check joystick
     stick = input->getJoystick();
     // Check keyboard
@@ -92,6 +93,10 @@ void GamePad::update(InputListener* input) {
         stick.x *= 0.707f;
         stick.y *= 0.707f;
     }
+
+    // Compute delta
+    delta.x = stick.x - oldStick.x;
+    delta.y = stick.y - oldStick.y;
 }
 
 
