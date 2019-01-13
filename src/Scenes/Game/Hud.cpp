@@ -47,14 +47,14 @@ void Hud::draw(Graphics* g) {
     // Draw time text
     std::string str;
     str.push_back((char)1);
-    str += " :" + intToString(time);
+    str += " :" + intToString(timer);
     g->drawText(bmpFont, str, TEXT_X, STAGE_Y+TIME_Y, XOFF, 0,
         SHADOW_X, SHADOW_Y, SHADOW_ALPHA,
     SCALE, false);
 
     // Draw star text
     str = "";
-    str.push_back(time <= turnTarget ? (char)2 : (char)3);
+    str.push_back(timer <= turnTarget ? (char)2 : (char)3);
     str += " :" + intToString(turnTarget);
     g->drawText(bmpFont, str, TEXT_X, STAGE_Y+TIME_Y+STAR_Y, 
         XOFF, 0, SHADOW_X, SHADOW_Y, 
@@ -66,5 +66,5 @@ void Hud::draw(Graphics* g) {
 // Reset
 void Hud::reset() {
 
-    time = 0;
+    timer = 0;
 }

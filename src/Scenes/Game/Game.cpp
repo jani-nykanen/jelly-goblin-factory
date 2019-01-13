@@ -29,18 +29,30 @@ void Game::drawStageClear(Graphics* g) {
     const float SHADOW_ALPHA = 0.5f;
     const float TEXT_Y = -96;
     const float XOFF = -32.0f;
+    const float BASE_SCALE = 1.5f;
+    const float SCALE_MOD = 0.25f;
+    const float COLOR_MOD = 0.25f;
 
-     Vector2 view = g->getViewport();
+    Vector2 view = g->getViewport();
 
     // Draw end menu
     endMenu.draw(g, 0, END_MENU_Y);
 
+    // Compute size & color mods
+    float s = sinf(endTimer);
+    float scale = BASE_SCALE + s*SCALE_MOD;
+    float cmod = (s+1.0f)/2.0f * COLOR_MOD;
+
     // Draw "Stage clear"
-    g->setColor(1.5f,1.5f,0.5f);
+    if(hud.isPerfectClear())
+        g->setColor(1.5f+cmod,1.5f+cmod,0.5f+cmod);
+    else
+        g->setColor(0.65f+cmod,0.65f+cmod,0.65f+cmod);
+
     g->drawText(bmpFont, "STAGE CLEAR!", 
-        view.x/2, view.y/2 + TEXT_Y, XOFF, 0, 
+        view.x/2, view.y/2 + TEXT_Y*(1+s*SCALE_MOD/2), XOFF, 0, 
         SHADOW_X, SHADOW_Y, SHADOW_ALPHA,
-        1.5f, true);
+        scale, true);
 }
 
 
@@ -181,6 +193,7 @@ void Game::update(float tm) {
 
     // "Pre-update"
     bool anyMoving = false;
+    int aliveCount = 0;
     for(int i = 0; i < workers.size(); ++ i) {
 
         // Check cog collisions
@@ -191,8 +204,20 @@ void Game::update(float tm) {
 
             anyMoving = true;
         }
+
+        // If "alive"
+        if(workers[i].isAlive()) {
+
+            ++ aliveCount;
+        }
     }
 
+    // Check if victory
+    if(aliveCount == 0 && !anyMoving) {
+
+        endMenu.activate();
+        return;
+    } 
 
     // Update workers
     bool anyStartedMoving = false;

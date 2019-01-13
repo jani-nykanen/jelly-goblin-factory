@@ -16,7 +16,7 @@ private:
     Bitmap* bmpFont;
 
     // Info
-    int time;
+    int timer;
     int turnTarget;
     int stageID;
 
@@ -34,10 +34,16 @@ public:
 
     // Set info
     inline void addMove() {
-        ++ time;
+        ++ timer;
     }
     inline void setMoveTarget(int t) {
         turnTarget = t;
+    }
+
+    // Getters
+    inline bool isPerfectClear() {
+
+        return timer <= turnTarget;
     }
 
     // Reset

@@ -90,6 +90,11 @@ public:
 
         return transforming || moving;
     }
+    // A little misleading, yes
+    inline bool isAlive() {
+
+        return !isCog && color >= 0;
+    }
 };
 
 // Initialize global data
