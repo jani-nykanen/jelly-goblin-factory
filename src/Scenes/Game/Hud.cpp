@@ -14,6 +14,11 @@ Hud::Hud(AssetPack* assets) {
 
     // Get bitmaps
     bmpFont = assets->getBitmap("font");
+
+    // Set defaults
+    timer = 0;
+    turnTarget = 0;
+    stageID = 1;
 }
 
 

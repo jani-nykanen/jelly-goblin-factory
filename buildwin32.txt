@@ -1,0 +1,5 @@
+(Reminder to self)
+
+Use these: -lglew32.dll -lopengl32 -lglfw3dll -lpthread -static-libgcc -static-libstdc++
+Compile with: i686-w64-mingw32-g++
+

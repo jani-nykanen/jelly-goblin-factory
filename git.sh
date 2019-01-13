@@ -9,3 +9,4 @@ git add app.cfg
 git add dev
 git add Assets
 git add controls.cfg
+git add buildwin32.txt
