@@ -38,6 +38,10 @@ private:
     // Buttons
     std::vector<PadButton> buttons;
 
+    // Joy axes
+    Point stickAxes;
+    Point hatAxes;
+
 public:
 
     // Constructors
@@ -57,6 +61,9 @@ public:
     inline Vector2 getDelta() {
         return delta;
     }
+
+    // Initialize input
+    void initInput(InputListener* input);
 };
 
 #endif // __GAMEPAD_H__

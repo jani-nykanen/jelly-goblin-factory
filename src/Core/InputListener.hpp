@@ -37,6 +37,10 @@ protected:
     // Is joystick active
     bool joyActive;
 
+    // Joy axes
+    Point stickAxes;
+    Point hatAxes;
+
     // Input down
     void inputDown(std::vector<int> &arr, int index);
     // Input up
@@ -66,6 +70,13 @@ public:
     inline int getButtonState(int b) { return getInputState(joystate, b); }
     // Get joystick
     inline Vector2 getJoystick() {return joystick;}
+
+    // Set joy axes
+    inline void setJoyAxes(Point stick, Point hat) {
+
+        stickAxes = stick;
+        hatAxes = hat;
+    }
 
 };
 

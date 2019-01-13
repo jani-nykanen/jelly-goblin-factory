@@ -132,20 +132,20 @@ void InputListener::updateInput() {
 
         int count;
         const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
-        if(count >= 2) {
+        if(count >= max_int32(stickAxes.x, stickAxes.y) ) {
             
             // Check if enough movement
-            if(hypotf(axes[0],axes[1]) > DELTA) {
+            if(hypotf(axes[stickAxes.x],axes[stickAxes.y]) > DELTA) {
 
-                updateJoystick(axes[0], axes[1]);
+                updateJoystick(axes[stickAxes.x], axes[stickAxes.y]);
             }
             
             // Check hat
-            if(count >= 8)  {
+            if(count >= max_int32(hatAxes.x, hatAxes.y))  {
 
-                if(hypotf(axes[6],axes[7]) > DELTA) {
+                if(hypotf(axes[hatAxes.x],axes[hatAxes.y]) > DELTA) {
 
-                    updateJoystick(axes[6], axes[7]);
+                    updateJoystick(axes[hatAxes.x], axes[hatAxes.y]);
                 }
             }
             

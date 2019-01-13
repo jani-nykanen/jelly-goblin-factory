@@ -54,6 +54,25 @@ GamePad::GamePad(std::string confPath) {
         // Add
         buttons.push_back(PadButton(name, key, button));
     }
+
+    // Set joy axes
+    stickAxes = Point(0, 1);
+    hatAxes = Point(0, 1);
+    PadButton b;
+    for(int i = 0; i < buttons.size(); ++ i) {
+
+        b = buttons[i];
+        if(b.name == "@stick_axis") {
+
+            stickAxes.x = b.key;
+            stickAxes.y = b.button;
+        }
+        else if(b.name == "@hat_axis") {
+
+            hatAxes.x = b.key;
+            hatAxes.y = b.button;
+        }
+    }
 }
 
 
@@ -106,12 +125,25 @@ void GamePad::update(InputListener* input) {
 // Get button
 int GamePad::getButton(std::string name) {
     
+    // Special button data is ignored
+    if(name.length() >= 1 && name[0] == '@')
+        return State::Up;
+
+    std::string s;
     for(int i = 0; i < buttons.size(); ++ i) {
 
-        if(buttons[i].name == name) {
+        s = buttons[i].name;
+        if(s[0] != '@' && s == name) {
 
             return buttons[i].state;
         }
     }
     return State::Up;
+}
+
+
+// Initialize input
+void GamePad::initInput(InputListener* input) {
+
+    input->setJoyAxes(stickAxes, hatAxes);
 }

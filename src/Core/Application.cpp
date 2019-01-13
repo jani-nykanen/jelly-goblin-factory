@@ -92,6 +92,7 @@ void Application::init() {
     }
     // Create event manager
     evMan = new EventManager(this, (void*)window, &vpad);
+    vpad.initInput(evMan);
 
     // Load assets
     assets = new AssetPack(conf.getParam("asset_path"));
