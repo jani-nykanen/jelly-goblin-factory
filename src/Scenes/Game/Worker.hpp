@@ -42,8 +42,6 @@ private:
 
     // Sprite
     Sprite spr;
-    // Start row
-    int startRow;
 
     // Color
     int color;

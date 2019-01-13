@@ -161,6 +161,7 @@ void Worker::animate(float tm) {
     const float WALK_SPEED = 6.0f;
     const float SLEEP_SPEED = 60.0f;
     const float ROTATE_SPEED = 0.05f;
+    const float ROCK_ROTATE_SPEED = (M_PI/2.0f) / MOVE_TIME;
 
     if(isCog) {
 
@@ -178,8 +179,8 @@ void Worker::animate(float tm) {
 
             spr.animate(color*2+1, 0, 1, SLEEP_SPEED, tm);
         }
-        // Awake
-        else {
+        // Awake (and not rock)
+        else if(color != -1) {
 
             bool cond = (moving);
             int frameSkip = cond ? 4 : 0;
@@ -188,6 +189,12 @@ void Worker::animate(float tm) {
             spr.animate(color*2, frameSkip, frameSkip+3, 
                 cond ? WALK_SPEED : STAND_SPEED, tm);
         }
+        // If rock
+        else if(color == -1 && moving) {
+
+            int dir = target.x < pos.x ? -1 : 1;
+            angle += ROCK_ROTATE_SPEED * tm * dir;
+        }   
     }
 }
 
@@ -213,7 +220,7 @@ void Worker::transform(float tm) {
 // Check cog collision
 void Worker::checkCogCollision(Stage* stage) {
 
-    if(moving || isCog)
+    if(moving || isCog || color < 0)
         return;
 
     // Check nearby tiles
@@ -256,18 +263,24 @@ Worker::Worker(Point p, int color, bool sleeping, bool isCog) {
     // Create sprite
     spr = Sprite(128, 128);
     // Set beginning frame
-    startRow = color*2;
+    int row = color*2;
     int frame = 0;
     if(!sleeping) {
 
-        frame = rand() % 4;
+        if(color != -1)
+            frame = rand() % 4;
+        else {
+
+            frame = 0;
+            row = 6;
+        }
     }
     else {
 
         frame = rand() % 2;
-        ++ startRow;
+        ++ row;
     }
-    spr.setFrame(startRow, frame);
+    spr.setFrame(row, frame);
 }
 
 
@@ -345,6 +358,33 @@ void Worker::draw(Graphics* g) {
 
     }
     else {
-        spr.draw(g, bmpWorker, vpos.x, vpos.y);
+
+        
+
+        // Draw rock
+        if(color == -1) {
+
+            g->push();
+            g->translate(vpos.x+BASE_TILE_SIZE/2, 
+                vpos.y+BASE_TILE_SIZE/2);
+            g->rotate(angle);
+            g->useTransf();
+
+            // Draw rock body
+            spr.draw(g, bmpWorker, 0,6, 
+                -BASE_TILE_SIZE/2, 
+                -BASE_TILE_SIZE/2);
+            
+            g->pop();
+            g->useTransf();
+
+            // Draw sunglasses
+            spr.draw(g, bmpWorker, 1,6, vpos.x, vpos.y);
+        }
+        else {
+
+            // Draw ordinary worker
+            spr.draw(g, bmpWorker, vpos.x, vpos.y);
+        }
     }
 }

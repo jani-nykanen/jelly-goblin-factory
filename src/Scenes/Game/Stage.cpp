@@ -309,6 +309,14 @@ void Stage::parseMap(Communicator &comm) {
             isCog = false;
             break;
 
+        // Rock
+        case 10:
+
+            color = -1;
+            sleeping = false;
+            isCog = false;
+            break;
+
         default:
             isWorker = false;
             break;
