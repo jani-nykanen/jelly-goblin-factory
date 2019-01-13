@@ -11,6 +11,9 @@
 #include <cstring>
 #include <vector>
 
+#define MENU_TEXT_XOFF -32.0f
+#define MENU_TEXT_YOFF -8.0f
+
 // Callback type
 typedef void (*MenuCallback) (void);
 

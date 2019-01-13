@@ -8,6 +8,7 @@
 #include "Stage.hpp"
 #include "Hud.hpp"
 #include "Worker.hpp"
+#include "PauseMenu.hpp"
 
 // Game scene
 class Game : public Scene {
@@ -26,10 +27,17 @@ private:
     // Workers
     std::vector<Worker> workers;
 
+    // Pause menus
+    PauseMenu pause;
+
 public:
 
     // Reset the current game state
     void reset();
+    // Resume game
+    void resume();
+    // Terminate
+    void terminate();
 
     // Initialize scene
     void init();

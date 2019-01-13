@@ -11,6 +11,15 @@
 
 #include <GLFW/glfw3.h>
 
+// Reference to this
+static Game* gref;
+
+
+// Callbacks
+static void cb_Resume() { gref->resume(); }
+static void cb_Reset() { gref->reset(); }
+static void cb_Terminate() { gref->terminate(); }
+
 
 // Reset the current game state
 void Game::reset() {
@@ -23,13 +32,36 @@ void Game::reset() {
     // Reset workers
     workers.clear();
     stage->parseMap(comm);
+
+    // Disable pause
+    pause.deactivate();
+}
+
+
+// Resume game
+void Game::resume() {
+
+    pause.deactivate();
+}
+
+
+// Terminate
+void Game::terminate() {
+    
+    pause.deactivate();
+    evMan->terminate();
 }
 
 
 // Initialize scene
 void Game::init() {
 
+    const float PAUSE_WIDTH = 384.0f;
+    const float PAUSE_HEIGHT = 288.0f;
+
     printf("Initializing...\n");
+
+    gref = this;
 
     // Get bitmaps
     bmpFont = assets->getBitmap("font");
@@ -50,14 +82,40 @@ void Game::init() {
     // Initialize HUD
     hud = Hud(assets);
     hud.setMoveTarget(stage->getMoveTarget());
+
+    // Create pause menu
+    std::vector<MenuButton> buttons;
+    buttons.push_back(MenuButton("Resume", cb_Resume));
+    buttons.push_back(MenuButton("Restart", cb_Reset));
+    buttons.push_back(MenuButton("Settings", NULL));
+    buttons.push_back(MenuButton("Quit", cb_Terminate));
+    pause = PauseMenu(buttons, 
+        PAUSE_WIDTH, PAUSE_HEIGHT, 1.0f);
 }
 
 
 // Update scene
 void Game::update(float tm) {
 
+    GamePad* vpad = evMan->getController();
+
+    // Check pause
+    if(pause.isActive()) {
+
+        pause.update(evMan);
+        return;
+    }
+    else {
+
+        if(vpad->getButton("start") == State::Pressed) {
+
+            pause.activate();
+            return;
+        }
+    }
+
     // Reset
-    if(evMan->getController()->getButton("reset") == State::Pressed) {
+    if(vpad->getButton("reset") == State::Pressed) {
 
         reset();
     }
@@ -103,7 +161,7 @@ void Game::draw(Graphics* g) {
     g->clearScreen(0.1f, 0.60f, 1.0f);
 
     // Set transform
-    g->setView(720.0f);
+    g->setView(VIEW_HEIGHT);
     g->identity();
     g->useTransf();
 
@@ -112,6 +170,9 @@ void Game::draw(Graphics* g) {
 
     // Draw hud
     hud.draw(g);
+
+    // Draw pause
+    pause.draw(g);
 }
 
 

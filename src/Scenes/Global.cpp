@@ -3,6 +3,8 @@
 
 #include "Global.hpp"
 
+#include "../Menu.hpp"
+
 #include <GLFW/glfw3.h>
 
 #include <cstdlib>
@@ -14,6 +16,9 @@ void Global::init() {
 
     // Only affects animation
     srand(time(NULL));
+
+    // Update certain global components
+    initGlobalMenu(assets);
 }
 
 

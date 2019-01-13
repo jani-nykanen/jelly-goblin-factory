@@ -12,8 +12,11 @@ static Bitmap* bmpFont;
 // Constructor
 Menu::Menu(std::vector<MenuButton> buttons) {
 
+    // Store data
     this->buttons = buttons;
     count = buttons.size();
+
+    // Set defaults
     cursorPos = 0;
 }
 
@@ -56,8 +59,12 @@ void Menu::update(EventManager* evMan) {
 // Draw
 void Menu::draw(Graphics* g, float x, float y, float scale) {
 
-    const float XOFF = -32.0f;
-    const float YOFF = -8.0f;
+    const float XOFF = MENU_TEXT_XOFF;
+    const float YOFF = MENU_TEXT_YOFF;
+
+    const float SHADOW_X = 4*scale;
+    const float SHADOW_Y = 6*scale;
+    const float SHADOW_TRANS = 0.5f;
 
     // Draw buttons
     std::string text;
@@ -67,7 +74,16 @@ void Menu::draw(Graphics* g, float x, float y, float scale) {
         text = i == cursorPos ? ">" : "";
         text += buttons[i].text;
 
-        g->drawText(bmpFont, text, x, y + i*(h+YOFF)*scale, XOFF,0, scale);
+        // Set color
+        if(i == cursorPos)
+            g->setColor(1, 1, 0);
+        else
+            g->setColor();
+
+        // Draw text
+        g->drawText(bmpFont, text, x, y + i*(h+YOFF)*scale, XOFF,0, 
+            SHADOW_X, SHADOW_Y,SHADOW_TRANS,
+            scale);
     }
 }
 
