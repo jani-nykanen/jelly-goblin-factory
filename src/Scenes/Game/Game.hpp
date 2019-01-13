@@ -29,6 +29,13 @@ private:
 
     // Pause menus
     PauseMenu pause;
+    PauseMenu endMenu;
+
+    // Stage clear timer
+    float endTimer;
+
+    // Draw "Stage clear"
+    void drawStageClear(Graphics* g);
 
 public:
 

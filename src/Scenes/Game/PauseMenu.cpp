@@ -29,15 +29,23 @@ PauseMenu::PauseMenu(std::vector<MenuButton> buttons,
         }
     }
     // Compute offsets
-    xoff = width/2 - max*(64.0f+MENU_TEXT_XOFF)/2.0f;
-    yoff = height/2 - (buttons.size())*(64.0f+MENU_TEXT_YOFF)/2.0f;
+    xoff = width/2 - max*(64.0f+MENU_TEXT_XOFF)/2.0f*scale;
+    yoff = height/2 - (buttons.size())*(64.0f+MENU_TEXT_YOFF)/2.0f*scale;
 }
 
 
 // Update
-void PauseMenu::update(EventManager* evMan) {
+void PauseMenu::update(EventManager* evMan, bool esc) {
     
     if(!active) return;
+
+    // Quit with escape, if enabled
+    if(esc
+    && evMan->getController()->getButton("cancel") == State::Pressed) {
+
+        deactivate();
+        return;
+    }
 
     // Update menu
     menu.update(evMan);
@@ -45,7 +53,7 @@ void PauseMenu::update(EventManager* evMan) {
 
 
 // Draw
-void PauseMenu::draw(Graphics* g) {
+void PauseMenu::draw(Graphics* g, float tx, float ty) {
     
     const float DARKEN_ALPHA = 0.25f;
     const float BOX_ALPHA = 0.75f;
@@ -57,6 +65,10 @@ void PauseMenu::draw(Graphics* g) {
     g->setColor(0, 0, 0, DARKEN_ALPHA);
     g->fillRect(0, 0, view.x, view.y);
 
+    g->push();
+    g->translate(tx, ty);
+    g->useTransf();
+
     // Draw box
     float x = view.x/2 - width/2;
     float y = view.y/2 - height/2;
@@ -65,6 +77,9 @@ void PauseMenu::draw(Graphics* g) {
 
     // Draw menu
     menu.draw(g, x + xoff, y + yoff, scale);
+
+    g->pop();
+    g->useTransf();
 }
 
 

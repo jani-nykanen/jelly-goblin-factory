@@ -65,10 +65,13 @@ void GamePad::update(InputListener* input) {
     // Update buttons
     for(int i = 0; i < buttons.size(); ++ i) {
 
+        // Check key
         buttons[i].state = input->getKeyState(buttons[i].key);
+        // Check joystick button
         if(buttons[i].state == State::Up) {
 
-            buttons[i].state = input->getButtonState(buttons[i].button);
+            buttons[i].state = 
+                input->getButtonState(buttons[i].button);
         }
     }
 

@@ -35,9 +35,9 @@ public:
         float width, float height, float scale);
 
     // Update
-    void update(EventManager* evMan);
+    void update(EventManager* evMan, bool esc=false);
     // Draw
-    void draw(Graphics* g);
+    void draw(Graphics* g, float tx=0, float ty=0);
 
     // Activate
     void activate();
