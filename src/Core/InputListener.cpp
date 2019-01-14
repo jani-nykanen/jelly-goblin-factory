@@ -125,6 +125,9 @@ void InputListener::updateInput() {
     updateInputArray(kbstate);
     updateInputArray(joystate);
 
+    // Check if joystick is active
+    joyActive = glfwJoystickPresent(GLFW_JOYSTICK_1);
+
     // Update joystick stick
     joystick.x = 0;
     joystick.y = 0;

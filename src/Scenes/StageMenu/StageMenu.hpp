@@ -12,6 +12,12 @@
 
 #include "Grid.hpp"
 
+// To be passed to player
+struct StageInfo {
+    Tilemap* tmap;
+    int stageIndex;
+};
+
 // Stage menu class
 class StageMenu : public Scene {
 
@@ -28,8 +34,16 @@ private:
 
     // Maps
     std::vector<Tilemap> maps;
+    // Map names
+    std::vector<std::string> mapNames;
+    // Map difficulties
+    std::vector<int> mapDiff;
+
     // Stage target
     int stageTarget;
+
+    // Draw stage info
+    void drawStageInfo(Graphics* g);
 
 public: 
 

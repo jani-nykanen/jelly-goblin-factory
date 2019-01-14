@@ -10,6 +10,8 @@
 #include "Worker.hpp"
 #include "PauseMenu.hpp"
 
+struct StageInfo;
+
 // Game scene
 class Game : public Scene {
 
@@ -42,7 +44,7 @@ private:
     void drawStageClear(Graphics* g);
 
     // Hard reset
-    void hardReset(Tilemap* tmap);
+    void hardReset(StageInfo* sinfo);
 
 public:
 

@@ -6,6 +6,9 @@
 #include "../../Core/MathExt.hpp"
 #include "../../Core/Tilemap.hpp"
 #include "../../Core/SceneManager.hpp"
+#include "../../Core/Utility.hpp"
+
+#include "../StageMenu/StageMenu.hpp"
 
 #include <cstdio>
 #include <cmath>
@@ -65,10 +68,10 @@ void Game::drawStageClear(Graphics* g) {
 
 
 // Hard reset
-void Game::hardReset(Tilemap* tmap) {
+void Game::hardReset(StageInfo* sinfo) {
 
     // (Re)initialize stage
-    stage = Stage(tmap);
+    stage = Stage(sinfo->tmap);
     // Parse map for objects
     workers = std::vector<Worker> ();
     stage.parseMap(comm);
@@ -77,6 +80,7 @@ void Game::hardReset(Tilemap* tmap) {
     hud.reset();
     // Pass data to hud
     hud.setMoveTarget(stage.getMoveTarget());
+    hud.setStageIndex(sinfo->stageIndex);
 
     // Disable pause
     pause.deactivate();
@@ -370,7 +374,7 @@ void Game::dispose() {
 // to this scene
 void Game::onChange(void* param) {
 
-    hardReset((Tilemap*)param);    
+    hardReset((StageInfo*)param);    
 }
 
 

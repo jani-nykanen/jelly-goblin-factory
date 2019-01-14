@@ -10,6 +10,22 @@
 static StageMenu* smRef;
 
 
+// Get difficulty string
+static std::string getDifficultyString(int level) {
+
+    std::string ret = "";
+    int i = 0;
+    for(; i < level/2; ++ i) {
+
+        ret += (char)7;
+    }
+    if(i % 2 != 0)
+        ret += (char)8;
+
+    return ret;
+}
+
+
 // Callbacks
 static void cb_GoToStage() {
     smRef->goToStage();
@@ -18,6 +34,55 @@ static void cb_NumButton(int b) {
 
     smRef->setStageTarget(b);
     smRef->fadeToTarget(cb_GoToStage);
+}
+
+
+// Draw stage info
+void StageMenu::drawStageInfo(Graphics* g) {
+
+    const float XOFF = -32.0f;
+    const float HEADER_Y = 128.0f;
+    const float INFO_Y = 80.0f;
+    const float HEADER_SCALE = 0.625f;
+    const float BASE_SCALE = 0.80f;
+    const float SHADOW_X = 4.0f;
+    const float SHADOW_Y = 6.0f;
+    const float SHADOW_ALPHA = 0.5f;
+    const float DIFF_OFF = -128.0f;
+
+    // Check if the stage in the cursor
+    // position exists
+    int index = stageGrid.getChoseStageIndex() -1;
+    if(index < 0 || index >= maps.size()) {
+        return;
+    }
+
+    Vector2 view = g->getViewport();
+
+    // Headers
+    g->setColor();
+    g->drawText(bmpFont, "Stage name:", 
+        view.x/2 - view.x/4, view.y-HEADER_Y, 
+        XOFF, 0, SHADOW_X, SHADOW_Y, SHADOW_ALPHA,
+        HEADER_SCALE, true);
+
+    g->drawText(bmpFont, "Difficulty:", 
+        view.x/2 + view.x/4, view.y-HEADER_Y, 
+        XOFF, 0, SHADOW_X, SHADOW_Y, SHADOW_ALPHA,
+        HEADER_SCALE, true);
+
+    // Info
+    g->setColor(1, 1, 0);
+    g->drawText(bmpFont,"\"" + mapNames[index] + "\"", 
+        view.x/2 - view.x/4, view.y-INFO_Y, 
+        XOFF, 0, SHADOW_X, SHADOW_Y, SHADOW_ALPHA,
+        BASE_SCALE, true);
+
+    g->setColor();
+    g->drawText(bmpFont, getDifficultyString(mapDiff[index]), 
+        view.x/2 + view.x/4 + DIFF_OFF, view.y-INFO_Y, 
+        0, 0, SHADOW_X, SHADOW_Y, SHADOW_ALPHA,
+        BASE_SCALE, false);
 }
 
 
@@ -30,7 +95,11 @@ void StageMenu::goToStage() {
         return;
     }
     
-    sceneMan->changeActiveScene("game", (void*)&maps[stageTarget-1]);
+    StageInfo sinfo;
+    sinfo.tmap = &maps[stageTarget-1];
+    sinfo.stageIndex = stageTarget;
+
+    sceneMan->changeActiveScene("game", (void*)&sinfo);
 }
 
 
@@ -67,11 +136,18 @@ void StageMenu::init() {
     const std::string BASE_PATH = "Assets/Tilemaps/New/";
     const int MAX = 100;
     maps = std::vector<Tilemap> ();
+    mapNames = std::vector<std::string> ();
+    mapDiff = std::vector<int> ();
     try {
 
         for(int i = 1; i <= MAX; ++ i) {
 
-            maps.push_back(Tilemap(BASE_PATH + intToString(i) + ".tmx"));
+            maps.push_back(Tilemap(BASE_PATH 
+                + intToString(i) + ".tmx"));
+
+            // Get info
+            mapNames.push_back(maps[i-1].getProp("name"));
+            mapDiff.push_back(strToInt(maps[i-1].getProp("difficulty")));
         }
     }
     catch(std::exception e){}
@@ -107,6 +183,7 @@ void StageMenu::draw(Graphics* g) {
     g->useTransf();
 
     // Draw header
+    g->setColor();
     g->drawText(bmpFont, "Choose a stage", 
         view.x/2, HEADER_Y, XOFF, 0,
         SHADOW_X, SHADOW_Y, SHADOW_ALPHA, 
@@ -114,6 +191,9 @@ void StageMenu::draw(Graphics* g) {
 
     // Draw grid
     stageGrid.draw(g, 0, GRID_YOFF);
+
+    // Draw stage info
+    drawStageInfo(g);
 }
 
 

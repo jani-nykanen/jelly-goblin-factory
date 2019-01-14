@@ -45,7 +45,8 @@ void Hud::draw(Graphics* g) {
 
     // Draw stage text
     g->setColor();
-    g->drawText(bmpFont, "Stage 1", TEXT_X, STAGE_Y, XOFF, 0,
+    g->drawText(bmpFont, "Stage " + intToString(stageID), 
+        TEXT_X, STAGE_Y, XOFF, 0,
         SHADOW_X, SHADOW_Y, SHADOW_ALPHA,
     SCALE, false);
 

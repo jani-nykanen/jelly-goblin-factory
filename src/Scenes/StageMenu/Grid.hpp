@@ -72,6 +72,9 @@ public:
     void update(EventManager* evMan, GridCallback numberCb, float tm);
     // Draw
     void draw(Graphics* g, float tx=0, float ty=0);
+
+    // Get chosen stage index
+    int getChoseStageIndex();
 };
 
 #endif // __GRID_H__

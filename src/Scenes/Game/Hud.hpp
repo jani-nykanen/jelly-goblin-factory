@@ -39,6 +39,10 @@ public:
     inline void setMoveTarget(int t) {
         turnTarget = t;
     }
+    inline void setStageIndex(int index) {
+
+        stageID = index;
+    }
 
     // Getters
     inline bool isPerfectClear() {

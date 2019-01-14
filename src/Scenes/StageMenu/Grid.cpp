@@ -60,7 +60,7 @@ Grid::Grid(AssetPack* assets, int w, int h,
     rendh = (blockSize.y + yoff) * height;
 
     // Set defaults
-    cpos.x = 0;
+    cpos.x = 1;
     cpos.y = 0;
     page = 0;
 
@@ -252,4 +252,11 @@ void Grid::draw(Graphics* g, float tx, float ty) {
     g->pop();
     g->useTransf();
     g->setColor();
+}
+
+
+// Get chosen stage index
+int Grid::getChoseStageIndex() {
+    
+    return cpos.y*width+cpos.x + page*width*height;
 }
