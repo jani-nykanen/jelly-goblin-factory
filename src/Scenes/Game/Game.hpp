@@ -24,7 +24,7 @@ private:
     // Communicator
     Communicator comm;
     // Stage
-    Stage* stage;
+    Stage stage;
     // Hud
     Hud hud;
     // Workers
@@ -40,6 +40,9 @@ private:
 
     // Draw "Stage clear"
     void drawStageClear(Graphics* g);
+
+    // Hard reset
+    void hardReset(Tilemap* tmap);
 
 public:
 
@@ -72,7 +75,7 @@ public:
     void dispose();
     // Called when the scene is changed
     // to this scene
-    void onChange();
+    void onChange(void* param =NULL);
     
     // Draw workers
     void drawWorkers(Graphics* g);

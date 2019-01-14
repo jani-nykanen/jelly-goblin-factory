@@ -36,7 +36,7 @@ public:
     virtual void update(float tm) {}
     virtual void draw(Graphics* g) {}
     virtual void dispose() {}
-    virtual void onChange() {}
+    virtual void onChange(void* param) {}
     virtual std::string getName() =0;
 
 };

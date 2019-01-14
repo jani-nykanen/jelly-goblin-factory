@@ -15,8 +15,8 @@ int main(int argc, char** argv) {
         std::vector<SceneInfo> ();
     // Add scenes
     scenes.push_back(SceneInfo(new Global(), false, true));
-    scenes.push_back(SceneInfo(new StageMenu()));
-    scenes.push_back(SceneInfo(new Game(), true, false));
+    scenes.push_back(SceneInfo(new Game()));
+    scenes.push_back(SceneInfo(new StageMenu(), true, false));
 
     // Run application
     return Application("app.cfg", scenes).run(argc, argv);

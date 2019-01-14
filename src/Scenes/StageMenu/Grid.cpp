@@ -144,8 +144,10 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
         // Number button
         else {
 
-            if(numberCb != NULL)
+            if(numberCb != NULL) {
+
                 numberCb(page*width*height + cpos.x+cpos.y*width);
+            }
         }
     }
 }

@@ -45,7 +45,7 @@ void SceneManager::addScene(Scene* s, bool makeActive, bool makeGlobal) {
 
 
 // Change active scene
-void SceneManager::changeActiveScene(std::string name) {
+void SceneManager::changeActiveScene(std::string name, void* param) {
     
     // Go through the scenes and try to find a
     // corresponding scene
@@ -61,7 +61,7 @@ void SceneManager::changeActiveScene(std::string name) {
     if(s == NULL) return;
 
     // Change scene
-    s->onChange();
+    s->onChange(param);
     activeScene = s;
 }
 

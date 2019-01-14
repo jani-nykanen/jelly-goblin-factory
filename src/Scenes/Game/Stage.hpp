@@ -60,13 +60,18 @@ private:
     // Draw background cogs
     void drawCogs(Graphics* g);
 
+    // Initialize
+    void init();
+
 public:
 
-    // Constructor
+    // Constructors
+    Stage();
     Stage(std::string mapPath);
-    // Desctructor
-    ~Stage();
+    Stage(Tilemap* tmap);
 
+    // Reinitialize
+    void reInit(Tilemap* tmap);
     // Reset
     void reset();
     // Parse map for objects
@@ -85,7 +90,6 @@ public:
     // Get move target
     int getMoveTarget();
 };
-
 
 // Initialize global data
 void initGlobalStage(AssetPack* assets);

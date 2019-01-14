@@ -30,6 +30,7 @@ private:
 public:
 
     // Constructor
+    inline Tilemap() {}
     Tilemap(std::string path);
 
     // Get dimensions

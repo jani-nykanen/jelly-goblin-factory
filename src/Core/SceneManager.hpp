@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <string>
+#include <cstdlib>
 
 #include "Scene.hpp"
 
@@ -35,7 +36,7 @@ public:
     // Add a scene
     void addScene(Scene* s, bool makeActive=false, bool makeGlobal=false);
     // Change active scene
-    void changeActiveScene(std::string name);
+    void changeActiveScene(std::string name, void* param=NULL);
 
     // Initialize scenes
     void init();

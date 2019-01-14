@@ -64,17 +64,37 @@ void Game::drawStageClear(Graphics* g) {
 }
 
 
+// Hard reset
+void Game::hardReset(Tilemap* tmap) {
+
+    // (Re)initialize stage
+    stage = Stage(tmap);
+    // Parse map for objects
+    workers = std::vector<Worker> ();
+    stage.parseMap(comm);
+
+    // Reset hud
+    hud.reset();
+    // Pass data to hud
+    hud.setMoveTarget(stage.getMoveTarget());
+
+    // Disable pause
+    pause.deactivate();
+    endMenu.deactivate();
+}
+
+
 // Reset the current game state
 void Game::reset() {
 
     // Reset stage
-    stage->reset();
+    stage.reset();
     // Reset hud
     hud.reset();
 
     // Reset workers
     workers.clear();
-    stage->parseMap(comm);
+    stage.parseMap(comm);
 
     // Disable pause
     pause.deactivate();
@@ -170,15 +190,11 @@ void Game::init() {
     initGlobalStage(assets);
     initGlobalWorker(assets);
 
-    // Initialize stage
-    stage = new Stage("Assets/Tilemaps/test.tmx");
-    // Parse map for objects
-    workers = std::vector<Worker> ();
-    stage->parseMap(comm);
-
-    // Initialize HUD
+    // Initialize hud
     hud = Hud(assets);
-    hud.setMoveTarget(stage->getMoveTarget());
+
+    // Not really necessary
+    stage = Stage();
 
     // Create pause menu
     std::vector<MenuButton> buttons;
@@ -274,7 +290,7 @@ void Game::update(float tm) {
     for(int i = 0; i < workers.size(); ++ i) {
 
         // Check cog collisions
-        workers[i].checkCogCollision(stage);
+        workers[i].checkCogCollision(&stage);
 
         // Is moving
         if(!anyMoving && workers[i].isActive()) {
@@ -301,7 +317,7 @@ void Game::update(float tm) {
     bool anyStartedMoving = false;
     for(int i = 0; i < workers.size(); ++ i) {
 
-        workers[i].update(evMan, stage, anyMoving, tm);
+        workers[i].update(evMan, &stage, anyMoving, tm);
         if(!anyStartedMoving && workers[i].hasStartedMoving())
             anyStartedMoving = true;
     }
@@ -310,7 +326,7 @@ void Game::update(float tm) {
         hud.addMove();
 
     // Update stage
-    stage->update(evMan, tm);
+    stage.update(evMan, tm);
 
     // Update HUD
     hud.update();
@@ -328,7 +344,7 @@ void Game::draw(Graphics* g) {
     g->useTransf();
 
     // Draw stage
-    stage->draw(g, comm);
+    stage.draw(g, comm);
 
     // Draw hud
     hud.draw(g);
@@ -346,18 +362,15 @@ void Game::draw(Graphics* g) {
 // Dispose scene
 void Game::dispose() {
 
-    delete stage;
-
     printf("Terminating...\n");
 }
 
 
 // Called when the scene is changed
 // to this scene
-void Game::onChange() {
+void Game::onChange(void* param) {
 
-    // ...
-    
+    hardReset((Tilemap*)param);    
 }
 
 

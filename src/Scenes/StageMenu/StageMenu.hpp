@@ -6,6 +6,7 @@
 
 #include "../../Core/Scene.hpp"
 #include "../../Core/Bitmap.hpp"
+#include "../../Core/Tilemap.hpp"
 
 #include "../Game/Stage.hpp"
 
@@ -16,13 +17,30 @@ class StageMenu : public Scene {
 
 private:
 
+    // Transition
+    Transition* trans;
+
     // Bitmaps
     Bitmap* bmpFont;
 
     // Grid
     Grid stageGrid;
 
+    // Maps
+    std::vector<Tilemap> maps;
+    // Stage target
+    int stageTarget;
+
 public: 
+
+    // Go to the selected stage
+    void goToStage();
+    // Set stage target
+    inline void setStageTarget(int index) {
+        stageTarget = index;
+    }
+    // Fade to something
+    void fadeToTarget(TransitionCallback cb);
 
     // Initialize scene
     void init();
@@ -34,7 +52,7 @@ public:
     void dispose();
     // Called when the scene is changed
     // to this scene
-    void onChange();
+    void onChange(void* param=NULL);
 
     // Get name
     inline std::string getName() {

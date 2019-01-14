@@ -215,11 +215,8 @@ void Stage::drawCogs(Graphics* g) {
 }
 
 
-// Constructor
-Stage::Stage(std::string mapPath) {
-
-    // Load tilemap
-    tmap = new Tilemap(mapPath);
+// Initialize
+void Stage::init() {
 
     // Get information
     data = tmap->copyData();
@@ -239,10 +236,25 @@ Stage::Stage(std::string mapPath) {
     // Set defaults
     cogAngle = 0.0f;
 }
-// Desctructor
-Stage::~Stage() {
 
-    delete tmap;
+
+// Constructors
+Stage::Stage() {
+
+    // ...
+}
+Stage::Stage(Tilemap* tmap) {
+
+    this->tmap = tmap;
+    init();
+}
+
+
+// Reinitialize
+void Stage::reInit(Tilemap* tmap) {
+
+    this->tmap = tmap;
+    init();
 }
 
 

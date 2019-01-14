@@ -3,10 +3,41 @@
 
 #include  "StageMenu.hpp"
 
-// Number button callback
+#include "../../Core/Utility.hpp"
+#include "../../Core/SceneManager.hpp"
+
+// Reference to self
+static StageMenu* smRef;
+
+
+// Callbacks
+static void cb_GoToStage() {
+    smRef->goToStage();
+}
 static void cb_NumButton(int b) {
 
-    printf("%d\n", b);
+    smRef->setStageTarget(b);
+    smRef->fadeToTarget(cb_GoToStage);
+}
+
+
+// Go to the selected stage
+void StageMenu::goToStage() {
+
+    if(stageTarget <= 0 || stageTarget > maps.size()) {
+
+        printf("Stage not implemented yet.\n");
+        return;
+    }
+    
+    sceneMan->changeActiveScene("game", (void*)&maps[stageTarget-1]);
+}
+
+
+// Fade to something
+void StageMenu::fadeToTarget(TransitionCallback cb) {
+
+    trans->activate(FadeIn, 2.0f, cb);
 }
 
 
@@ -20,12 +51,30 @@ void StageMenu::init() {
     const float XOFF = 20;
     const float YOFF = 20;
 
+    smRef = this;
+
+    // Get "global" objects
+    trans = evMan->getTransition();
+
     // Get bitmaps
     bmpFont = assets->getBitmap("font");
 
     // Create components
     stageGrid = Grid(assets, WIDTH, HEIGHT, 
         BUTTON_W, BUTTON_H, XOFF, YOFF);
+
+    // Find existing maps & load them
+    const std::string BASE_PATH = "Assets/Tilemaps/New/";
+    const int MAX = 100;
+    maps = std::vector<Tilemap> ();
+    try {
+
+        for(int i = 1; i <= MAX; ++ i) {
+
+            maps.push_back(Tilemap(BASE_PATH + intToString(i) + ".tmx"));
+        }
+    }
+    catch(std::exception e){}
 }
 
 
@@ -76,6 +125,6 @@ void StageMenu::dispose() {
 
 // Called when the scene is changed
 // to this scene
-void StageMenu::onChange() {
+void StageMenu::onChange(void* param) {
 
 }
