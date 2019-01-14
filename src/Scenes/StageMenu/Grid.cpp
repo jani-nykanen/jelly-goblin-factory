@@ -76,7 +76,7 @@ Grid::Grid(AssetPack* assets, int w, int h,
 
 
 // Update
-void Grid::update(EventManager* evMan, float tm) {
+void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
 
     const float DELTA = 0.25f;
 
@@ -136,11 +136,16 @@ void Grid::update(EventManager* evMan, float tm) {
             cpos.y = height-1;
             resetBlockScalings();
         }
-
         // Quit (TEMPORARY!)
-        if(page == 0 && cpos.x == 0 && cpos.y == 0) {
+        else if(page == 0 && cpos.x == 0 && cpos.y == 0) {
 
             evMan->terminate();
+        }
+        // Number button
+        else {
+
+            if(numberCb != NULL)
+                numberCb(page*width*height + cpos.x+cpos.y*width);
         }
     }
 }

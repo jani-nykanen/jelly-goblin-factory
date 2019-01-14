@@ -8,6 +8,7 @@
 #include "../../Core/EventManager.hpp"
 #include "../../Core/AssetPack.hpp"
 
+typedef void (*GridCallback) (int);
 
 // Block scale
 struct BlockScale {
@@ -68,7 +69,7 @@ public:
         int blockw, int blockh, int xoff, int yoff);
 
     // Update
-    void update(EventManager* evMan, float tm);
+    void update(EventManager* evMan, GridCallback numberCb, float tm);
     // Draw
     void draw(Graphics* g, float tx=0, float ty=0);
 };

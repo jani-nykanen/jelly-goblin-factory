@@ -3,6 +3,12 @@
 
 #include  "StageMenu.hpp"
 
+// Number button callback
+static void cb_NumButton(int b) {
+
+    printf("%d\n", b);
+}
+
 
 // Initialize scene
 void StageMenu::init() {
@@ -27,7 +33,7 @@ void StageMenu::init() {
 void StageMenu::update(float tm) {
 
     // Update grid
-    stageGrid.update(evMan, tm);
+    stageGrid.update(evMan, cb_NumButton, tm);
 }
 
 
