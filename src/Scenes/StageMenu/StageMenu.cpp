@@ -7,12 +7,12 @@
 // Initialize scene
 void StageMenu::init() {
 
-    const int WIDTH = 8;
-    const int HEIGHT = 5;
-    const float BUTTON_W = 80;
-    const float BUTTON_H = 80;
-    const float XOFF = 16;
-    const float YOFF = 16;
+    const int WIDTH = 6;
+    const int HEIGHT = 4;
+    const float BUTTON_W = 92;
+    const float BUTTON_H = 92;
+    const float XOFF = 20;
+    const float YOFF = 20;
 
     // Get bitmaps
     bmpFont = assets->getBitmap("font");
@@ -40,7 +40,7 @@ void StageMenu::draw(Graphics* g) {
     const float SHADOW_X = 4.0f;
     const float SHADOW_Y = 6.0f;
     const float SHADOW_ALPHA = 0.5f;
-    const float GRID_YOFF = 0.0f;
+    const float GRID_YOFF = -16.0f;
 
     Vector2 view = g->getViewport();
 

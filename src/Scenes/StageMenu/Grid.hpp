@@ -54,6 +54,11 @@ private:
 
     // Cursor position
     Point cpos;
+    // Page
+    int page;
+
+    // Reset scalings
+    void resetBlockScalings();
 
 public:
 

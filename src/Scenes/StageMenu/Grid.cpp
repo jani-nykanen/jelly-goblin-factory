@@ -5,6 +5,9 @@
 
 #include "../../Core/Utility.hpp"
 
+// Maximum page
+static const int MAX_PAGE = 1;
+
 
 // Update block size
 void BlockScale::update(float tm) {
@@ -22,6 +25,17 @@ void BlockScale::update(float tm) {
         scale -= SPEED * tm;
         if(scale <= target)
             scale = target;
+    }
+}
+
+
+// Reset scalings
+void Grid::resetBlockScalings() {
+
+    for(int i = 0; i < blockScale.size(); ++ i) {
+
+        blockScale[i].scale = 1.0f;
+        blockScale[i].target = 1.0f;
     }
 }
 
@@ -48,6 +62,7 @@ Grid::Grid(AssetPack* assets, int w, int h,
     // Set defaults
     cpos.x = 0;
     cpos.y = 0;
+    page = 0;
 
     // Set block scales to default
     blockScale = std::vector<BlockScale> (width*height);
@@ -96,13 +111,46 @@ void Grid::update(EventManager* evMan, float tm) {
 
         blockScale[i].update(tm);
     }
+
+    // Check button press
+    bool pressed = vpad->getButton("start") == State::Pressed ||
+        vpad->getButton("accept") == State::Pressed;
+
+    // TODO: To a different method
+    if(pressed) {
+
+        // Next & previous symbols
+        if(page != MAX_PAGE && cpos.x == width-1 && 
+            cpos.y == height-1) {
+        
+            ++ page;
+            cpos.x = 0;
+            cpos.y = 0;
+            resetBlockScalings();
+        }
+        else if(page != 0 && cpos.x == 0 && 
+            cpos.y == 0) {
+        
+            -- page;
+            cpos.x = width-1;
+            cpos.y = height-1;
+            resetBlockScalings();
+        }
+
+        // Quit (TEMPORARY!)
+        if(page == 0 && cpos.x == 0 && cpos.y == 0) {
+
+            evMan->terminate();
+        }
+    }
 }
 
 
 // Draw
 void Grid::draw(Graphics* g, float tx, float ty) {
 
-    const float DARKEN = 0.80f;
+    const float DARKEN = 0.85f;
+    const float BRIGHTEN = 1.10f;
     const float TEXT_XOFF = -32.0f;
     const float TEXT_BASE_SCALE = 1.25f;
 
@@ -112,7 +160,6 @@ void Grid::draw(Graphics* g, float tx, float ty) {
     const float BUTTON_SHADOW_X = 8;
     const float BUTTON_SHADOW_Y = 8;
     
-
     Vector2 view = g->getViewport();
 
     g->push();
@@ -131,6 +178,7 @@ void Grid::draw(Graphics* g, float tx, float ty) {
     float s;
     float textScale;
     float col;
+    std::string num;
     for(int y = 0; y < height; ++ y) {
 
         for(int x = 0; x < width; ++ x) {
@@ -139,7 +187,7 @@ void Grid::draw(Graphics* g, float tx, float ty) {
             if(cpos.x == x && cpos.y == y) {
 
                 nscale = 1.25f;
-                col = 1.0f;
+                col = BRIGHTEN;
             }
             else {
 
@@ -165,9 +213,27 @@ void Grid::draw(Graphics* g, float tx, float ty) {
                 blockSize.x*s, blockSize.y*s);
 
             // Draw number
+            num = " ";
+            if(page != MAX_PAGE && 
+                y == height-1 && x == width-1) {
+
+                num[0] = (char)4;
+                cx -= 4;
+                cy -= 2;
+            }
+            else if(x == 0 && y == 0) {
+
+                num[0] = page > 0 ?(char)6 : (char)5;
+                cx -= 12;
+                cy -= 4;
+            }
+            else
+                num = intToString(y*width+x + page*(width*height));
+
             textScale = TEXT_BASE_SCALE* blockSize.x/128.0f * s;
-            g->drawText(bmpFont, intToString(x+y*width +1),
-                cx+xoff/2, cy-32.0f*textScale, 
+            g->drawText(bmpFont, num,
+                cx+xoff/2, 
+                cy-32.0f*textScale, 
                 TEXT_XOFF, 0, 
                 TEXT_SHADOW_X*textScale,
                 TEXT_SHADOW_Y*textScale, 
