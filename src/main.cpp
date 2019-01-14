@@ -3,6 +3,7 @@
 
 #include "Core/Application.hpp"
 #include "Scenes/Game/Game.hpp"
+#include "Scenes/StageMenu/StageMenu.hpp"
 #include "Scenes/Global.hpp"
 
 
@@ -14,6 +15,7 @@ int main(int argc, char** argv) {
         std::vector<SceneInfo> ();
     // Add scenes
     scenes.push_back(SceneInfo(new Global(), false, true));
+    scenes.push_back(SceneInfo(new StageMenu()));
     scenes.push_back(SceneInfo(new Game(), true, false));
 
     // Run application

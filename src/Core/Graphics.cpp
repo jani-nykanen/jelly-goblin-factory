@@ -147,7 +147,6 @@ void Graphics::drawText(Bitmap* bmp, std::string text, int dx, int dy,
         // Line swap
         if (c == '\n')
         {
-
             x = dx;
             y += (yoff + ch) * scale;
             continue;

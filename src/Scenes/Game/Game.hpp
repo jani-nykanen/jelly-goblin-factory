@@ -47,8 +47,8 @@ public:
     void reset();
     // Resume game
     void resume();
-    // Terminate
-    void terminate();
+    // Quit
+    void quit();
     // Reactivate pause
     void reactivatePause();
     // Activate settings

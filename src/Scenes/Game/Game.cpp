@@ -5,6 +5,7 @@
 
 #include "../../Core/MathExt.hpp"
 #include "../../Core/Tilemap.hpp"
+#include "../../Core/SceneManager.hpp"
 
 #include <cstdio>
 #include <cmath>
@@ -19,7 +20,7 @@ static Game* gref;
 static void cb_Resume() { gref->resume(); }
 static void cb_Reset() { gref->reset(); }
 static void cb_Settings() { gref->activateSettings();}
-static void cb_Terminate() { gref->terminate(); }
+static void cb_Quit() { gref->quit(); }
 
 static void cb_SFX() {gref->toggleSFX();}
 static void cb_Music() {gref->toggleMusic();}
@@ -89,11 +90,9 @@ void Game::resume() {
 
 
 // Terminate
-void Game::terminate() {
+void Game::quit() {
     
-    pause.deactivate();
-    endMenu.deactivate();
-    evMan->terminate();
+    sceneMan->changeActiveScene("stageMenu");
 }
 
 
@@ -186,7 +185,7 @@ void Game::init() {
     buttons.push_back(MenuButton("Resume", cb_Resume));
     buttons.push_back(MenuButton("Restart", cb_Reset, true, 2.0f));
     buttons.push_back(MenuButton("Settings", cb_Settings));
-    buttons.push_back(MenuButton("Quit", cb_Terminate, true, 2.0f));
+    buttons.push_back(MenuButton("Quit", cb_Quit, true, 2.0f));
     pause = PauseMenu(buttons, 
         PAUSE_WIDTH, PAUSE_HEIGHT, PAUSE_SCALE);
 
@@ -194,7 +193,7 @@ void Game::init() {
     buttons.clear();
     buttons.push_back(MenuButton("Next stage", cb_Reset, true, 2.0f));
     buttons.push_back(MenuButton("Retry", cb_Reset, true, 2.0f));
-    buttons.push_back(MenuButton("Stage menu", cb_Terminate, true, 2.0f));
+    buttons.push_back(MenuButton("Stage menu", cb_Quit, true, 2.0f));
     endMenu = PauseMenu(buttons, 
         END_WIDTH, END_HEIGHT, END_SCALE);
 
