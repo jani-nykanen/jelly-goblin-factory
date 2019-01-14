@@ -34,6 +34,4 @@ public:
     }
 };
 
-
-
 #endif // __GLOBAL_H__

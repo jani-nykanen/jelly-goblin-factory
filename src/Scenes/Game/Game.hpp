@@ -1,6 +1,9 @@
 // Game scene
 // (c) 2019 Jani Nykänen
 
+#ifndef __GAME_SCENE_H__
+#define __GAME_SCENE_H__
+
 #include "../../Core/Scene.hpp"
 #include "../../Core/Bitmap.hpp"
 
@@ -92,3 +95,5 @@ public:
         return "game";
     }
 };
+
+#endif // __GAME_SCENE_H__
