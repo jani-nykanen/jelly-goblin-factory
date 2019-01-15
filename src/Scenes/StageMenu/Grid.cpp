@@ -5,8 +5,11 @@
 
 #include "../../Core/Utility.hpp"
 
-// Maximum page
-static const int MAX_PAGE = 1;
+#include <cmath>
+
+// Constants
+static const int MAX_PAGE = 1; // TEMP
+static const float MOVE_TIME = 10.0f;
 
 
 // Update block size
@@ -40,6 +43,61 @@ void Grid::resetBlockScalings() {
 }
 
 
+// Compute "virtual" cursor pos
+void Grid::computeCursorVpos() {
+
+    float t = ctimer / MOVE_TIME; 
+    
+    float w = blockSize.x + xoff;
+    float h = blockSize.y + yoff;
+
+    // Starting & ending points
+    Vector2 start = Vector2(
+        -rendw/2 + cpos.x*w,
+        -rendh/2 + cpos.y*h
+    );
+    Vector2 end = Vector2(
+        -rendw/2 + ctarget.x*w,
+        -rendh/2 + ctarget.y*h
+    );
+
+    // Compute position
+    cvpos.x = start.x*t + (1-t)*end.x;
+    cvpos.y = start.y*t + (1-t)*end.y;
+}
+
+
+// Update cursor
+bool Grid::updateCursor(float tm) {
+
+    const float FLOAT_SPEED = 0.05f;
+    // Update floating
+    cfloatTimer += FLOAT_SPEED * tm;
+    cfloatTimer = fmodf(cfloatTimer, M_PI*2);
+
+    // Update timer
+    bool ret = false;
+    if(ctimer > 0.0f) {
+
+        ctimer -= 1.0f * tm;
+        if(ctimer <= 0.0f) {
+
+            cpos = ctarget;
+            ctimer = 0.0f;
+        }
+        else {
+
+            ret = true;
+        }
+    }
+
+    // Compute vpos
+    computeCursorVpos();
+
+    return ret;
+}
+
+
 // Constructor
 Grid::Grid(AssetPack* assets, int w, int h, 
         int blockw, int blockh, int xoff, int yoff) {
@@ -62,14 +120,18 @@ Grid::Grid(AssetPack* assets, int w, int h,
     // Set defaults
     cpos.x = 1;
     cpos.y = 0;
+    ctarget = cpos;
+    ctimer = 0.0f;
+    cfloatTimer = 0.0f;
     page = 0;
+    computeCursorVpos();
 
     // Set block scales to default
     blockScale = std::vector<BlockScale> (width*height);
     for(int i = 0; i < width*height; ++ i) {
 
         blockScale[i] = BlockScale();
-        blockScale[i].scale = blockSize.x/128.0f;
+        blockScale[i].scale = 1.0f;
         blockScale[i].target = blockScale[i].scale;
     }
 }
@@ -80,36 +142,47 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
 
     const float DELTA = 0.25f;
 
-    GamePad* vpad = evMan->getController();
-    Vector2 stick = vpad->getStick();
-    Vector2 delta = vpad->getDelta();
-
-    // Update cursor position
-    if(stick.x < -DELTA && delta.x < -DELTA) {
-
-        if(-- cpos.x < 0)
-            cpos.x += width;
-    }
-    else if(stick.x > DELTA && delta.x > DELTA) {
-
-        if(++ cpos.x >= width)
-            cpos.x -= width;
-    }
-    if(stick.y < -DELTA && delta.y < -DELTA) {
-
-        if(-- cpos.y < 0)
-            cpos.y += height;
-    }
-    else if(stick.y > DELTA && delta.y > DELTA) {
-
-        if(++ cpos.y >= height)
-            cpos.y -= height;
-    }
-
     // Update block scales
     for(int i = 0; i < blockScale.size(); ++ i) {
 
         blockScale[i].update(tm);
+    }
+
+    // Update cursor
+    if(updateCursor(tm)) {
+
+        return;
+    }
+
+    GamePad* vpad = evMan->getController();
+    Vector2 stick = vpad->getStick();
+
+    // Update cursor position
+    if(stick.x < -DELTA) {
+
+        if(-- ctarget.x < 0)
+            ctarget.x += width;
+    }
+    else if(stick.x > DELTA) {
+
+        if(++ ctarget.x >= width)
+            ctarget.x -= width;
+    }
+    if(stick.y < -DELTA) {
+
+        if(-- ctarget.y < 0)
+            ctarget.y += height;
+    }
+    else if(stick.y > DELTA) {
+
+        if(++ ctarget.y >= height)
+            ctarget.y -= height;
+    }
+    // If something moved
+    if(ctarget.x != cpos.x || ctarget.y != cpos.y) {
+
+        ctimer = MOVE_TIME;
+        return;
     }
 
     // Check button press
@@ -126,6 +199,9 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
             ++ page;
             cpos.x = 0;
             cpos.y = 0;
+            ctarget = cpos;
+            updateCursor(0);
+
             resetBlockScalings();
         }
         else if(page != 0 && cpos.x == 0 && 
@@ -134,6 +210,9 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
             -- page;
             cpos.x = width-1;
             cpos.y = height-1;
+            ctarget = cpos;
+            updateCursor(0);
+
             resetBlockScalings();
         }
         // Quit (TEMPORARY!)
@@ -166,6 +245,10 @@ void Grid::draw(Graphics* g, float tx, float ty) {
     const float SHADOW_ALPHA = 0.5f;
     const float BUTTON_SHADOW_X = 8;
     const float BUTTON_SHADOW_Y = 8;
+
+    const float CURSOR_FLOAT_AMPLITUDE = 12.0f;
+    const float CURSOR_TRANS_X = 0.75f;
+    const float CURSOR_TRANS_Y = 0.5f;
     
     Vector2 view = g->getViewport();
 
@@ -252,6 +335,14 @@ void Grid::draw(Graphics* g, float tx, float ty) {
     g->pop();
     g->useTransf();
     g->setColor();
+
+    // Compute cursor floating
+    float cf = sinf(cfloatTimer) * CURSOR_FLOAT_AMPLITUDE;
+    // Draw cursor
+    g->drawBitmap(bmpBlocks, 129, 129, 126, 126,
+        view.x/2 + cvpos.x + blockSize.x*CURSOR_TRANS_X, 
+        view.y/2 + cvpos.y + blockSize.y*CURSOR_TRANS_Y + cf, 
+        blockSize.x, blockSize.y);
 }
 
 

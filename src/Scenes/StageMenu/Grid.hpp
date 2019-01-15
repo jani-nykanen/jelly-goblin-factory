@@ -53,13 +53,27 @@ private:
     float rendw;
     float rendh;
 
-    // Cursor position
+    // Cursor position (in grid)
     Point cpos;
+    // Cursor target (in grid)
+    Point ctarget;
+    // Cursor timer
+    float ctimer;
+    // Cursor float timer
+    float cfloatTimer;
+    // Cursor position ("virtual")
+    Vector2 cvpos;
     // Page
     int page;
 
     // Reset scalings
     void resetBlockScalings();
+    
+    // Compute "virtual" cursor pos
+    void computeCursorVpos();
+
+    // Update cursor
+    bool updateCursor(float tm);
 
 public:
 

@@ -157,6 +157,8 @@ void StageMenu::init() {
 // Update scene
 void StageMenu::update(float tm) {
 
+    if(trans->isActive()) return;
+
     // Update grid
     stageGrid.update(evMan, cb_NumButton, tm);
 }
