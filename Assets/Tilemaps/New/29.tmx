@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="8" height="7" tilewidth="16" tileheight="16" infinite="0" nextlayerid="2" nextobjectid="1">
+ <properties>
+  <property name="difficulty" value="6"/>
+  <property name="moves" value="30"/>
+  <property name="name" value="Test Zone"/>
+ </properties>
+ <tileset firstgid="1" source="../../../dev/editor_tiles.tsx"/>
+ <layer id="1" name="Tile layer 1" width="8" height="7">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,
+1,6,1,0,3,0,4,1,
+1,2,0,11,0,1,1,1,
+1,9,0,3,0,1,5,1,
+1,1,2,1,0,0,0,1,
+1,7,0,8,2,1,2,1,
+1,1,1,1,1,1,1,1
+</data>
+ </layer>
+</map>

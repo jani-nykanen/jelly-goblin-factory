@@ -89,6 +89,8 @@ public:
 
     // Get chosen stage index
     int getChoseStageIndex();
+    // Is the selected tile special
+    bool isSpecialTile();
 };
 
 #endif // __GRID_H__

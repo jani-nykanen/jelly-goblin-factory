@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="7" height="7" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="1">
+ <properties>
+  <property name="difficulty" value="5"/>
+  <property name="moves" value="29"/>
+  <property name="name" value="Past Midnight"/>
+ </properties>
+ <tileset firstgid="1" source="../../../dev/editor_tiles.tsx"/>
+ <layer id="12" name="Tile layer 1" width="7" height="7">
+  <data encoding="csv">
+1,1,1,1,1,1,1,
+1,10,3,0,0,8,1,
+1,0,0,4,0,0,1,
+1,2,0,6,5,0,1,
+1,7,0,0,0,0,1,
+1,0,2,0,4,0,1,
+1,1,1,1,1,1,1
+</data>
+ </layer>
+</map>

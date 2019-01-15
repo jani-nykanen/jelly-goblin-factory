@@ -194,8 +194,11 @@ void StageMenu::draw(Graphics* g) {
     // Draw grid
     stageGrid.draw(g, 0, GRID_YOFF);
 
-    // Draw stage info
-    drawStageInfo(g);
+    if(!stageGrid.isSpecialTile()) {
+
+        // Draw stage info
+        drawStageInfo(g);
+    }
 }
 
 

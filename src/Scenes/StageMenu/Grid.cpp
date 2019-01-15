@@ -225,7 +225,7 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
 
             if(numberCb != NULL) {
 
-                numberCb(page*width*height + cpos.x+cpos.y*width);
+                numberCb(getChoseStageIndex());
             }
         }
     }
@@ -318,7 +318,7 @@ void Grid::draw(Graphics* g, float tx, float ty) {
                 cy -= 4;
             }
             else
-                num = intToString(y*width+x + page*(width*height));
+                num = intToString(y*width+x + page*(width*height) -page*2);
 
             textScale = TEXT_BASE_SCALE* blockSize.x/128.0f * s;
             g->drawText(bmpFont, num,
@@ -349,5 +349,14 @@ void Grid::draw(Graphics* g, float tx, float ty) {
 // Get chosen stage index
 int Grid::getChoseStageIndex() {
     
-    return cpos.y*width+cpos.x + page*width*height;
+    return cpos.y*width+cpos.x + page*width*height -page*2;
+}
+
+
+// Is the selected tile special
+bool Grid::isSpecialTile() {
+
+    return 
+        (cpos.x == 0 && cpos.y == 0)
+        || (cpos.x == width-1 && cpos.y == height-1 && page != MAX_PAGE);
 }
