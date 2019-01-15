@@ -19,7 +19,7 @@ static std::string getDifficultyString(int level) {
 
         ret += (char)7;
     }
-    if(i % 2 != 0)
+    if(level % 2 != 0)
         ret += (char)8;
 
     return ret;
