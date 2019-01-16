@@ -217,6 +217,16 @@ void Worker::transform(float tm) {
 }
 
 
+// Check nearby tile (for cog!)
+bool Worker::checkNearbyTile(Stage* stage, int c) {
+
+    return stage->getSolidValue(pos.x,pos.y-1) == c
+    || stage->getSolidValue(pos.x,pos.y+1) == c
+    || stage->getSolidValue(pos.x-1,pos.y) == c
+    || stage->getSolidValue(pos.x+1,pos.y) == c;
+}
+
+
 // Check cog collision
 void Worker::checkCogCollision(Stage* stage) {
 
@@ -224,10 +234,8 @@ void Worker::checkCogCollision(Stage* stage) {
         return;
 
     // Check nearby tiles
-    if(stage->getSolidValue(pos.x,pos.y-1) == 3+color
-    || stage->getSolidValue(pos.x,pos.y+1) == 3+color
-    || stage->getSolidValue(pos.x-1,pos.y) == 3+color
-    || stage->getSolidValue(pos.x+1,pos.y) == 3+color) {
+    if(checkNearbyTile(stage, 3+color) ||
+       checkNearbyTile(stage, 3+3)) {
 
         isCog = true;
         moving = false;
@@ -269,10 +277,11 @@ Worker::Worker(Point p, int color, bool sleeping, bool isCog) {
 
         if(color != -1)
             frame = rand() % 4;
+
         else {
 
             frame = 0;
-            row = 6;
+            row = 7;
         }
     }
     else {
@@ -359,8 +368,6 @@ void Worker::draw(Graphics* g) {
     }
     else {
 
-        
-
         // Draw rock
         if(color == -1) {
 
@@ -371,7 +378,7 @@ void Worker::draw(Graphics* g) {
             g->useTransf();
 
             // Draw rock body
-            spr.draw(g, bmpWorker, 0,6, 
+            spr.draw(g, bmpWorker, 0,7, 
                 -BASE_TILE_SIZE/2, 
                 -BASE_TILE_SIZE/2);
             
@@ -379,7 +386,7 @@ void Worker::draw(Graphics* g) {
             g->useTransf();
 
             // Draw sunglasses
-            spr.draw(g, bmpWorker, 1,6, vpos.x, vpos.y);
+            spr.draw(g, bmpWorker, 1,7, vpos.x, vpos.y);
         }
         else {
 

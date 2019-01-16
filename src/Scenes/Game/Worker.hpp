@@ -62,6 +62,9 @@ private:
     // Transform
     void transform(float tm);
 
+    // Check nearby tile (for cog!)
+    bool checkNearbyTile(Stage* stage, int color);
+
 public:
 
     // Constructor

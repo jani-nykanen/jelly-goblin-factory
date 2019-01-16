@@ -329,6 +329,23 @@ void Stage::parseMap(Communicator &comm) {
             isCog = false;
             break;
 
+        // Gray cog
+        case 11:
+
+            color = 3;
+            isCog = true;
+            sleeping = false;
+            break;
+
+        // Gray worker
+        case 12:
+
+            color = 3;
+            isCog = false;
+            sleeping = false;
+            break;
+
+
         default:
             isWorker = false;
             break;
