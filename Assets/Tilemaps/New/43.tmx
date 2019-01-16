@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="8" height="7" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="1">
+ <properties>
+  <property name="difficulty" value="5"/>
+  <property name="moves" value="16"/>
+  <property name="name" value="Trolls Ahead"/>
+ </properties>
+ <tileset firstgid="1" source="../../../dev/editor_tiles.tsx"/>
+ <layer id="10" name="Tile layer 1" width="8" height="7">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,
+1,12,11,3,3,0,12,1,
+1,0,3,13,13,9,0,1,
+1,2,13,2,2,13,2,1,
+1,0,8,13,0,10,0,1,
+1,12,11,4,11,0,12,1,
+1,1,1,1,1,1,1,1
+</data>
+ </layer>
+</map>
