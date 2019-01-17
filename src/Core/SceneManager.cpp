@@ -61,8 +61,8 @@ void SceneManager::changeActiveScene(std::string name, void* param) {
     if(s == NULL) return;
 
     // Change scene
-    s->onChange(param);
     activeScene = s;
+    s->onChange(param);
 }
 
 

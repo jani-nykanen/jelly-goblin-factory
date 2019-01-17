@@ -56,7 +56,7 @@ public:
     // Resume game
     void resume();
     // Quit
-    void quit();
+    void quit(int v=0);
     // Reactivate pause
     void reactivatePause();
     // Activate settings

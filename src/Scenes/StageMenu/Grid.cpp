@@ -360,3 +360,27 @@ bool Grid::isSpecialTile() {
         (cpos.x == 0 && cpos.y == 0)
         || (cpos.x == width-1 && cpos.y == height-1 && page != MAX_PAGE);
 }
+
+
+// Set cursor position
+void Grid::setCursorPos(int i) {
+
+    // TODO: Should be while if more than
+    // two pages, but to make sure nothing evil
+    // happens, let's do the check only once...
+    if(page < MAX_PAGE && 
+       i+2 >= (page+1)*width*height-1) {
+
+        ++ page;
+    }
+    i -= page*width*height;
+    i += page*2;
+
+    cpos.x = (i % width);
+    cpos.y = i / width;
+    ctarget = cpos;
+
+    computeCursorVpos();
+
+    ctimer = 0.0f;
+}

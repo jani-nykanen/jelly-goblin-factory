@@ -91,6 +91,9 @@ public:
     int getChoseStageIndex();
     // Is the selected tile special
     bool isSpecialTile();
+
+    // Set cursor position
+    void setCursorPos(int i);
 };
 
 #endif // __GRID_H__

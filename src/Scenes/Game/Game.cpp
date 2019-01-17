@@ -24,6 +24,7 @@ static void cb_Resume() { gref->resume(); }
 static void cb_Reset() { gref->reset(); }
 static void cb_Settings() { gref->activateSettings();}
 static void cb_Quit() { gref->quit(); }
+static void cb_NextStage() { gref->quit(1); }
 
 static void cb_SFX() {gref->toggleSFX();}
 static void cb_Music() {gref->toggleMusic();}
@@ -114,9 +115,9 @@ void Game::resume() {
 
 
 // Terminate
-void Game::quit() {
+void Game::quit(int v) {
     
-    sceneMan->changeActiveScene("stageMenu");
+    sceneMan->changeActiveScene("stageMenu", (void*)(size_t)v);
 }
 
 
@@ -211,7 +212,7 @@ void Game::init() {
 
     // Create end menu
     buttons.clear();
-    buttons.push_back(MenuButton("Next stage", cb_Reset, true, 2.0f));
+    buttons.push_back(MenuButton("Next stage", cb_NextStage, true, 2.0f));
     buttons.push_back(MenuButton("Retry", cb_Reset, true, 2.0f));
     buttons.push_back(MenuButton("Stage menu", cb_Quit, true, 2.0f));
     endMenu = PauseMenu(buttons, 
@@ -252,12 +253,12 @@ void Game::update(float tm) {
         return;
     }
     // TEMP
-    /*
+    
     else if(vpad->getButton("debug") == State::Pressed) {
 
         endMenu.activate();
     }
-    */
+    
 
     // Check settings
     if(settings.isActive()) {

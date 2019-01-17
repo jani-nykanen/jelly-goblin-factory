@@ -212,4 +212,12 @@ void StageMenu::dispose() {
 // to this scene
 void StageMenu::onChange(void* param) {
 
+    int v = (int)(size_t)param;
+
+    if(v == 1 && stageTarget < maps.size()) {
+
+        ++ stageTarget;
+        stageGrid.setCursorPos(stageTarget);
+        goToStage();
+    }
 }
