@@ -8,6 +8,8 @@
 #include "../../Core/EventManager.hpp"
 #include "../../Core/AssetPack.hpp"
 
+#include <cstdio>
+
 typedef void (*GridCallback) (int);
 
 // Block scale
@@ -85,11 +87,13 @@ public:
     // Update
     void update(EventManager* evMan, GridCallback numberCb, float tm);
     // Draw
-    void draw(Graphics* g, float tx=0, float ty=0);
+    void draw(Graphics* g, float tx=0, float ty=0, 
+        std::vector<int>* completion=NULL);
 
     // Get chosen stage index
     int getChoseStageIndex();
     // Is the selected tile special
+    bool isSpecialTile(int x, int y);
     bool isSpecialTile();
 
     // Set cursor position

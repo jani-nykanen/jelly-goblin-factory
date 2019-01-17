@@ -233,7 +233,7 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
 
 
 // Draw
-void Grid::draw(Graphics* g, float tx, float ty) {
+void Grid::draw(Graphics* g, float tx, float ty, std::vector<int>* completion) {
 
     const float DARKEN = 0.85f;
     const float BRIGHTEN = 1.10f;
@@ -269,6 +269,8 @@ void Grid::draw(Graphics* g, float tx, float ty) {
     float textScale;
     float col;
     std::string num;
+    int cval;
+    int bx, by;
     for(int y = 0; y < height; ++ y) {
 
         for(int x = 0; x < width; ++ x) {
@@ -289,18 +291,31 @@ void Grid::draw(Graphics* g, float tx, float ty) {
             cx = dx + x*bw + bw/2;
             cy = dy + y*bh + bh/2;
 
+            // Get completion info
+            if(isSpecialTile(x, y))
+                cval = 0;
+            else
+                cval = (*completion)[y*width+x + page*width*height -page*2];
+
+            bx = 128 * (cval % 2);
+            by = cval/2;
+            by *= 128;
+
             // Draw block shadow
             g->setColor(0, 0, 0, SHADOW_ALPHA);
-            g->drawBitmap(bmpBlocks,0,0,128,128,
+            g->drawBitmap(bmpBlocks,bx,by,128,128,
                 cx - blockSize.x/2*s + BUTTON_SHADOW_X, 
                 cy - blockSize.y/2*s + BUTTON_SHADOW_Y,
                 blockSize.x*s, blockSize.y*s);
 
             // Draw block
             g->setColor(col, col, col);
-            g->drawBitmap(bmpBlocks,0,0,128,128,
+            g->drawBitmap(bmpBlocks,bx,by,128,128,
                 cx - blockSize.x/2*s, cy - blockSize.y/2*s,
                 blockSize.x*s, blockSize.y*s);
+
+            if(cval > 0)
+                continue;
 
             // Draw number
             num = " ";
@@ -354,11 +369,15 @@ int Grid::getChoseStageIndex() {
 
 
 // Is the selected tile special
-bool Grid::isSpecialTile() {
+bool Grid::isSpecialTile(int x, int y) {
 
     return 
-        (cpos.x == 0 && cpos.y == 0)
-        || (cpos.x == width-1 && cpos.y == height-1 && page != MAX_PAGE);
+        (x == 0 && y == 0)
+        || (x == width-1 && y == height-1 && page != MAX_PAGE);
+}
+bool Grid::isSpecialTile() {
+
+    return isSpecialTile(cpos.x, cpos.y);
 }
 
 

@@ -38,6 +38,8 @@ private:
     std::vector<std::string> mapNames;
     // Map difficulties
     std::vector<int> mapDiff;
+    // Map completion
+    std::vector<int> completion;
 
     // Stage target
     int stageTarget;

@@ -138,6 +138,7 @@ void StageMenu::init() {
     maps = std::vector<Tilemap> ();
     mapNames = std::vector<std::string> ();
     mapDiff = std::vector<int> ();
+    completion = std::vector<int> ();
     try {
 
         for(int i = 1; i <= MAX; ++ i) {
@@ -148,6 +149,9 @@ void StageMenu::init() {
             // Get info
             mapNames.push_back(maps[i-1].getProp("name"));
             mapDiff.push_back(strToInt(maps[i-1].getProp("difficulty")));
+
+            // Set default completion
+            completion.push_back(0);
         }
     }
     catch(std::exception e){}
@@ -192,7 +196,7 @@ void StageMenu::draw(Graphics* g) {
         HEADER_SCALE, true);
 
     // Draw grid
-    stageGrid.draw(g, 0, GRID_YOFF);
+    stageGrid.draw(g, 0, GRID_YOFF, &completion);
 
     if(!stageGrid.isSpecialTile()) {
 
@@ -212,12 +216,19 @@ void StageMenu::dispose() {
 // to this scene
 void StageMenu::onChange(void* param) {
 
-    int v = (int)(size_t)param;
+    Point v = *(Point*)(size_t)param;
 
-    if(v == 1 && stageTarget < maps.size()) {
+    // Check completion
+    if(v.y > 0) {
+
+        completion[stageTarget] = v.y;
+    }
+    // Transition to the next stage?
+    if(v.x == 1 && stageTarget < maps.size()) {
 
         ++ stageTarget;
         stageGrid.setCursorPos(stageTarget);
         goToStage();
     }
+    
 }
