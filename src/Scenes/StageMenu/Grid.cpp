@@ -295,7 +295,7 @@ void Grid::draw(Graphics* g, float tx, float ty, std::vector<int>* completion) {
             if(isSpecialTile(x, y))
                 cval = 0;
             else
-                cval = (*completion)[y*width+x + page*width*height -page*2];
+                cval = (*completion)[y*width+x + page*width*height -page*2 -1];
 
             bx = 128 * (cval % 2);
             by = cval/2;

@@ -6,6 +6,9 @@
 #include "../../Core/Utility.hpp"
 #include "../../Core/SceneManager.hpp"
 
+// File path
+const char* FILE_PATH = "save.dat";
+
 // Reference to self
 static StageMenu* smRef;
 
@@ -155,6 +158,14 @@ void StageMenu::init() {
         }
     }
     catch(std::exception e){}
+
+    // Read completion data
+    saveMan = SaveDataManager(FILE_PATH);
+    std::vector<int> data = saveMan.read();
+    for(int i = 0; i < data.size(); ++ i) {
+
+        completion[i] = data[i];
+    }
 }
 
 
@@ -219,9 +230,12 @@ void StageMenu::onChange(void* param) {
     Point v = *(Point*)(size_t)param;
 
     // Check completion
-    if(v.y > 0) {
+    if(v.y > completion[stageTarget-1]) {
 
-        completion[stageTarget] = v.y;
+        completion[stageTarget-1] = v.y;
+
+        // Save data
+        saveMan.write(completion);
     }
     // Transition to the next stage?
     if(v.x == 1 && stageTarget < maps.size()) {

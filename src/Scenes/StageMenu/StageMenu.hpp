@@ -11,6 +11,7 @@
 #include "../Game/Stage.hpp"
 
 #include "Grid.hpp"
+#include "SaveData.hpp"
 
 // To be passed to player
 struct StageInfo {
@@ -40,6 +41,9 @@ private:
     std::vector<int> mapDiff;
     // Map completion
     std::vector<int> completion;
+
+    // For reading/writing data
+    SaveDataManager saveMan;
 
     // Stage target
     int stageTarget;

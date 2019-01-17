@@ -1,0 +1,2 @@
+- Remove debug button "P"
+- joystick_enabled = 0 to app.cfg
