@@ -50,7 +50,7 @@ AudioManager::AudioManager() {
 // Play a sample
 void AudioManager::playSample(Sample* s, float vol, int loops) {
 
-    if(initialized == 0 || sfxEnabled) 
+    if(s == NULL || initialized == 0 || !sfxEnabled) 
         return;
 
     s->play(vol*sfxVolume, loops);

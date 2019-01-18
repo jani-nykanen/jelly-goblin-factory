@@ -38,6 +38,10 @@ private:
     Bitmap* bmpFont;
     Bitmap* bmpBlocks;
 
+    // Samples
+    Sample* sSelect;
+    Sample* sAccept;
+
     // Grid dimensions
     int width;
     int height;

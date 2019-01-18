@@ -106,6 +106,10 @@ Grid::Grid(AssetPack* assets, int w, int h,
     bmpFont = assets->getBitmap("font");
     bmpBlocks = assets->getBitmap("blocks");
 
+    // Get samples
+    sSelect = assets->getSample("select");
+    sAccept = assets->getSample("accept");
+
     // Store info
     width = w;
     height = h;
@@ -141,6 +145,9 @@ Grid::Grid(AssetPack* assets, int w, int h,
 void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
 
     const float DELTA = 0.25f;
+
+    // Audio manager
+    AudioManager* audio = evMan->getAudioManager();
 
     // Update block scales
     for(int i = 0; i < blockScale.size(); ++ i) {
@@ -181,6 +188,9 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
     // If something moved
     if(ctarget.x != cpos.x || ctarget.y != cpos.y) {
 
+        // Play sound
+        audio->playSample(sSelect, 0.40f);
+
         ctimer = MOVE_TIME;
         return;
     }
@@ -191,6 +201,9 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
 
     // TODO: To a different method
     if(pressed) {
+
+        // Play sound
+        audio->playSample(sAccept, 0.40f);
 
         // Next & previous symbols
         if(page != MAX_PAGE && cpos.x == width-1 && 
