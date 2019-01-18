@@ -7,6 +7,9 @@
 
 // Bitmaps
 static Bitmap* bmpFont;
+// Samples
+static Sample* sSelect;
+static Sample* sAccept;
 
 
 // Constructor
@@ -28,11 +31,16 @@ void Menu::update(EventManager* evMan) {
 
     const float DELTA = 0.25f;
 
+    // Get audio manager
+    AudioManager* audio = evMan->getAudioManager();
+
+    // Get gamepad
     GamePad* vpad = evMan->getController();
     float sticky = vpad->getStick().y;
     float deltay = vpad->getDelta().y;
 
     // Update cursor position
+    int oldp = cursorPos;
     if(sticky < -DELTA && deltay < -DELTA) {
 
         if(-- cursorPos < 0)
@@ -42,6 +50,11 @@ void Menu::update(EventManager* evMan) {
 
         if(++ cursorPos >= count)
             cursorPos -= count;
+    }
+    // Play sound, if changed
+    if(oldp != cursorPos) {
+
+        audio->playSample(sSelect, 0.60f);
     }
 
     // Check key press
@@ -62,6 +75,9 @@ void Menu::update(EventManager* evMan) {
                 cb();
             }
         }
+
+        // Play sound
+        audio->playSample(sAccept, 0.45f);
     }
 }
 
@@ -112,5 +128,8 @@ void initGlobalMenu(AssetPack* assets) {
 
     // Get bitmaps
     bmpFont = assets->getBitmap("font");
+    // Get samples
+    sSelect = assets->getSample("select");
+    sAccept = assets->getSample("accept");
 }
 

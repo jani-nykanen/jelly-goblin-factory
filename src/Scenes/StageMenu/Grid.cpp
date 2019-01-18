@@ -189,7 +189,7 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
     if(ctarget.x != cpos.x || ctarget.y != cpos.y) {
 
         // Play sound
-        audio->playSample(sSelect, 0.40f);
+        audio->playSample(sSelect, 0.60f);
 
         ctimer = MOVE_TIME;
         return;
@@ -203,7 +203,7 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
     if(pressed) {
 
         // Play sound
-        audio->playSample(sAccept, 0.40f);
+        audio->playSample(sAccept, 0.45f);
 
         // Next & previous symbols
         if(page != MAX_PAGE && cpos.x == width-1 && 

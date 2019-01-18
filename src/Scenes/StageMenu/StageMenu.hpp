@@ -29,6 +29,8 @@ private:
 
     // Bitmaps
     Bitmap* bmpFont;
+    // Samples
+    Sample* sReject;
 
     // Grid
     Grid stageGrid;

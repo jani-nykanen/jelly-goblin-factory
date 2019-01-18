@@ -34,6 +34,8 @@ private:
 
     // Is transforming
     bool transforming;
+    // If started transforming
+    bool startedTransforming;
     // Transform timer
     float transfTimer;
 
@@ -92,6 +94,10 @@ public:
     inline bool isActive() {
 
         return transforming || moving;
+    }
+    inline bool isTransforming() {
+
+        return startedTransforming;
     }
     // A little misleading, yes
     inline bool isAlive() {

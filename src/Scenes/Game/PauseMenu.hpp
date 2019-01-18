@@ -54,4 +54,7 @@ public:
 
 };
 
+// Init global
+void initGlobalPauseMenu(AssetPack* assets);
+
 #endif // __PAUSE_H__

@@ -23,6 +23,12 @@ private:
     // Bitmaps
     Bitmap* bmpFont;
 
+    // Samples
+    Sample* sWalk;
+    Sample* sTransform;
+    Sample* sAccept;
+    Sample* sPause;
+
     // Transition
     Transition* trans;
 

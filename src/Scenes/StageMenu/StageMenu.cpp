@@ -130,6 +130,8 @@ void StageMenu::init() {
 
     // Get bitmaps
     bmpFont = assets->getBitmap("font");
+    // Get samples
+    sReject = assets->getSample("reject");
 
     // Create components
     stageGrid = Grid(assets, WIDTH, HEIGHT, 
@@ -176,6 +178,14 @@ void StageMenu::update(float tm) {
 
     // Update grid
     stageGrid.update(evMan, cb_NumButton, tm);
+
+    // Check escape
+    if(evMan->getController()->getButton("cancel") 
+        == State::Pressed) {
+
+        evMan->getAudioManager()->playSample(sReject, 0.40f);
+        evMan->terminate();
+    }
 }
 
 

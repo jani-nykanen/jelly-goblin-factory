@@ -240,6 +240,7 @@ void Worker::checkCogCollision(Stage* stage) {
         isCog = true;
         moving = false;
         transforming = true;
+        startedTransforming = true;
         transfTimer = TRANSFORM_TIME;
 
         stage->updateSolid(pos.x, pos.y, 3+color);
@@ -266,6 +267,7 @@ Worker::Worker(Point p, int color, bool sleeping, bool isCog) {
     moveTimer = 0.0f;
     startedMoving = false;
     transforming = false;
+    startedTransforming = false;
     transfTimer = 0.0f;
 
     // Create sprite
@@ -297,6 +299,7 @@ Worker::Worker(Point p, int color, bool sleeping, bool isCog) {
 void Worker::update(EventManager* evMan, Stage* stage, 
     bool anyMoving,  float tm) {
 
+    startedTransforming = false;
     startedMoving = false;
 
     // Transform

@@ -193,6 +193,12 @@ void Game::init() {
     // Get bitmaps
     bmpFont = assets->getBitmap("font");
 
+    // Get samples
+    sWalk = assets->getSample("walk");
+    sTransform = assets->getSample("transform");
+    sAccept = assets->getSample("accept");
+    sPause = assets->getSample("pause");
+
     // Get transition
     trans = evMan->getTransition();
 
@@ -202,6 +208,7 @@ void Game::init() {
     // Initialize global data
     initGlobalStage(assets);
     initGlobalWorker(assets);
+    initGlobalPauseMenu(assets);
 
     // Initialize hud
     hud = Hud(assets);
@@ -243,6 +250,8 @@ void Game::update(float tm) {
 
     const float END_TIMER_SPEED = 0.05f;
 
+    AudioManager* audio = evMan->getAudioManager();
+
     // If fading, wait until it's over
     if(trans->isActive())
         return;
@@ -261,7 +270,6 @@ void Game::update(float tm) {
         return;
     }
     // TEMP
-    
     else if(vpad->getButton("debug") == State::Pressed) {
 
         endMenu.activate();
@@ -283,8 +291,12 @@ void Game::update(float tm) {
     }
     else {
 
+        // Activate pause
         if(vpad->getButton("start") == State::Pressed ||
            vpad->getButton("cancel") == State::Pressed) {
+
+            // Play sound
+            audio->playSample(sPause, 0.40f);
 
             pause.activate();
             return;
@@ -294,11 +306,15 @@ void Game::update(float tm) {
     // Reset
     if(vpad->getButton("reset") == State::Pressed) {
 
+        // Play sound
+        audio->playSample(sAccept, 0.45f);
+        // Set transition
         trans->activate(FadeIn, 2.0f, cb_Reset);
     }
 
     // "Pre-update"
     bool anyMoving = false;
+    bool anyTransforming = false;
     int aliveCount = 0;
     for(int i = 0; i < workers.size(); ++ i) {
 
@@ -309,6 +325,11 @@ void Game::update(float tm) {
         if(!anyMoving && workers[i].isActive()) {
 
             anyMoving = true;
+        }
+        // Is transforming
+        if(!anyTransforming && workers[i].isTransforming()) {
+
+            anyTransforming = true;
         }
 
         // If "alive"
@@ -335,8 +356,18 @@ void Game::update(float tm) {
             anyStartedMoving = true;
     }
     // Increase turns, if moved
-    if(anyStartedMoving)
+    if(anyStartedMoving) {
+
+        // Play walk
+        audio->playSample(sWalk, 0.50f);
+
         hud.addMove();
+    }
+    // If transforming, play sound
+    if(anyTransforming) {
+
+        audio->playSample(sTransform, 0.45f);
+    }
 
     // Update stage
     stage.update(evMan, tm);

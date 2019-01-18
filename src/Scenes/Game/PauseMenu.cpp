@@ -3,6 +3,9 @@
 
 #include "PauseMenu.hpp"
 
+// Samples
+static Sample* sReject;
+
 
 // Constructor
 PauseMenu::PauseMenu(std::vector<MenuButton> buttons, 
@@ -42,6 +45,9 @@ void PauseMenu::update(EventManager* evMan, bool esc) {
     // Quit with escape, if enabled
     if(esc
     && evMan->getController()->getButton("cancel") == State::Pressed) {
+
+        // Play sound
+        evMan->getAudioManager()->playSample(sReject, 0.40f);
 
         deactivate();
         return;
@@ -104,4 +110,12 @@ void PauseMenu::setButtonText(int button,
     std::string newText) {
 
     menu.setText(button, newText);
+}
+
+
+// Init global
+void initGlobalPauseMenu(AssetPack* assets) {
+
+    // Get samples
+    sReject = assets->getSample("reject");
 }

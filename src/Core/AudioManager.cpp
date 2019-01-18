@@ -42,6 +42,7 @@ AudioManager::AudioManager() {
 
         initialized = 0;
         printf("Failed to open audio. Audio disabled.\n");
+        printf("Mix_OpenAudio: %s\n", Mix_GetError());
         return;
     }
 }
