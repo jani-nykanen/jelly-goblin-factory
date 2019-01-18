@@ -4,7 +4,9 @@
 #ifndef __AUDIO_MAN_H__
 #define __AUDIO_MAN_H__
 
-// A dummy audio manager class
+#include "Sample.hpp"
+
+// A audio manager class
 class AudioManager {
 
 private:
@@ -12,14 +14,19 @@ private:
     // States
     bool sfxEnabled;
     bool musicEnabled;
+    // If successfully initialized
+    // (1 = sfx only)
+    // (2 = music & sfx)
+    int initialized;
+
+    // Global volumes
+    float sfxVolume;
+    float musicVolume;
 
 public:
 
     // Constructor
-    inline AudioManager() {
-        sfxEnabled = true;
-        musicEnabled = true;
-    }
+    AudioManager();
 
     // Toggle states
     inline void toggleSfx(bool state) {
@@ -34,6 +41,12 @@ public:
     inline void toggleMusic() {
         musicEnabled = !musicEnabled;
     }
+    inline void setSfxVolume(float vol) {
+        sfxVolume = vol;
+    }
+    inline void setMusicVolume(float vol) {
+        musicVolume = vol;
+    }
 
     // Getters
     inline bool isSfxEnabled() {
@@ -42,6 +55,9 @@ public:
     inline bool isMusicEnabled() {
         return musicEnabled;
     }
+
+    // Play a sample
+    void playSample(Sample* s, float vol, int loops=0);
 
 
 };

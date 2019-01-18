@@ -6,6 +6,16 @@
 #include "Config.hpp"
 
 
+// Types
+namespace AssetType {
+
+    enum {
+        Bitmap = 0,
+        Sample = 1,
+    };
+}
+
+
 // Handle special parameter
 void AssetPack::handleSpecialParam(std::string key, std::string value) {
 
@@ -21,7 +31,26 @@ void AssetPack::handleSpecialParam(std::string key, std::string value) {
 
             assetType = AssetType::Bitmap;
         }
+        else if(value == "sample") {
+
+            assetType = AssetType::Sample;
+        }
     }
+}
+
+// Get a generic asset
+template <class T> T* AssetPack::getAsset(std::vector<Asset<T*> >* vec, 
+    std::string name) {
+
+    for(int i = 0; i < vec->size(); ++ i) {
+
+        if((*vec)[i].name == name) {
+
+            return (*vec)[i].asset;
+        }
+    }
+
+    return NULL;
 }
 
 
@@ -59,6 +88,10 @@ AssetPack::AssetPack(std::string path) {
                 bitmaps.push_back(Asset<Bitmap*> (new Bitmap(assetPath), assetName));
                 break;
 
+            // Load sample
+            case AssetType::Sample:
+                samples.push_back(Asset<Sample*> (new Sample(assetPath), assetName));
+
             default:
                 break;    
             }
@@ -75,19 +108,24 @@ AssetPack::~AssetPack() {
 
         delete bitmaps[i].asset;
     }
+
+    // Destroy samples
+    for(int i = 0; i < samples.size(); ++ i) {
+
+        delete samples[i].asset;
+    }
 }
 
 
 // Get a bitmap by its name
 Bitmap* AssetPack::getBitmap(std::string name) {
 
-    for(int i = 0; i < bitmaps.size(); ++ i) {
+    return getAsset<Bitmap>(&bitmaps, name);
+}
 
-        if(bitmaps[i].name == name) {
 
-            return bitmaps[i].asset;
-        }
-    }
+// Get a sample by its name
+Sample* AssetPack::getSample(std::string name) {
 
-    return NULL;
+    return getAsset<Sample>(&samples, name);
 }

@@ -5,17 +5,11 @@
 #define __ASSET_PACK_H__
 
 #include "Bitmap.hpp"
+#include "Sample.hpp"
 
 #include <string>
 #include <vector>
 
-// Types
-namespace AssetType {
-
-    enum {
-        Bitmap = 0
-    };
-}
 
 // Generic asset
 template<class T> struct Asset {
@@ -37,9 +31,9 @@ class AssetPack {
 
 private:
 
-    // Bitmaps
-    // TODO: Make pointer?
+    // Assets
     std::vector<Asset<Bitmap*> > bitmaps;
+    std::vector<Asset<Sample*> > samples;
 
     // Needed for parsing
     std::string basePath;
@@ -47,6 +41,10 @@ private:
 
     // Handle special parameter
     void handleSpecialParam(std::string key, std::string value);
+
+    // Get a generic asset
+    template <class T> T* getAsset(std::vector<Asset<T*> >* vec, 
+            std::string name);
 
 public:
 
@@ -57,6 +55,8 @@ public:
 
     // Get a bitmap by its name
     Bitmap* getBitmap(std::string name);
+    // Get a sample by its name
+    Sample* getSample(std::string name);
 };
 
 #endif // __ASSET_PACK_H__
