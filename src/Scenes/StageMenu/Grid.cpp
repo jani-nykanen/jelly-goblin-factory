@@ -189,7 +189,7 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
     if(ctarget.x != cpos.x || ctarget.y != cpos.y) {
 
         // Play sound
-        audio->playSample(sSelect, 0.60f);
+        audio->playSample(sSelect, 0.70f);
 
         ctimer = MOVE_TIME;
         return;
@@ -401,7 +401,7 @@ void Grid::setCursorPos(int i) {
     // two pages, but to make sure nothing evil
     // happens, let's do the check only once...
     if(page < MAX_PAGE && 
-       i+2 >= (page+1)*width*height-1) {
+       i >= (page+1)*width*height-1) {
 
         ++ page;
     }

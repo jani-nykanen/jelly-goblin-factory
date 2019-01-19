@@ -198,6 +198,7 @@ void Game::init() {
     sTransform = assets->getSample("transform");
     sAccept = assets->getSample("accept");
     sPause = assets->getSample("pause");
+    sSuccess = assets->getSample("success");
 
     // Get transition
     trans = evMan->getTransition();
@@ -341,6 +342,9 @@ void Game::update(float tm) {
 
     // Check if victory
     if(aliveCount == 0 && !anyMoving) {
+
+        // Victory sound
+        audio->playSample(sSuccess, 0.40f);
 
         endMenu.activate();
         endTimer = 0.0f;

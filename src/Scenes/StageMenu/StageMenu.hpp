@@ -49,6 +49,10 @@ private:
 
     // Stage target
     int stageTarget;
+    // Ending state
+    int endingState;
+    // Ending played
+    int endingPlayed;
 
     // Draw stage info
     void drawStageInfo(Graphics* g);
@@ -61,9 +65,11 @@ public:
     inline void setStageTarget(int index) {
         stageTarget = index;
     }
+    // Go to ending
+    void goToEnding();
     // Fade to something
     void fadeToTarget(TransitionCallback cb);
-
+    
     // Initialize scene
     void init();
     // Update scene

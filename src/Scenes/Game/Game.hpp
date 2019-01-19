@@ -28,6 +28,7 @@ private:
     Sample* sTransform;
     Sample* sAccept;
     Sample* sPause;
+    Sample* sSuccess;
 
     // Transition
     Transition* trans;

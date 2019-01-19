@@ -38,6 +38,9 @@ static void cb_NumButton(int b) {
     smRef->setStageTarget(b);
     smRef->fadeToTarget(cb_GoToStage);
 }
+static void cb_ToEnding() {
+    smRef->goToEnding();
+}
 
 
 // Draw stage info
@@ -106,6 +109,19 @@ void StageMenu::goToStage() {
 }
 
 
+// Go to ending
+void StageMenu::goToEnding() {
+
+    if(endingState > endingPlayed) {
+
+        sceneMan->changeActiveScene(
+            "ending",(void*)(size_t)(endingState-1));
+
+        endingPlayed = endingState;
+    }
+}
+
+
 // Fade to something
 void StageMenu::fadeToTarget(TransitionCallback cb) {
 
@@ -168,6 +184,10 @@ void StageMenu::init() {
 
         completion[i] = data[i];
     }
+
+    // Set defaults
+    endingState = 0;
+    endingPlayed = 0;
 }
 
 
@@ -176,15 +196,25 @@ void StageMenu::update(float tm) {
 
     if(trans->isActive()) return;
 
+    GamePad* vpad = evMan->getController();
+
     // Update grid
     stageGrid.update(evMan, cb_NumButton, tm);
 
     // Check escape
-    if(evMan->getController()->getButton("cancel") 
+    if(vpad->getButton("cancel") 
         == State::Pressed) {
 
         evMan->getAudioManager()->playSample(sReject, 0.40f);
         evMan->terminate();
+    }
+
+    // Check debug button
+    // TEMP
+    if(vpad->getButton("debug") == State::Pressed) {
+
+        endingState = 1;
+        fadeToTarget(cb_ToEnding);
     }
 }
 
@@ -236,6 +266,8 @@ void StageMenu::dispose() {
 // Called when the scene is changed
 // to this scene
 void StageMenu::onChange(void* param) {
+
+    if(param == NULL) return;
 
     Point v = *(Point*)(size_t)param;
 

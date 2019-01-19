@@ -54,7 +54,7 @@ void Menu::update(EventManager* evMan) {
     // Play sound, if changed
     if(oldp != cursorPos) {
 
-        audio->playSample(sSelect, 0.60f);
+        audio->playSample(sSelect, 0.70f);
     }
 
     // Check key press
