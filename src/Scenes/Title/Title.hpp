@@ -7,6 +7,8 @@
 #include "../../Core/Scene.hpp"
 #include "../../Core/Transition.hpp"
 
+#include "../Game/PauseMenu.hpp"
+
 #include "../../Menu.hpp"
 
 // Ending class
@@ -23,8 +25,9 @@ private:
 
     // Transition
     Transition* trans;
-    // Menu
+    // Menus
     Menu menu;
+    PauseMenu settings;
 
     // Logo float timer
     float logoFloat;
@@ -44,6 +47,20 @@ public:
     }
     // Go to the stage menu
     void goToStageMenu();
+    // Toggle fullscreen
+    inline void toggleFullscreen() {
+        evMan->toggleFullscreen();
+    }
+    // Toggle SFX
+    void toggleSFX();
+    // Toggle music
+    void toggleMusic();
+    // Disable settings
+    inline void disableSettings() {
+        settings.deactivate();
+    }
+    // Activate settings
+    void activateSettings();
 
     // Initialize scene
     void init();

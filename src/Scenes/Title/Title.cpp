@@ -14,9 +14,17 @@ static Title* tref;
 static void cb_Play() {
     tref->goToStageMenu();
 }
+static void cb_Settings() {
+    tref->activateSettings();
+}
 static void cb_Terminate() {
     tref->terminate();
 }
+static void cb_SFX() {tref->toggleSFX();}
+static void cb_Music() {tref->toggleMusic();}
+static void cb_Fullscreen() {tref->toggleFullscreen();}
+static void cb_Back() {tref->disableSettings();}
+
 
 
 // Go to the stage menu
@@ -26,9 +34,57 @@ void Title::goToStageMenu() {
 }
 
 
+// Toggle SFX
+void Title::toggleSFX() {
+
+    AudioManager* audio = evMan->getAudioManager();
+    audio->toggleSfx();
+
+    std::string text = "SFX: " + 
+        (audio->isSfxEnabled() ? std::string("On") : std::string("Off"));
+
+    settings.setButtonText(0, text);
+}
+
+
+// Toggle music
+void Title::toggleMusic() {
+
+    AudioManager* audio = evMan->getAudioManager();
+    audio->toggleMusic();
+
+    std::string text = "Music: " + 
+        (audio->isMusicEnabled() ? std::string("On") : std::string("Off"));
+
+    settings.setButtonText(1, text);
+}
+
+
+// Activate settings
+void Title::activateSettings() {
+
+    AudioManager* audio = evMan->getAudioManager();
+    // Set text
+    std::string text = "SFX: " + 
+        (audio->isSfxEnabled() ? std::string("On") : std::string("Off"));
+    settings.setButtonText(0, text);
+    text = "Music: " + 
+        (audio->isMusicEnabled() ? std::string("On") : std::string("Off"));
+    settings.setButtonText(1, text);
+
+    settings.activate(3);
+}
+
+
 // Initialize scene
 void Title::init() {
     
+    // TODO: Get these from one place, now
+    // they are the same as in "Game"
+    const float SETTINGS_WIDTH = 400.0f;
+    const float SETTINGS_HEIGHT = 288.0f;
+    const float SETTINGS_SCALE = 1.0f;
+
     tref = this;
 
     // Get "global" objects
@@ -44,10 +100,20 @@ void Title::init() {
     // Create menu
     std::vector<MenuButton> buttons;
     buttons.push_back(MenuButton("Play", cb_Play, true, 2.0f));
-    buttons.push_back(MenuButton("Settings", NULL));
+    buttons.push_back(MenuButton("Settings", cb_Settings));
     buttons.push_back(MenuButton("Clear Data", NULL));
     buttons.push_back(MenuButton("Quit", cb_Terminate, true, 2.0f));
     menu = Menu(buttons);
+
+    // Create settings
+    buttons.clear();
+    buttons.push_back(MenuButton("SFX: On", cb_SFX));
+    buttons.push_back(MenuButton("Music: On", cb_Music));
+    buttons.push_back(MenuButton("Fullscreen", cb_Fullscreen));
+    buttons.push_back(MenuButton("Back", cb_Back));
+    settings = PauseMenu(buttons, 
+        SETTINGS_WIDTH, SETTINGS_HEIGHT, 
+        SETTINGS_SCALE);
 
     // Set defaults
     logoFloat = 0.0f;
@@ -62,6 +128,13 @@ void Title::update(float tm) {
 
     const float LOGO_FLOAT = 0.05f;
     const float ENTER_TIMER_SPEED = 0.05f;
+
+    // Check settings
+    if(settings.isActive()) {
+
+        settings.update(evMan, true);
+        return;
+    }
 
     // Update logo scale using
     // transition object
@@ -194,6 +267,9 @@ void Title::draw(Graphics* g) {
         // Draw menu
         menu.draw(g, view.x/2+MENU_X, view.y/3.0f*2.0f, 
             MENU_SCALE, MENY_YOFF_PLUS);
+
+        // Draw settings
+        settings.draw(g);
     }
    
 }

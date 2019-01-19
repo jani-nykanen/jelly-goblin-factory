@@ -140,6 +140,15 @@ void Game::reactivatePause() {
 // Activate settings
 void Game::activateSettings() {
 
+    AudioManager* audio = evMan->getAudioManager();
+    // Set text
+    std::string text = "SFX: " + 
+        (audio->isSfxEnabled() ? std::string("On") : std::string("Off"));
+    settings.setButtonText(0, text);
+    text = "Music: " + 
+        (audio->isMusicEnabled() ? std::string("On") : std::string("Off"));
+    settings.setButtonText(1, text);
+
     settings.activate(3);
     pause.deactivate();
 }
