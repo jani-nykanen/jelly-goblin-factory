@@ -92,6 +92,30 @@ void StageMenu::drawStageInfo(Graphics* g) {
 }
 
 
+// Get completion status
+int StageMenu::getCompletionStatus() {
+
+    int maxCount = completion.size();
+    int perfect = 0;
+    int any = 0;
+    for(int i = 0; i < (int)completion.size(); ++ i) {
+
+        if(completion[i] >= 1) {
+
+            if(completion[i] == 2)
+                ++ perfect;
+
+            ++ any;
+        }
+    }
+
+    if(perfect == maxCount) return 2;
+    if(any == maxCount) return 1;
+    return 0;
+
+}
+
+
 // Go to the selected stage
 void StageMenu::goToStage() {
 
@@ -279,6 +303,14 @@ void StageMenu::onChange(void* param) {
 
         // Save data
         saveMan.write(completion);
+
+        // Check if enough completed for ending
+        endingState = getCompletionStatus();
+        if(endingState > 0) {
+
+            goToEnding();
+            return;
+        }
     }
     // Transition to the next stage?
     if(v.x == 1 && stageTarget < maps.size()) {

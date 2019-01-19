@@ -57,6 +57,9 @@ private:
     // Draw stage info
     void drawStageInfo(Graphics* g);
 
+    // Get completion status
+    int getCompletionStatus();
+
 public: 
 
     // Go to the selected stage

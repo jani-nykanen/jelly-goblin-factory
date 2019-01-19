@@ -18,6 +18,7 @@ private:
     Bitmap* bmpTrophy;
     // Samples
     Sample* sAccept;
+    Sample* sHit;
 
     // Transition
     Transition* trans;

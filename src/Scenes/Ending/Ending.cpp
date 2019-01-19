@@ -53,6 +53,7 @@ void Ending::init() {
     bmpTrophy = assets->getBitmap("trophy");
     // Get samples
     sAccept = assets->getSample("accept");
+    sHit = assets->getSample("hit");
 
     // Set ending text
     endingText[0] = std::string(ENDING1);
@@ -70,6 +71,7 @@ void Ending::update(float tm) {
     const float GRAVITY = 0.35f;
     const float MAX_GRAVITY = 32.0f;
     const float JUMP_MOD = 1.75f;
+    const float DELTA = 0.5f;
 
     if(trans->isActive()) return;
 
@@ -84,6 +86,13 @@ void Ending::update(float tm) {
     // Update trophy position
     trophyPos += trophyGravity * tm;
     if(trophyPos >= 0.0f) {
+
+        // Sound
+        if(trophyGravity > DELTA) {
+
+            audio->playSample(sHit, 0.60f);
+        }
+
         trophyPos = 0.0f;
         trophyGravity /= -JUMP_MOD;
     }

@@ -344,7 +344,7 @@ void Game::update(float tm) {
     if(aliveCount == 0 && !anyMoving) {
 
         // Victory sound
-        audio->playSample(sSuccess, 0.40f);
+        audio->playSample(sSuccess, 0.80f);
 
         endMenu.activate();
         endTimer = 0.0f;
