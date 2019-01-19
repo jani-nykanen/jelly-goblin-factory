@@ -211,9 +211,10 @@ void StageMenu::update(float tm) {
 
     // Check debug button
     // TEMP
-    if(vpad->getButton("debug") == State::Pressed) {
+    if(endingState < 2 &&
+        vpad->getButton("debug") == State::Pressed) {
 
-        endingState = 1;
+        ++ endingState;
         fadeToTarget(cb_ToEnding);
     }
 }

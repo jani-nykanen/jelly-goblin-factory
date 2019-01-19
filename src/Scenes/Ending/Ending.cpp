@@ -9,6 +9,7 @@
 
 // Constants
 static float ENDING_TIME = 480.0f;
+static float INITIAL_TROPHY_POS = -512.0f;
 
 // Reference to self
 static Ending* eref;
@@ -18,11 +19,12 @@ static const char ENDING1[] =
     "Congratulations! You have earned\n"
     "the silver trophy. Collect the\n"
     "remaining stars to obtain the\n"
-    "the golden one!";
+    "golden one!";
 static const char ENDING2[] = 
-    "Congratulations! You have earned\n"
-    "the golden trophy. Now, go\n"
-    "outside and... GET A LIFE!";
+    "Congratulations! You have\n"
+    "earned the golden trophy.\n"
+    "Now, go outside and...\n"
+    "GET A LIFE!";
 
 
 // Callbacks
@@ -65,10 +67,26 @@ void Ending::init() {
 // Update scene
 void Ending::update(float tm) {
 
+    const float GRAVITY = 0.35f;
+    const float MAX_GRAVITY = 32.0f;
+    const float JUMP_MOD = 1.75f;
+
     if(trans->isActive()) return;
 
     GamePad* vpad = evMan->getController();
     AudioManager* audio = evMan->getAudioManager();
+
+    // Update trophy gravity
+    trophyGravity += GRAVITY * tm;
+    if(trophyGravity > MAX_GRAVITY)
+        trophyGravity = MAX_GRAVITY;
+
+    // Update trophy position
+    trophyPos += trophyGravity * tm;
+    if(trophyPos >= 0.0f) {
+        trophyPos = 0.0f;
+        trophyGravity /= -JUMP_MOD;
+    }
 
     // Update ending timer
     if(endingTimer > 0.0f) {
@@ -77,8 +95,9 @@ void Ending::update(float tm) {
         if(endingTimer < 0.0f)
             endingTimer = 0.0f;
     }
-    // If enter pressed, quit
-    else if(vpad->getButton("start") == State::Pressed) {
+    // If enter or "accept" pressed, quit
+    else if(vpad->getButton("start") == State::Pressed ||
+        vpad->getButton("accept") == State::Pressed) {
 
         // Play sound
         audio->playSample(sAccept, 0.45f);
@@ -113,15 +132,27 @@ void Ending::draw(Graphics* g) {
     g->identity();
     g->useTransf();
 
-    // Draw trophy
+    
     float x = view.x/2-128.0f*TROPHY_SCALE;
     float y = view.y/2-128.0f*TROPHY_SCALE + TROPHY_YOFF;
+    
+    // Draw trophy shadow
+    float t = 1.0f - trophyPos/INITIAL_TROPHY_POS;
+    g->setColor(0, 0, 0, SHADOW_ALPHA);
+    g->drawBitmap(bmpTrophy, complMode*256, 256, 256, 256,
+        x-256*TROPHY_SCALE*(t-1)/2, 
+        y-256*TROPHY_SCALE*(t-1), 
+        256*TROPHY_SCALE*t, 256*TROPHY_SCALE*t);
+    
+    // Draw trophy
+    g->setColor();
     g->drawBitmap(bmpTrophy, complMode*256, 0, 256, 256,
-        x, y, 256*TROPHY_SCALE, 256*TROPHY_SCALE);
+        x, y + trophyPos, 
+        256*TROPHY_SCALE, 256*TROPHY_SCALE);
 
     // Compute character position
     std::string s = endingText[complMode];
-    float t = 1.0f - (endingTimer / ENDING_TIME);
+    t = 1.0f - (endingTimer / ENDING_TIME);
     int cpos = (int)(t * (float)s.length());
 
     // Draw text
@@ -144,4 +175,8 @@ void Ending::onChange(void* param) {
 
     endingTimer = ENDING_TIME;
     complMode = (int)(size_t)param;
+
+    // Reset trophy info
+    trophyPos = INITIAL_TROPHY_POS;
+    trophyGravity = 0.0f;
 }   

@@ -30,6 +30,11 @@ private:
     // Ending texts
     std::string endingText[2];
 
+    // Trophy pos
+    float trophyPos;
+    // Trophy gravity
+    float trophyGravity;
+
 public:
 
     // Back to stage menu
