@@ -363,7 +363,7 @@ void Game::update(float tm) {
     if(anyStartedMoving) {
 
         // Play walk
-        audio->playSample(sWalk, 0.50f);
+        audio->playSample(sWalk, 0.40f);
 
         hud.addMove();
     }

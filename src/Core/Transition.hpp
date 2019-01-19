@@ -51,6 +51,8 @@ public:
     inline bool isActive() {
         return active;
     }
+    // Get time in [0,1)
+    float getTime();
 };
 
 #endif // __TRANSITION_H__

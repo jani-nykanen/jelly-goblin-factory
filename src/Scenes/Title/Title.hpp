@@ -18,8 +18,8 @@ private:
     Bitmap* bmpFont;
     Bitmap* bmpLogo;
     // Samples
-    Sample* sAccept;
-    Sample* sSelect;
+    Sample* sPause;
+    Sample* sReject;
 
     // Transition
     Transition* trans;
@@ -28,6 +28,13 @@ private:
 
     // Logo float timer
     float logoFloat;
+    // Logo scale
+    float logoScale;
+
+    // Phase
+    int phase;
+    // "Press enter" timer
+    float enterTimer;
 
 public:
 

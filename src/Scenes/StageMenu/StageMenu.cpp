@@ -231,6 +231,7 @@ void StageMenu::update(float tm) {
     if(trans->isActive()) return;
 
     GamePad* vpad = evMan->getController();
+    AudioManager* audio = evMan->getAudioManager();
 
     // Update grid
     if(stageGrid.update(evMan, cb_NumButton, tm)) {
@@ -244,8 +245,9 @@ void StageMenu::update(float tm) {
     if(vpad->getButton("cancel") 
         == State::Pressed) {
 
-        evMan->getAudioManager()->playSample(sReject, 0.40f);
-        evMan->terminate();
+
+        audio->playSample(sReject, 0.40f);
+        fadeToTarget(cb_ToTitle);
     }
 
     // Check debug button

@@ -90,3 +90,10 @@ void Transition::activate(int mode, float speed, TransitionCallback cb) {
 
     activate(mode, speed, cb, col);
 }
+
+
+// Get time in [0,1)
+float Transition::getTime() {
+
+    return timer / MAX_TIME;
+}

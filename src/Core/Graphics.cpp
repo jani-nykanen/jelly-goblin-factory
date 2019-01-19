@@ -174,7 +174,7 @@ void Graphics::drawText(Bitmap* bmp, std::string text, int dx, int dy,
     Color c = gcolor;
 
     // Draw shadow
-    setColor(0, 0, 0, trans);
+    setColor(0, 0, 0, trans*c.a);
     drawText(bmp, text, dx + shadowX, dy + shadowY, 
         xoff, yoff, scale, center);    
 
