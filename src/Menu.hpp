@@ -11,6 +11,7 @@
 #include <cstring>
 #include <vector>
 
+// Why did I put these here?
 #define MENU_TEXT_XOFF -32.0f
 #define MENU_TEXT_YOFF -8.0f
 
@@ -58,7 +59,7 @@ public:
     // Update
     void update(EventManager* evMan);
     // Draw
-    void draw(Graphics* g, float x, float y, float scale);
+    void draw(Graphics* g, float x, float y, float scale, float yoff=0.0f);
 
     // Setters
     inline void setCursorPos(int p) {

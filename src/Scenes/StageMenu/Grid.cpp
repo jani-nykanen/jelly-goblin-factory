@@ -142,7 +142,7 @@ Grid::Grid(AssetPack* assets, int w, int h,
 
 
 // Update
-void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
+bool Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
 
     const float DELTA = 0.25f;
 
@@ -158,7 +158,7 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
     // Update cursor
     if(updateCursor(tm)) {
 
-        return;
+        return false;
     }
 
     GamePad* vpad = evMan->getController();
@@ -192,7 +192,7 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
         audio->playSample(sSelect, 0.70f);
 
         ctimer = MOVE_TIME;
-        return;
+        return false;
     }
 
     // Check button press
@@ -231,7 +231,7 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
         // Quit (TEMPORARY!)
         else if(page == 0 && cpos.x == 0 && cpos.y == 0) {
 
-            evMan->terminate();
+            return true;
         }
         // Number button
         else {
@@ -242,6 +242,7 @@ void Grid::update(EventManager* evMan, GridCallback numberCb, float tm) {
             }
         }
     }
+    return false;
 }
 
 

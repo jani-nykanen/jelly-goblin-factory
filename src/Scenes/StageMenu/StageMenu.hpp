@@ -70,6 +70,8 @@ public:
     }
     // Go to ending
     void goToEnding();
+    // Go to title screen
+    void goToTitle();
     // Fade to something
     void fadeToTarget(TransitionCallback cb);
     

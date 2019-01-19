@@ -89,7 +89,7 @@ public:
         int blockw, int blockh, int xoff, int yoff);
 
     // Update
-    void update(EventManager* evMan, GridCallback numberCb, float tm);
+    bool update(EventManager* evMan, GridCallback numberCb, float tm);
     // Draw
     void draw(Graphics* g, float tx=0, float ty=0, 
         std::vector<int>* completion=NULL);

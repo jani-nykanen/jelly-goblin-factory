@@ -83,10 +83,11 @@ void Menu::update(EventManager* evMan) {
 
 
 // Draw
-void Menu::draw(Graphics* g, float x, float y, float scale) {
+void Menu::draw(Graphics* g, float x, float y, 
+    float scale,  float yoff) {
 
     const float XOFF = MENU_TEXT_XOFF;
-    const float YOFF = MENU_TEXT_YOFF;
+    const float BASE_YOFF = MENU_TEXT_YOFF;
 
     const float SHADOW_X = 4*scale;
     const float SHADOW_Y = 6*scale;
@@ -107,7 +108,9 @@ void Menu::draw(Graphics* g, float x, float y, float scale) {
             g->setColor();
 
         // Draw text
-        g->drawText(bmpFont, text, x, y + i*(h+YOFF)*scale, XOFF,0, 
+        g->drawText(bmpFont, text, 
+            x, y + i*(h+BASE_YOFF+yoff)*scale, 
+            XOFF, 0, 
             SHADOW_X, SHADOW_Y,SHADOW_TRANS,
             scale);
     }

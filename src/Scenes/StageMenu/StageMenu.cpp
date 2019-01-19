@@ -41,6 +41,9 @@ static void cb_NumButton(int b) {
 static void cb_ToEnding() {
     smRef->goToEnding();
 }
+static void cb_ToTitle() {
+    smRef->goToTitle();
+}
 
 
 // Draw stage info
@@ -146,6 +149,13 @@ void StageMenu::goToEnding() {
 }
 
 
+// Go to title screen
+void StageMenu::goToTitle() {
+
+    sceneMan->changeActiveScene("title");
+}
+
+
 // Fade to something
 void StageMenu::fadeToTarget(TransitionCallback cb) {
 
@@ -223,7 +233,12 @@ void StageMenu::update(float tm) {
     GamePad* vpad = evMan->getController();
 
     // Update grid
-    stageGrid.update(evMan, cb_NumButton, tm);
+    if(stageGrid.update(evMan, cb_NumButton, tm)) {
+
+        // Back to title
+        fadeToTarget(cb_ToTitle);
+        return;
+    }
 
     // Check escape
     if(vpad->getButton("cancel") 

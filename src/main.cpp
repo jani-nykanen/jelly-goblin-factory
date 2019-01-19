@@ -5,6 +5,7 @@
 #include "Scenes/Game/Game.hpp"
 #include "Scenes/StageMenu/StageMenu.hpp"
 #include "Scenes/Ending/Ending.hpp"
+#include "Scenes/Title/Title.hpp"
 #include "Scenes/Global.hpp"
 
 
@@ -18,7 +19,8 @@ int main(int argc, char** argv) {
     scenes.push_back(SceneInfo(new Global(), false, true));
     scenes.push_back(SceneInfo(new Game()));
     scenes.push_back(SceneInfo(new Ending()));
-    scenes.push_back(SceneInfo(new StageMenu(), true, false));
+    scenes.push_back(SceneInfo(new StageMenu()));
+    scenes.push_back(SceneInfo(new Title(), true, false));
 
     // Run application
     return Application("app.cfg", scenes).run(argc, argv);
