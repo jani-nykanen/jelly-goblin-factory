@@ -184,6 +184,8 @@ void Title::init() {
     // Get samples
     sPause = assets->getSample("pause");
     sReject = assets->getSample("reject");
+    // Get music
+    mMenu = assets->getMusic("menu");
 
     // Create menu
     std::vector<MenuButton> buttons;
@@ -439,5 +441,13 @@ void Title::dispose() {
 // On change
 void Title::onChange(void* param) {
 
-    // ...
+    if(param == NULL)
+        return;
+
+    // Start music
+    if((int)(size_t)param == 1) {
+
+        AudioManager* audio = evMan->getAudioManager();
+        audio->fadeInMusic(mMenu, MENU_MUSIC_VOL, 1000);
+    }
 }   

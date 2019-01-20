@@ -31,6 +31,8 @@ private:
     Bitmap* bmpFont;
     // Samples
     Sample* sReject;
+    // Music
+    Music* mMenu;
 
     // Grid
     Grid stageGrid;
@@ -78,6 +80,8 @@ public:
     void goToTitle();
     // Fade to something
     void fadeToTarget(TransitionCallback cb);
+    // Fade out music
+    void fadeOutMusic(int time);
     
     // Initialize scene
     void init();

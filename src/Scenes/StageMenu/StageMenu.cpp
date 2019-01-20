@@ -6,6 +6,8 @@
 #include "../../Core/Utility.hpp"
 #include "../../Core/SceneManager.hpp"
 
+#include "../Title/Title.hpp"
+
 // File path
 static const char* FILE_PATH = "save.dat";
 
@@ -34,6 +36,9 @@ static void cb_GoToStage() {
     smRef->goToStage();
 }
 static void cb_NumButton(int b) {
+
+    // Fade out music
+    smRef->fadeOutMusic(500);
 
     smRef->setStageTarget(b);
     smRef->fadeToTarget(cb_GoToStage);
@@ -185,6 +190,14 @@ void StageMenu::fadeToTarget(TransitionCallback cb) {
 }
 
 
+// Fade out music
+void  StageMenu::fadeOutMusic(int time) {
+    // Fade out music
+    AudioManager* audio = evMan->getAudioManager();
+    audio->fadeOutMusic(time);
+}
+
+
 // Initialize scene
 void StageMenu::init() {
 
@@ -204,6 +217,8 @@ void StageMenu::init() {
     bmpFont = assets->getBitmap("font");
     // Get samples
     sReject = assets->getSample("reject");
+    // Get music
+    mMenu = assets->getMusic("menu");
 
     // Create components
     stageGrid = Grid(assets, WIDTH, HEIGHT, 
@@ -336,6 +351,10 @@ void StageMenu::onChange(void* param) {
         clearCompletionData();
         return;
     }
+    
+    // Play music
+    AudioManager* audio = evMan->getAudioManager();
+    audio->playMusic(mMenu, MENU_MUSIC_VOL);
 
     // Check completion
     if(v.y > completion[stageTarget-1]) {

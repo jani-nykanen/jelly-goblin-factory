@@ -23,7 +23,7 @@ static void cb_Title() {
 // Go to the stage menu
 void Intro::goToTitle() {
 
-    sceneMan->changeActiveScene("title");
+    sceneMan->changeActiveScene("title", (void*)(size_t)1);
 }
 
 

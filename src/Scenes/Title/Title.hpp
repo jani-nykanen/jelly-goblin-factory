@@ -11,6 +11,8 @@
 
 #include "../../Menu.hpp"
 
+#define MENU_MUSIC_VOL 0.50f
+
 // Title class
 class Title : public Scene {
 
@@ -23,6 +25,8 @@ private:
     // Samples
     Sample* sPause;
     Sample* sReject;
+    // Music
+    Music* mMenu;
 
     // Transition
     Transition* trans;

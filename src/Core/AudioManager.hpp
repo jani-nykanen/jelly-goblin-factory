@@ -5,6 +5,7 @@
 #define __AUDIO_MAN_H__
 
 #include "Sample.hpp"
+#include "Music.hpp"
 
 // A audio manager class
 class AudioManager {
@@ -23,6 +24,11 @@ private:
     float sfxVolume;
     float musicVolume;
 
+    // Current track
+    Music* currentTrack;
+    // Current volume
+    float currentVol;
+
 public:
 
     // Constructor
@@ -35,12 +41,8 @@ public:
     inline void toggleSfx() {
         sfxEnabled = !sfxEnabled;
     }
-    inline void toggleMusic(bool state) {
-        musicEnabled = state;
-    }
-    inline void toggleMusic() {
-        musicEnabled = !musicEnabled;
-    }
+    void toggleMusic(bool state);
+    void toggleMusic();
     inline void setSfxVolume(float vol) {
         sfxVolume = vol;
     }
@@ -58,6 +60,14 @@ public:
 
     // Play a sample
     void playSample(Sample* s, float vol, int loops=0);
+    // Play music
+    void playMusic(Music* m, float vol, bool loop=true);
+    // Fade in music
+    void fadeInMusic(Music* m, float vol, int time=1000, bool loop=true);
+    // Fade out music
+    void fadeOutMusic(int time=1000);
+    // Stop music
+    void stopMusic();
 
 
 };

@@ -13,6 +13,8 @@
 #include "Worker.hpp"
 #include "PauseMenu.hpp"
 
+#define THEME_MUSIC_VOL 0.60f
+
 struct StageInfo;
 
 // Game scene
@@ -22,13 +24,14 @@ private:
 
     // Bitmaps
     Bitmap* bmpFont;
-
     // Samples
     Sample* sWalk;
     Sample* sTransform;
     Sample* sAccept;
     Sample* sPause;
     Sample* sSuccess;
+    // Music
+    Music* mTheme;
 
     // Transition
     Transition* trans;
@@ -76,6 +79,8 @@ public:
     void toggleSFX();
     // Toggle music
     void toggleMusic();
+    // Start quitting
+    void startQuit();
 
     // Initialize scene
     void init();

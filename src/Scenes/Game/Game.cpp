@@ -26,6 +26,7 @@ static void cb_Settings() { gref->activateSettings();}
 static void cb_Quit() { gref->quit(); }
 static void cb_NextStage() { gref->quit(1, -1); }
 static void cb_Stagemenu() { gref->quit(0, -1); }
+static void cb_StartQuit() { gref->startQuit(); }
 
 static void cb_SFX() {gref->toggleSFX();}
 static void cb_Music() {gref->toggleMusic();}
@@ -180,6 +181,16 @@ void Game::toggleMusic() {
 }
 
 
+// Start quitting
+void Game::startQuit() {
+
+    // Fade out music
+    evMan->getAudioManager()->fadeOutMusic(500);
+
+    trans->activate(FadeIn, 2.0f, cb_Quit);
+}
+
+
 // Initialize scene
 void Game::init() {
 
@@ -201,13 +212,14 @@ void Game::init() {
 
     // Get bitmaps
     bmpFont = assets->getBitmap("font");
-
     // Get samples
     sWalk = assets->getSample("walk");
     sTransform = assets->getSample("transform");
     sAccept = assets->getSample("accept");
     sPause = assets->getSample("pause");
     sSuccess = assets->getSample("success");
+    // Get music
+    mTheme = assets->getMusic("theme");
 
     // Get transition
     trans = evMan->getTransition();
@@ -231,7 +243,7 @@ void Game::init() {
     buttons.push_back(MenuButton("Resume", cb_Resume));
     buttons.push_back(MenuButton("Restart", cb_Reset, true, 2.0f));
     buttons.push_back(MenuButton("Settings", cb_Settings));
-    buttons.push_back(MenuButton("Quit", cb_Quit, true, 2.0f));
+    buttons.push_back(MenuButton("Quit", cb_StartQuit));
     pause = PauseMenu(buttons, 
         PAUSE_WIDTH, PAUSE_HEIGHT, PAUSE_SCALE);
 
@@ -354,6 +366,8 @@ void Game::update(float tm) {
 
         // Victory sound
         audio->playSample(sSuccess, 0.80f);
+        // Fade out music
+        audio->fadeOutMusic(500);
 
         endMenu.activate();
         endTimer = 0.0f;
@@ -428,6 +442,10 @@ void Game::dispose() {
 void Game::onChange(void* param) {
 
     hardReset((StageInfo*)param);    
+
+    // Play music
+    AudioManager* audio = evMan->getAudioManager();
+    audio->playMusic(mTheme, THEME_MUSIC_VOL);
 }
 
 

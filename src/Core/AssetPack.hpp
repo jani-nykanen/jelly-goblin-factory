@@ -6,6 +6,7 @@
 
 #include "Bitmap.hpp"
 #include "Sample.hpp"
+#include "Music.hpp"
 
 #include <string>
 #include <vector>
@@ -34,6 +35,7 @@ private:
     // Assets
     std::vector<Asset<Bitmap*> > bitmaps;
     std::vector<Asset<Sample*> > samples;
+    std::vector<Asset<Music*> > music;
 
     // Needed for parsing
     std::string basePath;
@@ -57,6 +59,8 @@ public:
     Bitmap* getBitmap(std::string name);
     // Get a sample by its name
     Sample* getSample(std::string name);
+    // Get a music track by its name
+    Music* getMusic(std::string name);
 };
 
 #endif // __ASSET_PACK_H__

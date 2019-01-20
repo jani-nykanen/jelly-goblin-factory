@@ -12,6 +12,7 @@ namespace AssetType {
     enum {
         Bitmap = 0,
         Sample = 1,
+        Music = 2,
     };
 }
 
@@ -34,6 +35,10 @@ void AssetPack::handleSpecialParam(std::string key, std::string value) {
         else if(value == "sample") {
 
             assetType = AssetType::Sample;
+        }
+        else if(value == "music") {
+
+            assetType = AssetType::Music;
         }
     }
 }
@@ -92,6 +97,10 @@ AssetPack::AssetPack(std::string path) {
             case AssetType::Sample:
                 samples.push_back(Asset<Sample*> (new Sample(assetPath), assetName));
 
+            // Load music
+            case AssetType::Music:
+                music.push_back(Asset<Music*> (new Music(assetPath), assetName));
+
             default:
                 break;    
             }
@@ -128,4 +137,11 @@ Bitmap* AssetPack::getBitmap(std::string name) {
 Sample* AssetPack::getSample(std::string name) {
 
     return getAsset<Sample>(&samples, name);
+}
+
+
+// Get a music track by its name
+Music* AssetPack::getMusic(std::string name) {
+
+    return getAsset<Music> (&music, name);
 }
