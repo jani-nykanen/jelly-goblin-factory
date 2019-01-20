@@ -59,6 +59,10 @@ private:
 
     // Get completion status
     int getCompletionStatus();
+    // Load completion data
+    void loadCompletionData();
+    // Clear completion data
+    void clearCompletionData();
 
 public: 
 

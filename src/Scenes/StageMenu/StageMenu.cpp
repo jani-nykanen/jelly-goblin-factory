@@ -7,7 +7,7 @@
 #include "../../Core/SceneManager.hpp"
 
 // File path
-const char* FILE_PATH = "save.dat";
+static const char* FILE_PATH = "save.dat";
 
 // Reference to self
 static StageMenu* smRef;
@@ -119,6 +119,28 @@ int StageMenu::getCompletionStatus() {
 }
 
 
+// Load completion data
+void StageMenu::loadCompletionData() {
+
+    saveMan = SaveDataManager(FILE_PATH);
+    std::vector<int> data = saveMan.read();
+    for(int i = 0; i < data.size(); ++ i) {
+
+        completion[i] = data[i];
+    }
+}
+
+
+// Clear completion data
+void StageMenu::clearCompletionData() {
+
+    for(int i = 0; i < completion.size(); ++ i) {
+
+        completion[i] = 0;
+    }
+}
+
+
 // Go to the selected stage
 void StageMenu::goToStage() {
 
@@ -212,12 +234,7 @@ void StageMenu::init() {
     catch(std::exception e){}
 
     // Read completion data
-    saveMan = SaveDataManager(FILE_PATH);
-    std::vector<int> data = saveMan.read();
-    for(int i = 0; i < data.size(); ++ i) {
-
-        completion[i] = data[i];
-    }
+    loadCompletionData();
 
     // Set defaults
     endingState = 0;
@@ -312,6 +329,13 @@ void StageMenu::onChange(void* param) {
     if(param == NULL) return;
 
     Point v = *(Point*)(size_t)param;
+
+    // Reload data?
+    if(v.x == -1 && v.y == -1) {
+
+        clearCompletionData();
+        return;
+    }
 
     // Check completion
     if(v.y > completion[stageTarget-1]) {

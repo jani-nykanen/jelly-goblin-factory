@@ -17,6 +17,9 @@ static void cb_Play() {
 static void cb_Settings() {
     tref->activateSettings();
 }
+static void cb_Confirm() {
+    tref->activateConfirmMenu();
+}
 static void cb_Terminate() {
     tref->terminate();
 }
@@ -25,12 +28,24 @@ static void cb_Music() {tref->toggleMusic();}
 static void cb_Fullscreen() {tref->toggleFullscreen();}
 static void cb_Back() {tref->disableSettings();}
 
+static void cb_ClearData() { tref->removeData(); }
+static void cb_Reject() { tref->disableConfirmMenu(); }
 
 
 // Go to the stage menu
 void Title::goToStageMenu() {
 
-    sceneMan->changeActiveScene("stageMenu");
+    void* pp = NULL;
+    Point p = Point(0, 0);
+    if(dataRemoved) {
+
+        p.x = -1;
+        p.y = -1;
+        pp = (void*)&p;
+        dataRemoved = false;
+    }
+
+    sceneMan->changeActiveScene("stageMenu", pp);
 }
 
 
@@ -76,6 +91,23 @@ void Title::activateSettings() {
 }
 
 
+// Remove data
+void Title::removeData() {
+
+    remove("save.dat");
+    dataRemoved = true;
+
+    confirmMenu.deactivate();
+}
+
+
+// Activate confirm menu
+void Title::activateConfirmMenu() {
+
+    confirmMenu.activate(1);
+}
+
+
 // Initialize scene
 void Title::init() {
     
@@ -84,6 +116,9 @@ void Title::init() {
     const float SETTINGS_WIDTH = 400.0f;
     const float SETTINGS_HEIGHT = 288.0f;
     const float SETTINGS_SCALE = 1.0f;
+
+    const float CONFIRM_WIDTH = 256.0f;
+    const float CONFIRM_HEIGHT = 144.0f;
 
     tref = this;
 
@@ -101,7 +136,7 @@ void Title::init() {
     std::vector<MenuButton> buttons;
     buttons.push_back(MenuButton("Play", cb_Play, true, 2.0f));
     buttons.push_back(MenuButton("Settings", cb_Settings));
-    buttons.push_back(MenuButton("Clear Data", NULL));
+    buttons.push_back(MenuButton("Clear Data", cb_Confirm));
     buttons.push_back(MenuButton("Quit", cb_Terminate, true, 2.0f));
     menu = Menu(buttons);
 
@@ -115,11 +150,21 @@ void Title::init() {
         SETTINGS_WIDTH, SETTINGS_HEIGHT, 
         SETTINGS_SCALE);
 
+    // Create confirm menu
+    buttons.clear();
+    buttons.push_back(MenuButton("Yes", cb_ClearData));
+    buttons.push_back(MenuButton("No", cb_Reject));
+    confirmMenu = PauseMenu(buttons, 
+        CONFIRM_WIDTH, CONFIRM_HEIGHT, 
+        SETTINGS_SCALE);
+
     // Set defaults
     logoFloat = 0.0f;
     logoScale = 0.0f;
     phase = 0;
     enterTimer = -M_PI/2.0f;
+    logoStopped = false;
+    dataRemoved = false;
 }
 
 
@@ -133,6 +178,13 @@ void Title::update(float tm) {
     if(settings.isActive()) {
 
         settings.update(evMan, true);
+        return;
+    }
+
+    // Check confirm menu
+    if(confirmMenu.isActive()) {
+
+        confirmMenu.update(evMan, true);
         return;
     }
 
@@ -150,8 +202,19 @@ void Title::update(float tm) {
     AudioManager* audio = evMan->getAudioManager();
 
     // Update logo float
-    logoFloat += LOGO_FLOAT * tm;
-    logoFloat = fmodf(logoFloat, M_PI*4.0f);
+    if(!logoStopped) {
+        float oldFloat = logoFloat;
+        logoFloat += LOGO_FLOAT * (phase+1) * tm;
+        if(phase == 1 && (
+            (oldFloat < M_PI*2.0f && logoFloat >= M_PI*2.0f) || 
+            (logoFloat >= M_PI*4.0f)
+            )) {
+            
+            logoFloat = 0.0f;
+            logoStopped = true;
+        }
+        logoFloat = fmodf(logoFloat, M_PI*4.0f);
+    }
 
     if(phase == 1) {
 
@@ -213,6 +276,9 @@ void Title::draw(Graphics* g) {
     const float COPYRIGHT_SCALE = 0.67f;
     const float COPYRIGHT_OFF = -8.0f;
 
+    const float CONFIRM_SCALE = 1.25f;
+    const float CONFIRM_MENU_Y = 64.0f;
+
     Vector2 view = g->getViewport();
 
     g->clearScreen(0.1f, 0.60f, 1.0f);
@@ -223,10 +289,9 @@ void Title::draw(Graphics* g) {
     g->useTransf();
 
     float s = sinf(logoFloat) * LOGO_AMPLITUDE;
-    float scale = logoScale*(LOGO_SCALE + cosf(logoFloat/2) * SCALE_MOD);
+    float scale = logoScale*(LOGO_SCALE + sinf(logoFloat/2) * SCALE_MOD);
     float w = bmpLogo->getWidth() * scale;
     float h = bmpLogo->getHeight() * scale;
-
 
     // Draw shadow
     g->setColor(0, 0, 0, SHADOW_ALPHA);
@@ -264,12 +329,29 @@ void Title::draw(Graphics* g) {
             ENTER_SCALE, true);
     }
     else {
+
         // Draw menu
         menu.draw(g, view.x/2+MENU_X, view.y/3.0f*2.0f, 
             MENU_SCALE, MENY_YOFF_PLUS);
 
         // Draw settings
         settings.draw(g);
+
+        // Draw confirm menu
+        if(confirmMenu.isActive()) {
+
+            // Draw menu
+            confirmMenu.draw(g, 0, CONFIRM_MENU_Y);
+
+            // Draw title
+            g->setColor(1, 0.25f, 0.25f);
+            g->drawText(bmpFont, "Are you sure?", 
+                view.x/2, 
+                view.y/3, 
+                XOFF, 0, 
+                SHADOW_X, SHADOW_Y, SHADOW_ALPHA,
+                CONFIRM_SCALE, true);
+        }
     }
    
 }

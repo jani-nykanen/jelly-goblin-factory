@@ -28,16 +28,22 @@ private:
     // Menus
     Menu menu;
     PauseMenu settings;
+    PauseMenu confirmMenu;
 
     // Logo float timer
     float logoFloat;
     // Logo scale
     float logoScale;
+    // Has the logo stopped moving
+    bool logoStopped;
 
     // Phase
     int phase;
     // "Press enter" timer
     float enterTimer;
+
+    // Was data removed
+    bool dataRemoved;
 
 public:
 
@@ -61,6 +67,14 @@ public:
     }
     // Activate settings
     void activateSettings();
+    // Remove data
+    void removeData();
+    // Disable confirmation menu
+    inline void disableConfirmMenu() {
+        confirmMenu.deactivate();
+    }
+    // Activate confirm menu
+    void activateConfirmMenu();
 
     // Initialize scene
     void init();
