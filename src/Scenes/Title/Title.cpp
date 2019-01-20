@@ -372,7 +372,7 @@ void Title::draw(Graphics* g) {
 
         // Draw copyright
         g->setColor(1, 1, 0);
-        g->drawText(bmpFont, "(c)2019 Jani Nykanen", 
+        g->drawText(bmpFont, "(c)2019 Jani Nyk~nen", 
             view.x/2, 
             view.y-64*COPYRIGHT_SCALE+COPYRIGHT_OFF,
             XOFF, 0,
