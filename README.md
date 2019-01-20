@@ -1,12 +1,16 @@
-## Description
+![](https://github.com/jani-nykanen/project-2019/blob/master/Assets/Bitmaps/logo.png?raw=true)
 
-The first project in 2019. No title yet. Or anything else, really.
+-------
+
+## Play
+
+Coming to itch.io and Game Jolt very soon.
 
 -------
 
 ## Building
 
-Run `makemake.sh` to build a make file, then `make` to build the binary.
+If you really want to play the current development version, run `makemake.sh` to build a make file (you may have to replace python3 with python etc), then `make` to build the binary. A binary called "out" should appear.
 
 
 ------

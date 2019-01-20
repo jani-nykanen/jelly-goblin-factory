@@ -123,6 +123,12 @@ AssetPack::~AssetPack() {
 
         delete samples[i].asset;
     }
+
+    // Destroy music
+    for(int i = 0; i < music.size(); ++ i) {
+
+        delete music[i].asset;
+    }
 }
 
 

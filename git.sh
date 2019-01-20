@@ -11,3 +11,4 @@ git add Assets
 git add controls.cfg
 git add buildwin32.txt
 git add TODO.txt
+git add icon.ico

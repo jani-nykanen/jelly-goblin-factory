@@ -32,14 +32,14 @@ void Application::initGL() {
 
     int width = conf.getIntParam("window_width", 640);
     int height = conf.getIntParam("window_height", 480);
-    const char* caption = conf.getParam("caption").c_str();
+    std::string caption = conf.getParam("caption");
     
     // Set window hints
     //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
     // Create window
-    window = glfwCreateWindow(width, height, caption, NULL, NULL);
+    window = glfwCreateWindow(width, height, caption.c_str(), NULL, NULL);
     winSize[0] = width;
     winSize[1] = height;
     // Set OpenGL context to this window

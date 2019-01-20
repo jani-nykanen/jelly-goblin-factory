@@ -265,7 +265,7 @@ void Title::update(float tm) {
     // Update logo float
     if(!logoStopped) {
         float oldFloat = logoFloat;
-        logoFloat += LOGO_FLOAT * (phase+1) * tm;
+        logoFloat += LOGO_FLOAT * (phase*2+1) * tm;
         if(phase == 1 && (
             (oldFloat < M_PI*2.0f && logoFloat >= M_PI*2.0f) || 
             (logoFloat >= M_PI*4.0f)
