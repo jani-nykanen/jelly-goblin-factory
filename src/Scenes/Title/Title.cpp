@@ -32,6 +32,57 @@ static void cb_ClearData() { tref->removeData(); }
 static void cb_Reject() { tref->disableConfirmMenu(); }
 
 
+
+// Draw a cog
+void Title::drawCog(Graphics* g, float x, float y,
+    float scale, int dir) {
+
+    g->push();
+    g->translate(x, y);
+    g->rotate(cogAngle * dir);
+    g->scale(scale, scale);
+    g->useTransf();
+
+    g->drawBitmap(bmpCog, -128, -128);
+
+    g->pop();
+}
+
+
+// Draw cogs
+void Title::drawCogs(Graphics* g) {
+
+    const float SCALE = 1.25f;
+    const float SHADOW_ALPHA = 0.5f;
+    const float SHADOW_X = 12.0f;
+    const float SHADOW_Y = 12.0f;
+
+    Vector2 view = g->getViewport();
+
+    // Draw one cog to every corner
+    g->setColor();
+    for(int y = 0; y < 2; ++ y) {
+        
+        for(int x = 0; x < 2; ++ x) {
+
+            // Shadow
+            g->setColor(0, 0, 0, SHADOW_ALPHA);
+            drawCog(g, 
+                x*view.x + SHADOW_X, 
+                y*view.y + SHADOW_Y, 
+                SCALE, 
+                x == 0 ? -1 : 1);
+
+            // Base cog
+            g->setColor();
+            drawCog(g, x*view.x, y*view.y, SCALE, x == 0 ? -1 : 1);
+        }
+
+    }
+    g->useTransf();
+}
+
+
 // Go to the stage menu
 void Title::goToStageMenu() {
 
@@ -128,6 +179,7 @@ void Title::init() {
     // Get bitmaps
     bmpFont = assets->getBitmap("font");
     bmpLogo = assets->getBitmap("logo");
+    bmpCog = assets->getBitmap("cog");
     // Get samples
     sPause = assets->getSample("pause");
     sReject = assets->getSample("reject");
@@ -165,6 +217,7 @@ void Title::init() {
     enterTimer = -M_PI/2.0f;
     logoStopped = false;
     dataRemoved = false;
+    cogAngle = 0.0f;
 }
 
 
@@ -173,6 +226,7 @@ void Title::update(float tm) {
 
     const float LOGO_FLOAT = 0.05f;
     const float ENTER_TIMER_SPEED = 0.05f;
+    const float COG_SPEED = 0.05f;
 
     // Check settings
     if(settings.isActive()) {
@@ -195,6 +249,10 @@ void Title::update(float tm) {
 
         logoScale = t;
     }
+
+    // Update cog angle
+    cogAngle += COG_SPEED * tm;
+    cogAngle = fmodf(cogAngle, M_PI*2);
 
     if(trans->isActive()) return;
 
@@ -287,6 +345,9 @@ void Title::draw(Graphics* g) {
     g->setView(VIEW_HEIGHT);
     g->identity();
     g->useTransf();
+
+    // Draw cogs
+    drawCogs(g);
 
     float s = sinf(logoFloat) * LOGO_AMPLITUDE;
     float scale = logoScale*(LOGO_SCALE + sinf(logoFloat/2) * SCALE_MOD);

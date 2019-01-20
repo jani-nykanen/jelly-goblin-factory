@@ -19,6 +19,7 @@ private:
     // Bitmaps
     Bitmap* bmpFont;
     Bitmap* bmpLogo;
+    Bitmap* bmpCog;
     // Samples
     Sample* sPause;
     Sample* sReject;
@@ -44,6 +45,14 @@ private:
 
     // Was data removed
     bool dataRemoved;
+
+    // Cog angle
+    float cogAngle;
+
+    // Draw a cog
+    void drawCog(Graphics* g, float x, float y, float scale, int dir);
+    // Draw cogs
+    void drawCogs(Graphics* g);
 
 public:
 
