@@ -109,10 +109,11 @@ InputListener::InputListener(void* window) {
     if(window != NULL)
         glfwSetKeyCallback((GLFWwindow*)window, keybCallback);
 
-    // Check if joystick is active
-    joyActive = glfwJoystickPresent(GLFW_JOYSTICK_1);
+    // Set defaults
+    joyActive = false;
     joystick.x = 0;
     joystick.y = 0;
+    joyHardEnabled = true;
 }
 
 
@@ -125,12 +126,17 @@ void InputListener::updateInput() {
     updateInputArray(kbstate);
     updateInputArray(joystate);
 
+    // Set joystick to zero
+    joystick.x = 0;
+    joystick.y = 0;
+
+    // Skip joystick
+    if(!joyHardEnabled) return;
+
     // Check if joystick is active
     joyActive = glfwJoystickPresent(GLFW_JOYSTICK_1);
 
     // Update joystick stick
-    joystick.x = 0;
-    joystick.y = 0;
     if(joyActive) {
 
         int count;

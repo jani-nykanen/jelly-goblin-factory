@@ -96,6 +96,9 @@ void Application::init() {
     }
     // Create event manager
     evMan = new EventManager(this, (void*)window, &vpad);
+    // Set joystick state
+    evMan->hardToggleJoystick(conf.getIntParam("enable_joystick", 0) == 1);
+    // Initialize virtual gamepad input
     vpad.initInput(evMan);
 
     // Load assets

@@ -11,7 +11,7 @@
 
 #include "../../Menu.hpp"
 
-// Ending class
+// Title class
 class Title : public Scene {
 
 private:

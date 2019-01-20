@@ -22,7 +22,7 @@ void Global::init() {
 
     // Set transition
     trans = evMan->getTransition();
-    trans->activate(FadeOut, 2.0f, NULL, Color(0.1f, 0.60f, 1.0f));
+    trans->activate(FadeOut, 1.0f, NULL, Color(0.0f, 0.0f, 0.0f));
 }
 
 

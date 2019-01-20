@@ -36,6 +36,8 @@ protected:
     Vector2 joystick;
     // Is joystick active
     bool joyActive;
+    // Is joystick "hard enabled"
+    bool joyHardEnabled;
 
     // Joy axes
     Point stickAxes;
@@ -76,6 +78,11 @@ public:
 
         stickAxes = stick;
         hatAxes = hat;
+    }
+    // "Hard toggle" joystick
+    inline bool hardToggleJoystick(bool state) {
+
+        joyHardEnabled = state;
     }
 
 };
