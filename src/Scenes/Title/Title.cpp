@@ -6,6 +6,7 @@
 #include "../Game/Stage.hpp"
 
 #include "../../Core/SceneManager.hpp"
+#include "../../version.hpp"
 
 // Reference to self
 static Title* tref;
@@ -337,6 +338,8 @@ void Title::draw(Graphics* g) {
     const float CONFIRM_SCALE = 1.25f;
     const float CONFIRM_MENU_Y = 64.0f;
 
+    const float VERSION_SCALE = 0.5f;
+
     Vector2 view = g->getViewport();
 
     g->clearScreen(0.1f, 0.60f, 1.0f);
@@ -414,6 +417,14 @@ void Title::draw(Graphics* g) {
                 CONFIRM_SCALE, true);
         }
     }
+
+    // Draw version
+    g->setColor();
+    std::string vstr = "v."+ std::string(VERSION_NUMBER);
+    g->drawText(bmpFont, vstr, 
+        view.x-(vstr.length()+1)*( (64+XOFF)*VERSION_SCALE),
+        view.y-VERSION_SCALE*64.0f, XOFF, 0,
+        VERSION_SCALE, false);
    
 }
 
