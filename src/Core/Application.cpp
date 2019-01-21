@@ -104,7 +104,7 @@ void Application::init() {
     // Set audio states
     AudioManager* audio = evMan->getAudioManager();
     audio->toggleSfx(conf.getIntParam("sfx_enabled", 1) == 1);
-    audio->toggleMusic(conf.getIntParam("music_enabled", 1) == 1);
+    audio->toggleSfx(conf.getIntParam("music_enabled", 1) == 1);
     audio->setSfxVolume(conf.getFloatParam("sfx_volume", 1.0f));
     audio->setMusicVolume(conf.getFloatParam("music_volume", 1.0f));
 

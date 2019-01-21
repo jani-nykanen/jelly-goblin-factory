@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <cstdlib>
+#include <cmath>
 
 #include "Scene.hpp"
 

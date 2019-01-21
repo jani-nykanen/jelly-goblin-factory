@@ -73,7 +73,7 @@ bool Grid::updateCursor(float tm) {
     const float FLOAT_SPEED = 0.05f;
     // Update floating
     cfloatTimer += FLOAT_SPEED * tm;
-    cfloatTimer = fmodf(cfloatTimer, M_PI*2);
+    cfloatTimer = (float)fmod(cfloatTimer, M_PI*2);
 
     // Update timer
     bool ret = false;
@@ -366,7 +366,7 @@ void Grid::draw(Graphics* g, float tx, float ty, std::vector<int>* completion) {
     g->setColor();
 
     // Compute cursor floating
-    float cf = sinf(cfloatTimer) * CURSOR_FLOAT_AMPLITUDE;
+    float cf = (float)sin(cfloatTimer) * CURSOR_FLOAT_AMPLITUDE;
     // Draw cursor
     g->drawBitmap(bmpBlocks, 129, 129, 126, 126,
         view.x/2 + cvpos.x + blockSize.x*CURSOR_TRANS_X, 

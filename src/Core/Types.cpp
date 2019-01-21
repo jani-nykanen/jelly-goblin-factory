@@ -59,8 +59,8 @@ Matrix3 Matrix3::identity() {
 // Set to rotation matrix
 Matrix3 Matrix3::rotate(float angle) {
 
-    float s = sinf(angle);
-    float c = cosf(angle);
+    float s = (float)sin(angle);
+    float c = (float)cos(angle);
 
 	m11 = c; m21 =-s; m31 = 0;
 	m12 = s; m22 = c; m32 = 0;
