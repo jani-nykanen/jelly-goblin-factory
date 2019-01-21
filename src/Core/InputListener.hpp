@@ -80,7 +80,7 @@ public:
         hatAxes = hat;
     }
     // "Hard toggle" joystick
-    inline bool hardToggleJoystick(bool state) {
+    inline void hardToggleJoystick(bool state) {
 
         joyHardEnabled = state;
     }
