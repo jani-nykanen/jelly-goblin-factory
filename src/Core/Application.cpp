@@ -101,6 +101,13 @@ void Application::init() {
     // Initialize virtual gamepad input
     vpad.initInput(evMan);
 
+    // Set audio states
+    AudioManager* audio = evMan->getAudioManager();
+    audio->toggleSfx(conf.getIntParam("sfx_enabled", 1) == 1);
+    audio->toggleMusic(conf.getIntParam("music_enabled", 1) == 1);
+    audio->setSfxVolume(conf.getFloatParam("sfx_volume", 1.0f));
+    audio->setMusicVolume(conf.getFloatParam("music_volume", 1.0f));
+
     // Load assets
     assets = new AssetPack(conf.getParam("asset_path"));
 

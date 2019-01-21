@@ -29,6 +29,7 @@ public:
     std::string getParam(std::string key);
     std::string getParam(int i);
     int getIntParam(std::string key, int def);
+    float getFloatParam(std::string key, float def);
 
     // Get key
     std::string getKey(int i);

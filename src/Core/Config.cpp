@@ -181,6 +181,23 @@ int ConfigData::getIntParam(std::string key, int def) {
     return ret;
 }
 
+
+// Get float parameter
+// TODO: Template for this and the above?
+float ConfigData::getFloatParam(std::string key, float def) {
+
+    std::string r = getParam(key, "f");
+    if(r == "f") {
+
+        return def;
+    }
+    // Convert to integer
+    float ret = 0;
+    std::istringstream ( r ) >> ret;
+    return ret;
+}
+
+
 // Get key
 std::string ConfigData::getKey(int i) {
 

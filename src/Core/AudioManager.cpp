@@ -29,15 +29,6 @@ AudioManager::AudioManager() {
     }
     initialized = 2;
 
-    // Initialize Mixer
-    int flags = MIX_INIT_OGG;
-    int ret =  Mix_Init(flags);
-    if((ret & flags) != flags) {
-
-        initialized = 1;
-        printf("Failed to initialize OGG addon. Music disabled.\n");
-    }
-
     // Open audio
     if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 512) == -1) {
 
@@ -45,6 +36,16 @@ AudioManager::AudioManager() {
         printf("Failed to open audio. Audio disabled.\n");
         printf("Mix_OpenAudio: %s\n", Mix_GetError());
         return;
+    }
+
+    // Initialize Mixer
+    int flags = MIX_INIT_OGG;
+    int ret =  Mix_Init(flags);
+    if((ret & flags) != flags) {
+
+        initialized = 1;
+        printf("Failed to initialize OGG addon. Music possibly disabled.\n");
+        printf("SDL_Mixer: %s\n", Mix_GetError());
     }
 }
 
