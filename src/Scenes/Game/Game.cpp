@@ -26,6 +26,10 @@ static void cb_Settings() { gref->activateSettings();}
 static void cb_Quit() { gref->quit(); }
 static void cb_NextStage() { gref->quit(1, -1); }
 static void cb_Stagemenu() { gref->quit(0, -1); }
+static void cb_Replay() {
+    gref->replayMusic();
+    gref->reset();
+}
 static void cb_StartQuit() { gref->startQuit(); }
 
 static void cb_SFX() {gref->toggleSFX();}
@@ -191,6 +195,15 @@ void Game::startQuit() {
 }
 
 
+// Replay music
+void Game::replayMusic() {
+
+    // Play music
+    AudioManager* audio = evMan->getAudioManager();
+    audio->playMusic(mTheme, THEME_MUSIC_VOL);
+}
+
+
 // Initialize scene
 void Game::init() {
 
@@ -250,7 +263,7 @@ void Game::init() {
     // Create end menu
     buttons.clear();
     buttons.push_back(MenuButton("Next stage", cb_NextStage, true, 2.0f));
-    buttons.push_back(MenuButton("Retry", cb_Reset, true, 2.0f));
+    buttons.push_back(MenuButton("Retry", cb_Replay, true, 2.0f));
     buttons.push_back(MenuButton("Stage menu", cb_Stagemenu, true, 2.0f));
     endMenu = PauseMenu(buttons, 
         END_WIDTH, END_HEIGHT, END_SCALE);
@@ -444,8 +457,7 @@ void Game::onChange(void* param) {
     hardReset((StageInfo*)param);    
 
     // Play music
-    AudioManager* audio = evMan->getAudioManager();
-    audio->playMusic(mTheme, THEME_MUSIC_VOL);
+    replayMusic();
 }
 
 

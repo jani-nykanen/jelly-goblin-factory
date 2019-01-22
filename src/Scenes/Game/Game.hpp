@@ -81,6 +81,8 @@ public:
     void toggleMusic();
     // Start quitting
     void startQuit();
+    // Replay music
+    void replayMusic();
 
     // Initialize scene
     void init();

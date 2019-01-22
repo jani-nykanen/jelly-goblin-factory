@@ -1,1 +1,1 @@
-#define VERSION_NUMBER "0.9.3"
+#define VERSION_NUMBER "0.9.4"
